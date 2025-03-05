@@ -9,3 +9,10 @@ TODO
 - study typical receptor/neurotransmitter
 - study electrochemical gradient
 - study bayesian models
+
+# neuro #2
+- study sodium potassium pump
+- study action potential
+- study synapsis
+- study types of receptos (ionotropic, metabotropic)
+- study principles of EEG (eeg frequency bands, basic mechanisms)
