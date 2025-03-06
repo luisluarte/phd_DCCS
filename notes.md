@@ -18,3 +18,10 @@ TODO
 - Study philosophy idea of what's a phenomenon
 - Study scientific concept of evolution
 - Study dogma of molecular biology
+- 
+# neuro #2
+- study sodium potassium pump
+- study action potential
+- study synapsis
+- study types of receptos (ionotropic, metabotropic)
+- study principles of EEG (eeg frequency bands, basic mechanisms)
