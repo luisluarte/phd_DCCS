@@ -9,3 +9,12 @@ TODO
 - study typical receptor/neurotransmitter
 - study electrochemical gradient
 - study bayesian models
+
+# bio #1
+
+TODO
+- Tinbergen 4 levels of analysis
+- Study cell structure/function
+- Study philosophy idea of what's a phenomenon
+- Study scientific concept of evolution
+- Study dogma of molecular biology
