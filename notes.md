@@ -38,3 +38,24 @@ TODO
 - read paper "from the neuron doctrine to neural networks" rafael yuste
 - study cell mitochondria symbiosis
 - study cell biology
+
+# bio #3
+- study endocrine system
+- study cell signaling
+- memorize most important glads
+- study HPA axis
+
+# neuro #4
+- study SNC development
+
+
+
+
+
+
+
+
+
+
+
+
