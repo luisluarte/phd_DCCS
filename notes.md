@@ -42,13 +42,21 @@ TODO
 # bio #3
 - study endocrine system
 - study cell signaling
-- memorize most important glads
+- memorize most important glands
 - study HPA axis
 
 # neuro #4
 - study SNC development
 
+# Econometry #1
+- study introductory econometrics wooldridge
+- study time series
+- study joint and conditional distribution
 
+# neuro #5
+- study cortex organization
+- study brodmann areas
+- read 'Localisation in the Cerebral Cortex' Brodmann
 
 
 
