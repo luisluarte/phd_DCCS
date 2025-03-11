@@ -58,12 +58,10 @@ TODO
 - study brodmann areas
 - read 'Localisation in the Cerebral Cortex' Brodmann
 
-
-
-
-
-
-
-
+# math #2
+- study algebra reduction
+- study equation systems with multiple variables
+- OLS
+- Quadratic function
 
 
