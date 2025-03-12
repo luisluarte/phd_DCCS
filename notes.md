@@ -74,3 +74,12 @@ TODO
 - study covariance and correlation
 - study properties of covariance
 - study properties of correlation
+
+# math #3
+- study properties of the logarithms
+- study inverse function
+- study derivatives (properties)
+
+# neuro #5
+- study perception
+- study vision
