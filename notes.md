@@ -48,7 +48,7 @@ TODO
 # neuro #4
 - study SNC development
 
-# Econometry #1
+# econometry #1
 - study introductory econometrics wooldridge
 - study time series
 - study joint and conditional distribution
@@ -64,4 +64,13 @@ TODO
 - OLS
 - Quadratic function
 
-
+# econometry #2
+- study probability distributions
+- study normal distribution derivation and properties
+- study chi-squared distribution
+- study t-distribution
+- study f-distribution
+- study logistic-distribution (inverse logit function)
+- study covariance and correlation
+- study properties of covariance
+- study properties of correlation
