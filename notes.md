@@ -83,3 +83,10 @@ TODO
 # neuro #5
 - study perception
 - study vision
+
+# bio #4
+- study evolution theory
+
+# neuro #5
+- study dopaminergic system 
+- study neurotransmitters
