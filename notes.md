@@ -90,3 +90,13 @@ TODO
 # neuro #5
 - study dopaminergic system 
 - study neurotransmitters
+
+# bio #5
+- study convergent and divergent evolution (stochastic vs deterministic)
+- study motoo kimura
+- study Extended evolutive synthesis
+- Study evo-devo
+
+# math #4
+- monotonic function
+- minima maxima
