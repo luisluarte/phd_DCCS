@@ -100,3 +100,25 @@ TODO
 # math #4
 - monotonic function
 - minima maxima
+
+# econometry #3
+- study properties of conditional expectation
+- study "ley de expectativas iteradas"
+- study linear regression
+- study residuals and conditional variance
+
+# social sciences #1
+- social is represented by morality
+
+# math #5
+- study taylor series
+- study fourier series
+- how to study the error on taylor and fourier series
+- study integrals
+- fundamental theorem of calculus
+- study anti-derivative
+
+# math #6
+- study fourier transform
+- multivariable calculus
+- study "curvas de nivel"
