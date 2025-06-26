@@ -93,3 +93,5 @@ trial_test %>%
     geom_smooth(aes(group = trial_number, color = trial_number), method = "lm", se = FALSE) +
     scale_x_continuous(transform = "log") +
     scale_y_continuous(transform = "log")
+
+var <- load("../../data/econometrics/10.1073pnas.1911348117/modelResults.RData")
