@@ -16,17 +16,37 @@ euc_dist <- function(x2, x1, y2, y1) {
 # load data ----
 eye_raw <- read_csv("../../data/econometrics/10.1073pnas.1911348117/fixData.csv")
 
-## filter trial related data
+# pre-proc data ----
+
+# action indicator = ITI: fixation cross without any instruction ~5 sec
+
 eye_trial <- eye_raw %>%
+    separate_wider_delim(
+        text,
+        delim = "_",
+        names = c(
+            "id",
+            "task_indicator",
+            "task_number",
+            "trial_indicator",
+            "trial_number",
+            "action_indicator",
+            "action_type"
+        ),
+        too_few = "align_start",
+        too_many = "merge"
+    ) %>%
+    filter(
+        task_indicator == "game",
+        task_number != "instructions",
+        trial_indicator == "trial"
+    ) %>%
     mutate(
-        is_trial = replace_na(as.numeric(str_match(text, pattern = "trial") == "trial"), 0),
-        game_number = str_extract(text, pattern = "game_[0-9]+") %>%
-            str_extract(., pattern = "[0-9]+") %>%
-            as.numeric(),
-        trial_number = str_extract(text, pattern = "trial_[0-9]+") %>%
-            str_extract(., pattern = "[0-9]+") %>%
-            as.numeric()
+        task_number = as.numeric(task_number),
+        trial_number = as.numeric(trial_number)
     )
+eye_trial
+
 
 ## check single trial
 trial_test <- eye_trial %>%
