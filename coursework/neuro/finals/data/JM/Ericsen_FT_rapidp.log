@@ -1,0 +1,46 @@
+Scenario - EFT rapido Abril 2011
+Logfile written - 06/07/2012 10:02:06
+
+Subject	Trial	Event Type	Code	Time	TTime	Uncertainty	Duration	Uncertainty	ReqTime	ReqDur	Stim Type	Pair Index
+
+WW	2	Picture	11	10499	0	1	3166	2	0	3000	other	0
+WW	4	Picture	20	20999	0	1	3166	2	0	3000	other	0
+WW	6	Picture	20	32165	0	1	3166	2	0	3000	other	0
+WW	8	Picture	11	41331	0	1	3167	2	0	3000	other	0
+WW	10	Picture	11	52164	0	1	3167	2	0	3000	other	0
+WW	10	Response	1	54917	2753	1
+WW	12	Picture	21	61497	0	1	3167	2	0	3000	other	0
+WW	14	Picture	21	72830	0	2	3167	3	0	3000	other	0
+WW	14	Response	2	75229	2399	2
+WW	16	Picture	11	82497	0	1	3166	2	0	3000	other	0
+WW	18	Picture	21	92330	0	1	3166	3	0	3000	other	0
+WW	18	Response	1	95541	3211	2
+WW	20	Picture	10	100996	0	1	3167	2	0	3000	other	0
+WW	21	Response	2	108511	4181	1
+WW	22	Picture	11	110163	0	1	3166	2	0	3000	other	0
+WW	23	Response	1	116791	3295	1
+WW	24	Picture	11	118829	0	1	3167	2	0	3000	other	0
+WW	25	Response	2	124135	1973	1
+WW	26	Picture	20	128829	0	1	3166	3	0	3000	other	0
+WW	28	Picture	20	137995	0	1	3167	2	0	3000	other	0
+WW	30	Picture	21	147662	0	1	3166	2	0	3000	other	0
+WW	31	Quit		153354	2359
+
+
+Event Type	Code	Type	Response	RT	RT Uncertainty	Time	Uncertainty	Duration	Uncertainty	ReqTime	ReqDur
+
+Picture	11	other				10499	1	3166	2	0	3000
+Picture	20	other				20999	1	3166	2	0	3000
+Picture	20	other				32165	1	3166	2	0	3000
+Picture	11	other				41331	1	3167	2	0	3000
+Picture	11	other				52164	1	3167	2	0	3000
+Picture	21	other				61497	1	3167	2	0	3000
+Picture	21	other				72830	2	3167	3	0	3000
+Picture	11	other				82497	1	3166	2	0	3000
+Picture	21	other				92330	1	3166	3	0	3000
+Picture	10	other				100996	1	3167	2	0	3000
+Picture	11	other				110163	1	3166	2	0	3000
+Picture	11	other				118829	1	3167	2	0	3000
+Picture	20	other				128829	1	3166	3	0	3000
+Picture	20	other				137995	1	3167	2	0	3000
+Picture	21	other				147662	1	3166	2	0	3000
