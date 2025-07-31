@@ -10,10 +10,10 @@ function createInstructionScreen(title, content){
 }
 
 // build the experiment
-const study = new lab.core.Experiment();
-
-study.run(new lab.flow.Sequence({
+const study = new lab.flow.Sequence({
 	content: [
-		createInstructionScreen('instructions', 'aasdasdasdasda')
+		createInstructionScreen('asd', 'asd')
 	]
-}))
+});
+
+study.run();
