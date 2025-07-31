@@ -12,7 +12,7 @@ function createInstructionScreen(title, content){
 // build the experiment
 const study = new lab.flow.Sequence({
 	content: [
-		createInstructionScreen('asd', 'asd')
+		createInstructionScreen('Instructions', 'Instructions for a two-armed bandit')
 	]
 });
 
