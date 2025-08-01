@@ -13,17 +13,52 @@ function createInstructionScreen(title, content){
 	});
 }
 
-// create bandit trial
-function createBanditTrial(){
-	return new lab.html.Screen({
+// create random icon
+function createRandomIcon(color){
+        return `
+            <svg width="300" height="300" viewBox="0 0 100 100">
+                <rect x="10" y="10" width="80" height="80" fill="${color}" />
+            </svg>`;
+}
 
+// create reward
+function createReward(banditQuality){
+    if (banditQuality > 0.5){
+        const alpha = 40;
+        const beta = 10;
+    } else{
+        const alpha = 10;
+        const beta = 40;
+    }
+    const sample = jStat.beta.sample(alpha, beta);
+    return Math.round(sample);
+}
+
+// create feedback screen
+function createFeedbackScreen(duration = 1000){
+    return new lab.html.Screen({
+        content: `
+            <div class="content-vertical-center content-horizontal-center">
+                <h1 style="font-size: 3em;">+${'${this.state.reward}'}</h1>
+            </div>
+        `,
+        timeout: duration,
+        parameters: {
+            trial_type: 'bandit_feedback'
+        }
+    });
+}
+
+// create bandit trial
+function createBanditTrial(leftBanditQuality){
+	return new lab.html.Screen({
 		content: `
       <div class="content-vertical-center content-horizontal-center">
         <div>
           <p>Press the left or right arrow key.</p>
           <div style="display: flex; justify-content: space-around; width: 90vw;">
-            <img src="${leftImage}" alt="Left option" style="width: 300px; height: 300px; image-rendering: pixelated;">
-            <img src="${rightImage}" alt="Right option" style="width: 300px; height: 300px; image-rendering: pixelated;">
+            ${leftImage}
+            ${rightImage}
           </div>
         </div>
       </div>
@@ -34,12 +69,23 @@ function createBanditTrial(){
 			'keypress(d)': 'right'
 		},
 
-		parameters: {
-			left_image_url: leftImage,
-			right_image_url: rightImage,
-			trial_type: 'bandit_task'
+		messageHandlers: {
+		    'end': function() {
+		        let reward = 0;
+		        if (this.state.response === 'left'){
+		            reward = getBetaReward(leftBanditQuality);
+		        } else if (this.state.response === 'right'){
+		            reward = getBetaReward(1 - leftBanditQuality);
+		        }
+		        this.state.reward = reward;
+		    }
 		},
 
+		parameters: {
+			left_image: leftColor,
+			right_image: rightColor,
+			trial_type: 'bandit_task'
+		},
 	});
 }
 
@@ -70,11 +116,19 @@ function createRandomParticipantId(){
 
 // experiment setup
 
+// participant data
 const participantId = createRandomParticipantId();
 const startTime = Date.now();
 const dynamicFilename = `data_${participantId}.csv`;
-const leftImage = 'https://cdn-icons-png.flaticon.com/128/3214/3214746.png';
-const rightImage = 'https://cdn-icons-png.flaticon.com/128/3214/3214746.png';
+
+// define stimuli
+const leftSeed = Math.random();
+const rightSeed = Math.random();
+const leftBanditQuality = Math.random();
+const leftColor = `hsl(${leftSeed * 360}, 70%, 50%)`;
+const rightColor = `hsl(${rightSeed * 360}, 70%, 50%)`;
+const leftImage = createRandomIcon(leftColor);
+const rightImage = createRandomIcon(rightColor);
 
 // build the experiment
 const study = new lab.flow.Sequence({
@@ -103,7 +157,8 @@ const study = new lab.flow.Sequence({
 	content: [
 		createInstructionScreen('Instructions', 'put instruction here ...'),
 		createFixationCross(),
-		createBanditTrial(),
+		createBanditTrial(leftBanditQuality),
+		createFeedbackScreen(),
 
 		// handles automatic data download
 		new lab.html.Screen({
