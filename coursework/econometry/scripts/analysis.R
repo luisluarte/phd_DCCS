@@ -343,6 +343,8 @@ main_model_2 <- lmerTest::lmer(
 )
 summary(main_model_2)
 
+write_rds(x = main_model_2, file = "../data/mdl2.rds")
+
 summary(mdl_data$saccade_entropy)
 
 main_model_2_emm <- emmeans::emmeans(
