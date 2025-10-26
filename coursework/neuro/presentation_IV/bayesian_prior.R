@@ -714,13 +714,7 @@ mats_pd
 
 p7 <- mats_pd %>%
     mutate(
-        block_type = c(
-            rep("U", 50 * 300),
-            rep("R", 100 * 300),
-            rep("L", 100 * 300),
-            rep("R", 50 * 300)
-        ),
-        trial_cat = as.factor(paste(trial, block_type, sep = "_"))
+        trial_cat = as.factor(trial)
     ) %>%
     arrange(trial) %>%
     ggplot(aes(
@@ -748,7 +742,7 @@ p7_anim <- p7 +
     transition_states(
         states = trial_cat,
         transition_length = 2,
-        state_length = 1
+        state_length = 5
     ) +
     ease_aes("linear")
 p7_anim
