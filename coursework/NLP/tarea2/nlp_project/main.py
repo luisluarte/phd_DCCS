@@ -771,7 +771,7 @@ if __name__ == "__main__":
     N_RANDOM_SAMPLES = 1000
 
     # load data
-    BASE_PATH = pathlib.Path(__file__).parent.resolve()
+    BASE_PATH = pathlib.Path().parent.resolve()
     file_path = BASE_PATH / "data" / "dataset.csv"
     tmp_df = load_csv_to_dataframe(file_path)
     corpus_df = tmp_df[tmp_df["isTraining"] == 0]  # leave validation set out
