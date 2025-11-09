@@ -10,10 +10,11 @@ import logging
 import string
 import pathlib
 import itertools
-from typing import List, Literal, Optional, Iterator, Tuple, Dict, Any
+from typing import List, Literal, Optional, Iterator, Tuple, Dict, Any, Callable, Union
 from sklearn.model_selection import StratifiedKFold
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 from joblib import Parallel, delayed
 
@@ -123,7 +124,7 @@ def _clean_document(
     to_lower: bool,
     remove_punct: bool,
     remove_stopwords: bool,
-    normalization: Literal["none", "stem", "lemmatize"],
+    normalization_strategy: Literal["none", "stem", "lemmatize"],
 ) -> str:
     """
     Applies the chosen cleaning strategy to a document
@@ -138,7 +139,7 @@ def _clean_document(
         doc = doc.translate(PUNCT_TABLE)
 
     # tokenization
-    if remove_stopwords or normalization != "none":
+    if remove_stopwords or normalization_strategy != "none":
         tokens = nltk.word_tokenize(doc)
     else:
         return doc.strip()
@@ -148,14 +149,14 @@ def _clean_document(
         tokens = [t for t in tokens if t not in STOP_WORDS]
 
     # normalization
-    if normalization == "stem":
+    if normalization_strategy == "stem":
         tokens = [STEMMER.stem(t) for t in tokens]
-    elif normalization == "lemmatize":
+    elif normalization_strategy == "lemmatize":
         tokens = [LEMMATIZER.lemmatize(t) for t in tokens]
     elif normalization_strategy == "none":
         pass
     else:
-        raise ValueError(f"unknown normalization strat: {normalization_strategy}")
+        raise ValueError(f"unknown normalization_strategy strat: {normalization_strategy}")
 
     # re-join everything into single string doc
     return " ".join(tokens)
@@ -182,7 +183,7 @@ def create_preprocessed_corpus(
     to_lower: bool,
     remove_punct: bool,
     remove_stopwords: bool,
-    normalization: Literal["none", "stem", "lemmatize"],
+    normalization_strategy: Literal["none", "stem", "lemmatize"],
 ) -> pd.Series:
     """
     takes raw dataframe and relevant hyperparams and returns
@@ -197,7 +198,7 @@ def create_preprocessed_corpus(
             to_lower=to_lower,
             remove_punct=remove_punct,
             remove_stopwords=remove_stopwords,
-            normalization=normalization,
+            normalization_strategy=normalization_strategy,
         )
     )
 
@@ -244,24 +245,40 @@ def vectorize_fold_data(
 
     X_test_vec = vectorizer.transform(X_test)
 
-    logging.info(f"Vectorizer fitted on {len(vectorizer.vocabulary_)} features.")
+    #logging.info(f"Vectorizer fitted on {len(vectorizer.vocabulary_)} features.")
 
     return X_train_vec, X_test_vec, vectorizer
 
 
 def train_kernel_svm_model(
-    X_train_vec, y_train_fold: pd.Series, svm_hyperparams: Optional[dict] = None
+    X_train_vec,
+    y_train_fold: pd.Series,
+    model_hyperparams: Optional[dict] = None
 ) -> SVC:
     """
     suport vector machine
     """
-    if svm_hyperparams is None:
-        svm_hyperparams = {}
+    if model_hyperparams is None:
+        model_hyperparams = {}
 
-    model = SVC(**svm_hyperparams)
+    model = SVC(**model_hyperparams)
     model.fit(X_train_vec, y_train_fold)
 
-    logging.info(f"SVC(kernel={svm_hyperparams.get('kernel', 'rbf')}') model trained")
+    #logging.info(f"SVC(kernel={svm_hyperparams.get('kernel', 'rbf')}') model trained")
+    return model
+
+def train_rf_model(
+        X_train_vec,
+        y_train_fold: pd.Series,
+        model_hyperparams: Optional[dict] = None
+        ) -> RandomForestClassifier:
+    """
+    train random forest classifier
+    """
+    if model_hyperparams is None: model_hyperparams = {}
+    model = RandomForestClassifier(**model_hyperparams)
+    model.fit(X_train_vec, y_train_fold)
+    logging.debug(f"RandomForest(n_estimators={model_hyperparams.get('n_estimators', 100)}")
     return model
 
 
@@ -307,17 +324,19 @@ def generate_preprocessing_params() -> Iterator[Dict[str, Any]]:
     """
     combine_strategies = ["desc_only", "name_plus_desc"]
     normalization_strategies = ["none", "stem", "lemmatize"]
-    fixed_params = {"to_lower": True, "remove_punct": True, "remove_stopwords": True}
+    remove_stopwords_opts = [True, False]
+    fixed_params = {"to_lower": True, "remove_punct": True}
 
     param_id = 0
-    for combine_strat, norm_strat in itertools.product(
-        combine_strategies, normalization_strategies
+    for combine_strat, norm_strat, remove_sw in itertools.product(
+        combine_strategies, normalization_strategies, remove_stopwords_opts
     ):
         param_id += 1
         params = {
             "id": f"P{param_id}",
             "combine_strategy": combine_strat,
             "normalization_strategy": norm_strat,
+            "remove_stopwords": remove_sw,
             **fixed_params,
         }
         yield params
@@ -327,45 +346,130 @@ def generate_vectorizer_params() -> Iterator[Dict[str, Any]]:
     """
     generates the vectorization options
     """
-    ngram_ranges = [(1, 1), (1, 2), (1, 3)]
-    min_dfs = [3, 5]
+    ngram_ranges = [(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6)]
+    min_dfs = [5, 10, 15]
+    max_dfs = [0.7, 0.8, 0.9]
+    sublinear_tf_opts = [True, False]
     fixed_params = {
         "lowercase": False,
-        "max_df": 0.95,
-        "sublinear_tf": True,
         "norm": "l2",
     }
 
     param_id = 0
-    for ngram, min_df in itertools.product(ngram_ranges, min_dfs):
+    for ngram, min_df, max_df_val, sublinear_tf_val in itertools.product(
+            ngram_ranges, min_dfs, max_dfs, sublinear_tf_opts
+            ):
         param_id += 1
         params = {
             "id": f"V{param_id}",
             "ngram_range": ngram,
             "min_df": min_df,
+            "max_df": max_df_val,
+            "sublinear_tf": sublinear_tf_val,
             **fixed_params,
         }
         yield params
 
 
-def generate_model_params() -> Iterator[Dict[str, Any]]:
+def generate_svm_params() -> Iterator[Dict[str, Any]]:
     """
     generate the model options
     """
     kernels = ["linear", "rbf"]
-    Cs = [0.1, 1, 10]
-    fixed_params = {"class_weight": "balanced", "random_state": 42}
+    Cs = [0.1, 1, 10, 100]
+    gammas = ['scale', 0.1, 1]
+    degrees = [2, 3]
+    class_weight_opts = ['balanced', None]
+    fixed_params = {"random_state": 42}
 
     param_id = 0
-    for kernel, c in itertools.product(kernels, Cs):
+    for class_weight_val in class_weight_opts:
+        for kernel in kernels:
+            for c in Cs:
+                common_params = {
+                        "kernel": kernel,
+                        "C": c,
+                        "class_weight": class_weight_val,
+                        **fixed_params
+                        }
+
+                if kernel == 'linear':
+                    param_id += 1
+                    params = {
+                            "id": f"SVM{param_id}",
+                            **common_params
+                            }
+                    yield params
+
+                elif kernel == 'rbf':
+                    for gamma in gammas:
+                        param_id += 1
+                        params = {
+                                "id": f"SVM{param_id}",
+                                "gamma": gamma,
+                                **common_params
+                                }
+                        yield params
+
+#                elif kernel == 'poly':
+#                    for degree in degrees:
+#                        for gamma in gammas:
+#                            param_id += 1
+#                            params = {
+#                                    "id": f"SVM{param_id}",
+#                                    "gamma": gamma,
+#                                    "degree": degree,
+#                                    **common_params
+#                                    }
+#                            yield params
+
+
+def generate_rf_params() -> Iterator[Dict[str, Any]]:
+    """
+    generates random forest search space
+    """
+    n_estimators = [100] # this is stable enough
+    max_depths = [20, 30]
+    min_samples_split = [5, 10]
+    min_samples_leaf = [2, 5]
+    max_features_opts = ['sqrt', 0.5, 0.9]
+    class_weight_opts = ['balanced', None]
+
+    fixed_params = {
+            'random_state': 42,
+            'n_jobs': 1
+            }
+
+    param_id = 0
+
+    h_product = itertools.product(
+            n_estimators,
+            max_depths,
+            min_samples_split,
+            min_samples_leaf,
+            max_features_opts,
+            class_weight_opts
+            )
+
+    for (n, d, mss, msl, mf, cw) in h_product:
         param_id += 1
-        params = {"id": f"M{param_id}", "kernel": kernel, "C": c, **fixed_params}
+        params = {
+                "id": f"RF{param_id}",
+                "n_estimators": n,
+                "max_depth": d,
+                "min_samples_split": mss,
+                "min_samples_leaf": msl,
+                "max_features": mf,
+                "class_weight": cw,
+                **fixed_params
+                }
         yield params
 
 
 def run_experiment(
     corpus_df_clean: pd.DataFrame,
     y_labels_clean: pd.Series,
+    train_model: Callable,
     preprocess_params: Dict[str, Any],
     vectorize_params: Dict[str, Any],
     model_params: Dict[str, Any],
@@ -400,15 +504,16 @@ def run_experiment(
                 X_train_fold, X_test_fold, vectorizer_hyperparams=v_params_clean
             )
 
-            fold_model = train_kernel_svm_model(
-                X_train_vec, y_train_fold, svm_hyperparams=m_params_clean
+            fold_model = train_model(
+                    X_train_vec, y_train_fold,
+                    model_hyperparams = m_params_clean
             )
 
-            y_pred_dol = predict(fold_model, X_test_vec)
+            y_pred_fold = predict(fold_model, X_test_vec)
 
             y_pred_fold.index = y_test_fold.index
             fold_metrics = evaluate_fold(y_test_fold, y_pred_fold)
-            all_fold_metric.append(fold_metrics)
+            all_fold_metrics.append(fold_metrics)
 
         final_metrics = aggregate_metrics(all_fold_metrics)
 
@@ -416,17 +521,44 @@ def run_experiment(
             exp_id,
             {"p": preprocess_params, "v": vectorize_params, "m": model_params},
             final_metrics,
-            "DONE",
+            "SUCCESS",
         )
 
     except Exception as e:
-        logging.error(f"failed experiment {exp_id}: {e}")
+        #logging.error(f"failed experiment {exp_id}: {e}")
         return (
             exp_id,
             {"p": preprocess_params, "v": vectorize_params, "m": model_params},
             None,
             f"fail: {e}",
         )
+
+def create_results_dataframe(
+        all_results: List[Tuple[str, Dict, pd.DataFrame, str]]
+        ) -> pd.DataFrame:
+    """
+    create reports on hyperparameter optimization
+    """
+    processed_rows = []
+    for (exp_id, params, metrics_df, status) in all_results:
+        row = {"exp_id": exp_id, "status": status}
+        for p_key, p_val in params.get('p', {}).items():
+            row[f"p_{p_key}"] = p_val
+
+        for v_key, v_val in params.get('v', {}).items():
+            row[f"p_{v_key}"] = str(v_val) if isinstance(v_val, tuple) else v_val
+
+        for m_key, m_val in params.get('m', {}).items():
+            row[f"m_{m_key}"] = m_val
+
+        if status == "SUCCESS" and metrics_df is not None:
+            for metric, stats in metrics_df.iterrows():
+                row[f"{metric}_mean"] = stats['mean']
+                row[f"{metric}_std_dev"] = stats['std_dev']
+
+        processed_rows.append(row)
+
+    return pd.DataFrame(processed_rows)
 
 
 # %% [markdown]
@@ -435,92 +567,59 @@ def run_experiment(
 # %%
 if __name__ == "__main__":
 
-        # --- RUN-TIME PHASE (DATA I/O) ---
-    logging.info("--- Grid Search Pipeline Initialized ---")
-    
-    cwd_path = os.getcwd()
-    logging.info(f"Current Working Directory (CWD): {cwd_path}")
+    # load data
     BASE_PATH = pathlib.Path(__file__).parent.resolve()
     file_path = BASE_PATH / "data" / "dataset.csv"
-    
-    corpus_df = load_csv_to_dataframe(file_path)
-    print(corpus_df)
+    tmp_df = load_csv_to_dataframe(file_path)
+    corpus_df = tmp_df[tmp_df['isTraining'] == 0] # leave validation set out
 
-    if corpus_df is not None:
-        
-        # --- FIX 4: Use correct label column (from your traceback) ---
-        label_column_name = 'isEnviromental'
-        required_cols = ['Name', 'Project description', label_column_name]
-        
-        if (False):
-            logging.error(f"DataFrame is missing one or more required columns.")
-            logging.error(f"Please check your CSV. Required: {required_cols}")
-            
-        else:
-            logging.info("Required columns found. Proceeding.")
-            
-            # --- FIX 5: Clean Labels (Global Operation) ---
-            # Use explicit mapping, not pd.to_numeric
-            y_labels_raw = corpus_df[label_column_name]
-            valid_indices = y_labels_raw.dropna().index
-            
-            corpus_df_clean = corpus_df.loc[valid_indices]
-            y_labels_clean = y_labels_raw.loc[valid_indices].astype(int)
-            
-            if len(y_labels_clean.unique()) < 2:
-                logging.error(f"ValueError: The number of classes in '{label_column_name}' is less than 2.")
-                logging.error("StratifiedKFold cannot proceed. Check your 'label_map' dictionary.")
-            else:
-                
-                # --- The f_grid_search Morphism ---
-                logging.info("--- Entering Grid Search (Meta-Morphism) ---")
-                
-                # --- 1. Compute the Cartesian Product H_total ---
-                h_preprocess = list(generate_preprocessing_params())
-                h_vectorize = list(generate_vectorizer_params())
-                h_model = list(generate_model_params())
-                
-                h_total = list(itertools.product(h_preprocess, h_vectorize, h_model))
-                
-                logging.info(f"Total experiments to run: {len(h_total)}")
-                
-                all_results = []
-                
-                # --- 2. Iterate (Map Phase) ---
-                for (f_params, v_params, m_params) in h_total:
-                    
-                    # --- Apply f_pipeline ---
-                    exp_id, params, metrics_df, status = run_experiment(
+    # set data
+    label_column_name = 'isEnvironmental'
+    y_labels_raw = corpus_df[label_column_name]
+    valid_indices = y_labels_raw.dropna().index
+    corpus_df_clean = corpus_df.loc[valid_indices]
+    y_labels_clean = y_labels_raw.loc[valid_indices].astype(int)
+
+    # define search space
+    search_space = [
+            ("SVM", train_kernel_svm_model, list(generate_svm_params())),
+            ("RandomForest", train_rf_model, list(generate_rf_params()))
+            ]
+
+    h_preprocess = list(generate_preprocessing_params())
+    h_vectorize = list(generate_vectorizer_params())
+
+    all_tasks = []
+
+    # compute the full cartesian product
+    for (model_name, train_func, h_model_list) in search_space:
+        h_product = itertools.product(h_preprocess, h_vectorize, h_model_list)
+
+        for (f_p, v_p, m_p) in h_product:
+            all_tasks.append(
+                    delayed(run_experiment)(
                         corpus_df_clean,
                         y_labels_clean,
-                        f_params,
-                        v_params,
-                        m_params
+                        train_func,
+                        f_p, v_p, m_p
+                        )
                     )
-                    
-                    if status == "SUCCESS":
-                        all_results.append((exp_id, params, metrics_df))
-                
-                # --- 3. Reduce Phase (Collate & Report) ---
-                logging.info("\n\n" + "="*50)
-                logging.info("   GRID SEARCH COMPLETE: TOP 5 RESULTS")
-                logging.info("="*50)
-                
-                # Sort results by the 'mean' of the 'f1' score
-                all_results.sort(
-                    key=lambda res: res[2].loc['f1', 'mean'], 
-                    reverse=True
-                )
-                
-                for (exp_id, params, metrics_df) in all_results[:5]:
-                    f_p = params['p']
-                    v_p = params['v']
-                    m_p = params['m']
-                    
-                    print(f"\n--- RANK {all_results.index((exp_id, params, metrics_df)) + 1} (ID: {exp_id}) ---")
-                    print(f"  Preprocess: combine='{f_p['combine_strategy']}', norm='{f_p['normalization']}'")
-                    print(f"  Vectorize:  ngram={v_p['ngram_range']}, min_df={v_p['min_df']}")
-                    print(f"  Model:      C={m_p['C']}")
-                    print("\n  Metrics:")
-                    print(metrics_df.to_string(float_format="%.4f"))
-                    print("-"*50)
+
+        logging.warning(f"grid search {len(all_tasks)} total experiments to run")
+
+        os.environ["OMP_NUM_THREADS"] = "1"
+
+        all_results = Parallel(n_jobs = -1, verbose = 10)(all_tasks)
+
+        logging.warning("grid search complete")
+
+        # saving results to df
+        results_df = create_results_dataframe(all_results)
+        print(results_df)
+        results_df.sort_values(by = 'f1_mean', ascending = False, inplace = True)
+        output_path = BASE_PATH / "grid_search_results.csv"
+        results_df.to_csv(output_path, index = False, float_format = "%.4f")
+        logging.warning(f"results saved to: {output_path}")
+
+
+
