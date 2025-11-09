@@ -693,7 +693,12 @@ def run_meta_analysis(df: pd.DataFrame, model_type: str):
     logging.info(f"\nRunning meta-model analysis for {model_type}")
 
     Y = df['f1_mean']
-    params_cols = [col for col in df.columns if col.startswith('p_') or col.startswith('v_') or col.startswith('m_')]
+    params_cols = [
+            col
+            for col in df.columns
+            if (col.startswith('p_') or col.startswith('v_') or col.startswith('m_'))
+            and "id" not in col
+            ]
     X = df[params_cols]
 
     if X.empty:
@@ -768,7 +773,7 @@ def analyze_meta_model(results_df: pd.DataFrame):
 if __name__ == "__main__":
 
     SEARCH_MODE = 'random' # 'grid' for exhaustive search
-    N_RANDOM_SAMPLES = 1000
+    N_RANDOM_SAMPLES = 100
 
     # load data
     BASE_PATH = pathlib.Path().parent.resolve()
