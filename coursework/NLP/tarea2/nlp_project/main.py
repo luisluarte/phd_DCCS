@@ -36,7 +36,7 @@ logging.basicConfig(
 # # Function definitions
 
 
-## %%
+# %%
 # f: filepath -> dataframe
 def load_csv_to_dataframe(file_path: str) -> Optional[pd.DataFrame]:
     """
@@ -54,7 +54,7 @@ def load_csv_to_dataframe(file_path: str) -> Optional[pd.DataFrame]:
         return None
 
 
-## %%
+# %%
 # f: corpus -> pre_processed_corpus
 def download_nltk_resources():
     """
