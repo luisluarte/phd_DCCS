@@ -1,0 +1,152 @@
+\documentclass{article}
+
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\begin{document}
+\author{Luis Luarte}
+\title{Political drift}
+\maketitle
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\section{Preamble}
+Legislators "drift" from their ideological baselines, sometime voting with 
+their party again their apparent preferences, sometime moderating after a key 
+political loss, and sometimes "flip-flopping" entirely.
+\par
+The idea here is to consider that this, usually considered, "noise", miight be 
+the signal of a predictable, dynamic process.
+
+My central intuition is that a legislator's ideal point is not a fixed point, but 
+a particle in constant motion, managed by the tension between three distinct forces:
+\begin{itemize}
+	\item The \textit{ideological anchor} $(p_{i}(0)$: this is the legislator's
+	"true" ideal point, the position that got them elected. Like a spring, this force constantly pull the agent back "home" whenever they drift too far.
+	\item The \textit{vote outcome} $(\Delta p_{learn})$: when a legislator is on the losing side of the vote, they are forced to "learn" from the winning position, causing their ideal point to shift. A win, by contrast, reinforces their position.
+	\item The \textit{party gravity} $(C_{j})$: this is the pull of the party's center of mass, which demands loyalty and conformity.
+\end{itemize}
+
+I try to formalize the "Do I vote my conscience, or do I vote with my party?", adding that such conscience is dynamic and favor 'winning' scenarios.
+
+My model includes a \textit{detachment} mechanism: if the random jumps of political life pull the legislator too far from their anchor, the "spring" snaps. At this point, the agent is captured by the party's gravity and pulled toward the party center.
+
+This model, therefore, predicts that a legislator's long-term behavior is not a single point, but a stable "probability cloud" split between these two poles: their original, anchored ideology and their party's political center.
+
+
+\section{Formalization}
+\subsection{Actors, environment and information}
+
+\textbf{Agents} $(L, J)$: a set of $n$ legislators, $L = \{1, 2, \dots, n\}$. A set of $m$ political parties, $J = \{1, 2, \dots, m\}$. Each legislator $i \in L$ is a member of one party $j \in J$.
+
+\textbf{Policy space} $(X)$: the policy space $X$ is a single dimension representing the "left-right" ideological spectrum. All positions are scalars: $X \subseteq \mathbb{R}$
+
+\textbf{Information structure}: agest know their own \textit{latent ideal point} $p_{i}(t)$ (which evolves) and their fixed \textit{anchor ideal point} $p_{i}(0)$. There exists a global state variable $G(t) \in J$, which is the party of the ruler at time $t$. Then the relational agent state $S_{i}(t)$ based on $G(t)$ is:
+$$
+S_{i}(t) = \begin{cases}
+	\text{Officialist} & \text{if } J_{i} = G(t) \\
+	\text{Opposition} & \text{if } J_{i} \neq G(t)
+\end{cases}
+$$
+Agents know the scalar locations of the proposal $x_{P}(t)$ and the status-quo $x_{SQ}(t)$.
+
+\subsection{Rules of the game}
+
+\textbf{Initialization} $(t = 0)$: the \textit{anchor} ideal point $p_{i}(0)$ (a scalar) is empirically determined for all agents.
+
+\textbf{Game loop} $(for \ t = 1 \ to \ T)$:
+\begin{enumerate}
+	\item System state: the ruler's party $G(t)$ is observed.
+	\item Agenda: a bill is presented as two scalars: $x_{P}(t)$ and $x_{SQ}(t)$.
+	\item Action: each agent $i$ determines their role $S_{i}(t)$ (officialist/opposition) and chooses $a_{i}(t) \in \{\text{favor, against}\}$ by maximizing their utility function
+	\item Outcome: an outcome $O(t) \in  \{\text{pass, fail}\}$ is determined by a voting rule $\tau$.
+	\item Position update: the agent's latent ideal point $p_{i}(t)$ evolves to $p_{i}(t + 1)$ according to the dynamic update equation. 
+\end{enumerate}
+
+\subsection{Utility function}
+
+The agent's utility is a weighted sum of ideological satisfaction and a relational loyalty bonus $(K)$.
+\begin{itemize}
+	\item General utility equation:
+	$$U_{i}(\text{Action}) = \underbrace{w \cdot (\text{Ideological payoff})}_{\text{Personal beliefs}} + 
+	\underbrace{(1 - w) \cdot 
+	(\text{Portfolio payoff})}_{\text{Party loyalty}}$$
+	Where $w \in [0, 1]$ is the weight the agent places on pure ideology.
+	\item Ideologicall payoff:
+	$$
+	U_{\text{Ideological}}(\text{favor}) = -(p_{i}(t) - x_{P}(t))^{2}
+	$$
+	$$
+	U_{\text{Ideological}}(\text{against}) = -(p_{i}(t) - x_{SQ}(t))^{2}
+	$$
+	\item Portfolio payoff: a discrete bonus/penalty $K$ based on the agent's role $S_{t}(t)$. We assume the government's will is always "favor" on its proposal. If agent is \textit{officialist} the utility of voting "favor" is:
+	$$U_{i}(favor) = w \cdot (-(p_{i}(t) - x_{P})^{2}) + (1 - w) \cdot (K)$$
+	and the utility of voting "against":
+	$$U_{i}(against) = w \cdot (-(p_{i}(t) - x_{SQ})^{2}) + (1 - w) \cdot (-K)$$
+	if the agent is \textit{opposition}, the utility of voting "favor" is:
+	$$
+	U_{i}(favor) = w \cdot (-(p_{i}(t) - x_{P})^{2}) + (1 - w) \cdot (-K)
+	$$
+	and the utility of voting "against":
+	$$
+	U_{i}(favor) = w \cdot (-(p_{i}(t) - x_{SQ})^{2}) + (1 - w) \cdot (K)
+	$$
+\end{itemize}
+
+\subsection{Equilibrium and predictions}
+
+\textbf{Learning}: the ideal point $p_{i}(t)$ evolves according to:
+$$
+p_{i}(t + 1) = p_{i}(t) + \Delta p_{learn}(t) + \Delta p_{force}(t)
+$$
+
+\textbf{Error correction}: the teching or learning signal $\Delta p_{learn}(t)$ is computed as:
+$$
+\Delta p_{learn}(t) = \alpha_{i}(t) \cdot (x_{winner}(t) - p_{i}(t))
+$$
+\begin{itemize}
+	\item $x_{winner}(t)$ is the scalar position of the winning policy.
+	\item $\alpha_{i}(t) = \alpha_{loss}$, if the agent 'loses' the vote.
+\end{itemize}
+
+\textbf{Ideological drift}: how the agent is pulled against its original party or detached from it is described by:
+$$
+\Delta p_{force}(t) = \begin{cases}
+	\gamma_{i} \cdot (C_{target}(t) - p_{i}(t)) & \text{if } r \le P_{detach}(t) \ \text{(Detached)} \\
+	k_{i} \cdot (p_{i}(0) - p_{i}(t)) & \text{if } r \geq P_{detach}(t) \ \text{(Anchored)}
+\end{cases}
+$$
+
+\begin{itemize}
+	\item $C_{target}(t)$ is the scalar position of the nearest party cluster (party's "center of mass").
+	\item $k_{i}$ is the "spring stiffness" of the anchor $p_{i}(0)$.
+	\item $\gamma_{i}$ is the "gravitational pull" of the party cluster.
+	\item $r ~ U(0, 1)$ is a random draw.
+\end{itemize}
+
+\textbf{Detachment probability}: the probability of the spring "breaking":
+$$
+P_{detach}(t) = \frac{1}{1 + e^{-(\beta_{i} \cdot |p_{i}(t) - p_{i}(0)| -\theta_{i})}}
+$$
+
+\begin{itemize}
+	\item $\beta_{i} \cdot |p_{i}(t) - p_{i}(0)|$, represents detachment pressure, which grows as the agent drifts further from their anchor.
+	\item the paramater $\theta_{i}$ is the fixed barrier that the pressure must overcome to effectively detach.
+\end{itemize}
+
+\section{Predictions}
+
+\textbf{Defection from the party}:An officialist agent will defect and vote 'against' if and only if their ideological gain from defecting is greater that the loyalty bonus they forfeit.
+$$
+U_{i}(against) \ge U_{i}(favor)
+$$
+$$
+w \cdot U_{Ideological}(against) - (1 - w) \cdot K \ge w \cdot U_{Ideological}(favor) + (1 - w) \cdot K
+$$
+$$
+w \cdot [U_{Ideological}(against) - U_{Ideological}(favor)] \ge 2 \cdot (1 - w) \cdot K
+$$
+As the party's power $K$ increases, or as the agent's sincerity $w$ decreases, the agent's willingness to "toe the party line" increases.
+
+If the officialist party wins most of its votes, $x_{winner}(t)$ will be on average the goverment's proposal. Because $\alpha_{loss} \ge 0$, all agents who lose will have their ideal points $p_{i}(t)$ pulled toward $x_{winner}(t)$. A high $\alpha_{loss}$ predicts a system-wide convergence.
+\end{document}
