@@ -6,6 +6,8 @@
 \usepackage{authblk}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\addbibresource{bib.bib}
 
 \begin{document}
 	\author{Luis Luarte}
@@ -14,6 +16,17 @@
 	\maketitle
 	\setlength{\parindent}{0pt}
 	\setlength{\parskip}{1em}
+	
+	\section{Conceptual framework}
+	
+	Black \cite{black_rationale_1948} proposed a single-dimensional policy space, that is, a space going from left to right political ideologies. Its primary justification, in conjunction with Downs \cite{downs_economic_1957}, was that politics is indeed highly complex; however, there's a significant information cost for voters, leading to the use of a `good-enough' heuristic, which reduces dimensionality to this `left-right' dimension, having also found empirical support for this as a `natural' order. Further, Black \cite{black_rationale_1948} proposes a single-peaked utility function, which makes intuitive sense as any politician should have an ideal point to aim towards, thereby situating all political agents in the same rational space.
+	
+	My work is basically in line with the main assumptions of Black \cite{black_rationale_1948} and Downs \cite{downs_economic_1957}, starting from the point that rational agents take decisions from an ideal or preferred point in a policy space, which seems like a good-enough abstraction of the immense complexity of politics. The exception is that I take these assumptions and set them for a specific time point, relaxing the belief that, from time $t$ to time $t + 1$, the system must remain the same. Thus, I do not assume a fixed preference for the agents; instead, a mechanism for modifying preferences from $t$ to $t + 1$ is defined, while respecting the classical assumption within any given $t$. Ideal points are thus dynamic ideal points, following a more modern tradition of treating these points as time-varying parameters \cite{martin_dynamic_2002}, rather than fixed attributes. To justify this from the perspective of the agent's composition, I assume a `bounded rationality' framework, where internal beliefs are updated based on external feedback \cite{sargent_bounded_1993}, in conjunction with classical intuitions on how intelligent organisms learn based on their interaction with the environment \cite{sutton_reinforcement_2020}.
+	
+	As the logical next step I needed some assumptions of the environment in which the agents moves, again departing from Black's where the environment can be reduced to the proposal that the agents vote, here proposal potential value is in interaction with agent position in the political space and the macro-political space, to capture the intuition that no given proposal is the same depending on the ruling party. To capture this, I use techniques drawn from agent-based modeling and computational social science \cite{conte_agent-based_2014}, where, instead of a top-down statistical model, I propose a bottom-up Newtonian system with agents as particles, each party being a center of mass exerting a gravitational pull. This approach permits capturing emergent phenomena like `party lock-in' as the result of micro-level deterministic rules.
+	
+	The final part of my conceptual framework is the strategic vote, which I don't see as a complete departure from Black's sincere voting, as within any given $t$ while the political space is 1-dimensional the agents utility is multi-dimensional and dependent on the history of decision, an according to that its vote is always sincere within the complex political dynamics. The idea stems from thinking of parties as organizations that aim to solve the collective action problem by using incentives for their members \cite{cox_setting_2005}, rewarding loyalty and punishing defection. Here, the agent is in a tension between its own ideology and the party's organizational power; thus, the agent is not just a reflection of its ideology but also how it manages it in the personal-versus-party dimension.
+	
 	\section{Preamble}
 	
 	I start by assuming that politicians `drift' from their original ideological positions. I propose that there's (1) an \textbf{environment} in which they drift, and (2) a \textbf{mechanism} that determines how and why they'll `drift'.
@@ -232,7 +245,8 @@
 	
 	Finally, I propose that a bimodal distribution of loyalists and non-loyalists will permit the system-wide drift towards the ruling party center. The intuition here is that if there's no loyalty to the party's center, it will be very weak, so its induced gradient will be weak as well. On the other hand, if all agents are loyalists, there's no chance for drift. Having a balance between those types permits the system-wide drift with defined political centers and drifting agents that are more peripheral to parties.
 	
+	\newpage
 	
-	
+	\printbibliography
 	
 \end{document}
