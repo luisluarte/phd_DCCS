@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.12)  13 NOV 2025 03:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.15)  16 NOV 2025 02:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -113,34 +113,74 @@ LaTeX Info: Redefining \Relbar on input line 970.
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
 )
+(/usr/share/texmf-dist/tex/latex/preprint/authblk.sty
+Package: authblk 2001/02/27 1.3 (PWD)
+\affilsep=\skip55
+\@affilsep=\skip56
+\c@Maxaffil=\count284
+\c@authors=\count285
+\c@affil=\count286
+)
+(/usr/share/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+(/usr/share/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count287
+\float@exts=\toks25
+\float@box=\box55
+\@float@everytoks=\toks26
+\@floatcapt=\box56
+)
+(/usr/share/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
+)
+\@float@every@algorithm=\toks27
+\c@algorithm=\count288
+)
+(/usr/share/texmf-dist/tex/latex/algorithms/algorithmic.sty
+Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+
+(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks28
+)
+\c@ALC@unique=\count289
+\c@ALC@line=\count290
+\c@ALC@rem=\count291
+\c@ALC@depth=\count292
+\ALC@tlm=\skip57
+\algorithmicindent=\skip58
+)
 (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count284
-\l__pdf_internal_box=\box55
+\l__color_backend_stack_int=\count293
+\l__pdf_internal_box=\box57
 )
 (./formalization.aux)
 \openout1 = `formalization.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 10.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 29.
 
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 10.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 29.
 
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -153,23 +193,56 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 /enc/dvips/cm-super/cm-super-ts1.enc}]
 
 [2]
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 7
+1.
+ (/usr/share/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2024/11/19 v2.5n Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 71.
+
 
 [3]
+Overfull \hbox (56.17973pt too wide) detected at line 159
+[]\OML/cmm/m/it/10 U[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 a; S[]\OT1/cmr/m/n/10 (
+\OML/cmm/m/it/10 t\OT1/cmr/m/n/10 )) = []
+ []
 
-[4] (./formalization.aux)
+
+
+[4]
+Overfull \hbox (32.67574pt too wide) in paragraph at lines 196--197
+[]\OT1/cmr/m/n/10 The es-ti-ma-tion pro-cess will find the set of pa-ram-e-ters
+ $([])$
+ []
+
+
+
+[5]
+Overfull \hbox (12.67436pt too wide) in paragraph at lines 221--222
+\OT1/cmr/m/n/10 log-i-cal drift. Then I'll per-form a sim-ple one-sample t-test
+ with $\OML/cmm/m/it/10 H[] \OT1/cmr/m/n/10 : \OML/cmm/m/it/10 ^^V\OT1/cmr/m/n/
+10 (\OML/cmm/m/it/10 ^^L[]\OT1/cmr/m/n/10 ) =
+ []
+
+
+
+[6]
+
+[7] (./formalization.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 2051 strings out of 473190
- 29474 string characters out of 5722592
- 423719 words of memory out of 5000000
- 25330 multiletter control sequences out of 15000+600000
- 567381 words of font info for 69 fonts, out of 8000000 for 9000
+ 2515 strings out of 473190
+ 36457 string characters out of 5722592
+ 432605 words of memory out of 5000000
+ 25776 multiletter control sequences out of 15000+600000
+ 563333 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 56i,10n,65p,370b,221s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 56i,13n,65p,600b,521s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/publi
@@ -178,15 +251,16 @@ cmmi5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr
 /share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
-/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/t
-ype1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/publ
-ic/cm-super/sfrm1000.pfb>
-Output written on formalization.pdf (4 pages, 178034 bytes).
+/cm/cmr5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></u
+sr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
+m10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on formalization.pdf (7 pages, 213867 bytes).
 PDF statistics:
- 93 PDF objects out of 1000 (max. 8388607)
- 56 compressed objects within 1 object stream
+ 114 PDF objects out of 1000 (max. 8388607)
+ 70 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
