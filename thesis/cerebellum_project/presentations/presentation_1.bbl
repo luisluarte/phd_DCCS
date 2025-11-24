@@ -1,0 +1,275 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{bucknerOrganizationHumanCerebellum2011}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=3b7d6a2b279db45f0df8458b63857498}{%
+           family={Buckner},
+           familyi={B\bibinitperiod},
+           given={Randy\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=19c17563251ca07027922b36c8ac0898}{%
+           family={Krienen},
+           familyi={K\bibinitperiod},
+           given={Fenna\bibnamedelima M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ef6e93288f5e2deb22acd5f3ef825159}{%
+           family={Castellanos},
+           familyi={C\bibinitperiod},
+           given={Angela},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d008dc87380e8ee199079c878ee9b007}{%
+           family={Diaz},
+           familyi={D\bibinitperiod},
+           given={Julio\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=aa64e3733290ac739740c496b4be259e}{%
+           family={Yeo},
+           familyi={Y\bibinitperiod},
+           given={B.\bibnamedelimi T.\bibnamedelimi Thomas},
+           giveni={B\bibinitperiod\bibinitdelim T\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{19c4df2efb7d8ef7a65acf994f6cb83e}
+      \strng{fullhash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{fullhashraw}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{bibnamehash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{authorbibnamehash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{authornamehash}{19c4df2efb7d8ef7a65acf994f6cb83e}
+      \strng{authorfullhash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{authorfullhashraw}{80134b49b8311e24d441b48cb3aa4325}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The cerebral cortex communicates with the cerebellum via polysynaptic circuits. Separate regions of the cerebellum are connected to distinct cerebral areas, forming a complex topography. In this study we explored the organization of cerebrocerebellar circuits in the human using resting-state functional connectivity MRI (fcMRI). Data from 1,000 subjects were registered using nonlinear deformation of the cerebellum in combination with surface-based alignment of the cerebral cortex. The foot, hand, and tongue representations were localized in subjects performing movements. fcMRI maps derived from seed regions placed in different parts of the motor body representation yielded the expected inverted map of somatomotor topography in the anterior lobe and the upright map in the posterior lobe. Next, we mapped the complete topography of the cerebellum by estimating the principal cerebral target for each point in the cerebellum in a discovery sample of 500 subjects and replicated the topography in 500 independent subjects. The majority of the human cerebellum maps to association areas. Quantitative analysis of 17 distinct cerebral networks revealed that the extent of the cerebellum dedicated to each network is proportional to the network's extent in the cerebrum with a few exceptions, including primary visual cortex, which is not represented in the cerebellum. Like somatomotor representations, cerebellar regions linked to association cortex have separate anterior and posterior representations that are oriented as mirror images of one another. The orderly topography of the representations suggests that the cerebellum possesses at least two large, homotopic maps of the full cerebrum and possibly a smaller third map.}
+      \field{issn}{0022-3077, 1522-1598}
+      \field{journaltitle}{Journal of Neurophysiology}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{5}
+      \field{title}{The Organization of the Human Cerebellum Estimated by Intrinsic Functional Connectivity}
+      \field{urlday}{24}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{106}
+      \field{year}{2011}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{2322\bibrangedash 2345}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1152/jn.00339.2011
+      \endverb
+      \verb{urlraw}
+      \verb https://www.physiology.org/doi/10.1152/jn.00339.2011
+      \endverb
+      \verb{url}
+      \verb https://www.physiology.org/doi/10.1152/jn.00339.2011
+      \endverb
+    \endentry
+    \entry{glicksteinThinkingCerebellum2006}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=2ecb782be76f1bfc70f68e33a9cad129}{%
+           family={Glickstein},
+           familyi={G\bibinitperiod},
+           given={Mitchell},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{fullhash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{fullhashraw}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{bibnamehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authorbibnamehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authornamehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authorfullhash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authorfullhashraw}{2ecb782be76f1bfc70f68e33a9cad129}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{issn}{1460-2156, 0006-8950}
+      \field{journaltitle}{Brain}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{2}
+      \field{title}{Thinking about the Cerebellum}
+      \field{urlday}{24}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{129}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{288\bibrangedash 290}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1093/brain/awh728
+      \endverb
+      \verb{urlraw}
+      \verb http://academic.oup.com/brain/article/129/2/288/292271/Thinking-about-the-cerebellum
+      \endverb
+      \verb{url}
+      \verb http://academic.oup.com/brain/article/129/2/288/292271/Thinking-about-the-cerebellum
+      \endverb
+    \endentry
+  \enddatalist
+  \datalist[entry]{apa/global//global/global/global}
+    \entry{bucknerOrganizationHumanCerebellum2011}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=3b7d6a2b279db45f0df8458b63857498}{%
+           family={Buckner},
+           familyi={B\bibinitperiod},
+           given={Randy\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=19c17563251ca07027922b36c8ac0898}{%
+           family={Krienen},
+           familyi={K\bibinitperiod},
+           given={Fenna\bibnamedelima M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ef6e93288f5e2deb22acd5f3ef825159}{%
+           family={Castellanos},
+           familyi={C\bibinitperiod},
+           given={Angela},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d008dc87380e8ee199079c878ee9b007}{%
+           family={Diaz},
+           familyi={D\bibinitperiod},
+           given={Julio\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=aa64e3733290ac739740c496b4be259e}{%
+           family={Yeo},
+           familyi={Y\bibinitperiod},
+           given={B.\bibnamedelimi T.\bibnamedelimi Thomas},
+           giveni={B\bibinitperiod\bibinitdelim T\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{19c4df2efb7d8ef7a65acf994f6cb83e}
+      \strng{fullhash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{fullhashraw}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{bibnamehash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{authorbibnamehash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{authornamehash}{19c4df2efb7d8ef7a65acf994f6cb83e}
+      \strng{authorfullhash}{80134b49b8311e24d441b48cb3aa4325}
+      \strng{authorfullhashraw}{80134b49b8311e24d441b48cb3aa4325}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The cerebral cortex communicates with the cerebellum via polysynaptic circuits. Separate regions of the cerebellum are connected to distinct cerebral areas, forming a complex topography. In this study we explored the organization of cerebrocerebellar circuits in the human using resting-state functional connectivity MRI (fcMRI). Data from 1,000 subjects were registered using nonlinear deformation of the cerebellum in combination with surface-based alignment of the cerebral cortex. The foot, hand, and tongue representations were localized in subjects performing movements. fcMRI maps derived from seed regions placed in different parts of the motor body representation yielded the expected inverted map of somatomotor topography in the anterior lobe and the upright map in the posterior lobe. Next, we mapped the complete topography of the cerebellum by estimating the principal cerebral target for each point in the cerebellum in a discovery sample of 500 subjects and replicated the topography in 500 independent subjects. The majority of the human cerebellum maps to association areas. Quantitative analysis of 17 distinct cerebral networks revealed that the extent of the cerebellum dedicated to each network is proportional to the network's extent in the cerebrum with a few exceptions, including primary visual cortex, which is not represented in the cerebellum. Like somatomotor representations, cerebellar regions linked to association cortex have separate anterior and posterior representations that are oriented as mirror images of one another. The orderly topography of the representations suggests that the cerebellum possesses at least two large, homotopic maps of the full cerebrum and possibly a smaller third map.}
+      \field{issn}{0022-3077, 1522-1598}
+      \field{journaltitle}{Journal of Neurophysiology}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{5}
+      \field{title}{The Organization of the Human Cerebellum Estimated by Intrinsic Functional Connectivity}
+      \field{urlday}{24}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{106}
+      \field{year}{2011}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{2322\bibrangedash 2345}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1152/jn.00339.2011
+      \endverb
+      \verb{urlraw}
+      \verb https://www.physiology.org/doi/10.1152/jn.00339.2011
+      \endverb
+      \verb{url}
+      \verb https://www.physiology.org/doi/10.1152/jn.00339.2011
+      \endverb
+    \endentry
+    \entry{glicksteinThinkingCerebellum2006}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=2ecb782be76f1bfc70f68e33a9cad129}{%
+           family={Glickstein},
+           familyi={G\bibinitperiod},
+           given={Mitchell},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{fullhash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{fullhashraw}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{bibnamehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authorbibnamehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authornamehash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authorfullhash}{2ecb782be76f1bfc70f68e33a9cad129}
+      \strng{authorfullhashraw}{2ecb782be76f1bfc70f68e33a9cad129}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{issn}{1460-2156, 0006-8950}
+      \field{journaltitle}{Brain}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{2}
+      \field{title}{Thinking about the Cerebellum}
+      \field{urlday}{24}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{129}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{288\bibrangedash 290}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1093/brain/awh728
+      \endverb
+      \verb{urlraw}
+      \verb http://academic.oup.com/brain/article/129/2/288/292271/Thinking-about-the-cerebellum
+      \endverb
+      \verb{url}
+      \verb http://academic.oup.com/brain/article/129/2/288/292271/Thinking-about-the-cerebellum
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
