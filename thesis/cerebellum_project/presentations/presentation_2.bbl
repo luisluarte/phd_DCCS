@@ -1,0 +1,551 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{cayco-gajicSparseSynapticConnectivity2017}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=7204c13d24227402f35586c0006d5fe1}{%
+           family={Cayco-Gajic},
+           familyi={C\bibinithyphendelim G\bibinitperiod},
+           given={N.\bibnamedelimi Alex},
+           giveni={N\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=326600b0ad340d8e0cd5df377b62e046}{%
+           family={Clopath},
+           familyi={C\bibinitperiod},
+           given={Claudia},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=35daf5f5dc97589f181823efb5ea4702}{%
+           family={Silver},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi Angus},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{58eda547014db906315834c3f731faf7}
+      \strng{fullhash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{fullhashraw}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{bibnamehash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{authorbibnamehash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{authornamehash}{58eda547014db906315834c3f731faf7}
+      \strng{authorfullhash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{authorfullhashraw}{abe290c6c00ed2afe0572eec37bd44fd}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract Pattern separation is a fundamental function of the brain. The divergent feedforward networks thought to underlie this computation are widespread, yet exhibit remarkably similar sparse synaptic connectivity. Marr-Albus theory postulates that such networks separate overlapping activity patterns by mapping them onto larger numbers of sparsely active neurons. But spatial correlations in synaptic input and those introduced by network connectivity are likely to compromise performance. To investigate the structural and functional determinants of pattern separation we built models of the cerebellar input layer with spatially correlated input patterns, and systematically varied their synaptic connectivity. Performance was quantified by the learning speed of a classifier trained on either the input or output patterns. Our results show that sparse synaptic connectivity is essential for separating spatially correlated input patterns over a wide range of network activity, and that expansion and correlations, rather than sparse activity, are the major determinants of pattern separation.}
+      \field{day}{24}
+      \field{issn}{2041-1723}
+      \field{journaltitle}{Nature Communications}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{1}
+      \field{shortjournal}{Nat Commun}
+      \field{title}{Sparse Synaptic Connectivity Is Required for Decorrelation and Pattern Separation in Feedforward Networks}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{8}
+      \field{year}{2017}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1116}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41467-017-01109-y
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\MCLGXE4F\Cayco-Gajic et al. - 2017 - Sparse synaptic connectivity is required for decorrelation and pattern separation in feedforward net.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41467-017-01109-y
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41467-017-01109-y
+      \endverb
+      \keyw{MF->GC}
+    \endentry
+    \entry{heffleyClassicalConditioningDrives2019}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=bd4dd2947143dcc93db6194759d4bece}{%
+           family={Heffley},
+           familyi={H\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f1bc8c815a36630b8da3ac44d95a1b53}{%
+           family={Hull},
+           familyi={H\bibinitperiod},
+           given={Court},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{fullhash}{8a008f26cd1112d058000b615c9db903}
+      \strng{fullhashraw}{8a008f26cd1112d058000b615c9db903}
+      \strng{bibnamehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authorbibnamehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authornamehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authorfullhash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authorfullhashraw}{8a008f26cd1112d058000b615c9db903}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Classical models of cerebellar learning posit that climbing fibers operate according to a supervised learning rule to instruct changes in motor output by signaling the occurrence of movement errors. However, cerebellar output is also associated with non-motor behaviors, and recently with modulating reward association pathways in the VTA. To test how the cerebellum processes reward related signals in the same type of classical conditioning behavior typically studied to evaluate reward processing in the VTA and striatum, we have used calcium imaging to visualize instructional signals carried by climbing fibers across the lateral cerebellum in mice before and after learning. We find distinct climbing fiber responses in three lateral cerebellar regions that can each signal reward prediction. These instructional signals are well suited to guide cerebellar learning based on reward expectation and enable a cerebellar contribution to reward driven behaviors, suggesting a broad role for the lateral cerebellum in reward-based learning.}
+      \field{day}{11}
+      \field{issn}{2050-084X}
+      \field{journaltitle}{eLife}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{title}{Classical Conditioning Drives Learned Reward Prediction Signals in Climbing Fibers across the Lateral Cerebellum}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{8}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{e46764}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.7554/eLife.46764
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\GL8SA467\Heffley and Hull - 2019 - Classical conditioning drives learned reward prediction signals in climbing fibers across the latera.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://elifesciences.org/articles/46764
+      \endverb
+      \verb{url}
+      \verb https://elifesciences.org/articles/46764
+      \endverb
+      \keyw{ENV->IO}
+    \endentry
+    \entry{herzfeldEncodingActionPurkinje2015}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=e8058ec70593cf110cd3194d16b26ae3}{%
+           family={Herzfeld},
+           familyi={H\bibinitperiod},
+           given={David\bibnamedelima J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ac59eff1db74c03341e4c34e1f0310fd}{%
+           family={Kojima},
+           familyi={K\bibinitperiod},
+           given={Yoshiko},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=81ac1fe27a72b16070f123bf6dc04570}{%
+           family={Soetedjo},
+           familyi={S\bibinitperiod},
+           given={Robijanto},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9c478c69852fe12385823d6dfecd3ef6}{%
+           family={Shadmehr},
+           familyi={S\bibinitperiod},
+           given={Reza},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{fullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{fullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \strng{bibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorbibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authornamehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{authorfullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorfullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0028-0836, 1476-4687}
+      \field{journaltitle}{Nature}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{7573}
+      \field{shortjournal}{Nature}
+      \field{title}{Encoding of Action by the {{Purkinje}} Cells of the Cerebellum}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{526}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{439\bibrangedash 442}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1038/nature15693
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\N4T4I2M5\Herzfeld et al. - 2015 - Encoding of action by the Purkinje cells of the cerebellum.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/nature15693
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/nature15693
+      \endverb
+      \keyw{PC->ENV}
+    \endentry
+    \entry{suvrathanTimingRulesSynaptic2016}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=ae5fe792b5581f1dfd924211e389e2d2}{%
+           family={Suvrathan},
+           familyi={S\bibinitperiod},
+           given={Aparna},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7689f4a0031841d30748abc2b8b21ca6}{%
+           family={Payne},
+           familyi={P\bibinitperiod},
+           given={Hannah\bibnamedelima L.},
+           giveni={H\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=88b8fe93c0366cc0a818146fb2154785}{%
+           family={Raymond},
+           familyi={R\bibinitperiod},
+           given={Jennifer\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{719231f6a3d0821b061fb647e2f36192}
+      \strng{fullhash}{1c749966b4237701809f931349dbe4f8}
+      \strng{fullhashraw}{1c749966b4237701809f931349dbe4f8}
+      \strng{bibnamehash}{1c749966b4237701809f931349dbe4f8}
+      \strng{authorbibnamehash}{1c749966b4237701809f931349dbe4f8}
+      \strng{authornamehash}{719231f6a3d0821b061fb647e2f36192}
+      \strng{authorfullhash}{1c749966b4237701809f931349dbe4f8}
+      \strng{authorfullhashraw}{1c749966b4237701809f931349dbe4f8}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{It is widely assumed that the complexity of neural circuits enables them to implement diverse learning tasks using just a few generic forms of synaptic plasticity. In contrast, we report that synaptic plasticity can itself be precisely tuned to the requirements of a learning task. We found that the rules for induction of long-term and single-trial plasticity at parallel fiber-to-Purkinje cell synapses vary across cerebellar regions. In the flocculus, associative plasticity in~vitro and in~vivo is narrowly tuned for an interval of ∼120~ms, which compensates for the specific processing delay for error signals to reach the flocculus during oculomotor learning. In the vermis, which supports a range of behavioral functions, plasticity is induced by a range of intervals, with individual cells tuned for different intervals. Thus, plasticity at a single, anatomically defined type of synapse can have properties that vary in a way that is precisely matched to function.}
+      \field{day}{7}
+      \field{eprinttype}{pubmed}
+      \field{issn}{1097-4199}
+      \field{journaltitle}{Neuron}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{5}
+      \field{shortjournal}{Neuron}
+      \field{title}{Timing {{Rules}} for {{Synaptic Plasticity Matched}} to {{Behavioral Function}}}
+      \field{volume}{92}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{pages}{959\bibrangedash 967}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1016/j.neuron.2016.10.022
+      \endverb
+      \verb{eprint}
+      \verb 27839999
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\BVZ22EGY\Suvrathan et al. - 2016 - Timing Rules for Synaptic Plasticity Matched to Behavioral Function.pdf
+      \endverb
+      \keyw{Animals,Cerebellar Vermis,Cerebellum,Eye Movements,Formative Feedback,In Vitro Techniques,Learning,Long-Term Synaptic Depression,Male,Mice,Neuronal Plasticity,Purkinje Cells,Time Factors}
+    \endentry
+  \enddatalist
+  \datalist[entry]{apa/global//global/global/global}
+    \entry{cayco-gajicSparseSynapticConnectivity2017}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=7204c13d24227402f35586c0006d5fe1}{%
+           family={Cayco-Gajic},
+           familyi={C\bibinithyphendelim G\bibinitperiod},
+           given={N.\bibnamedelimi Alex},
+           giveni={N\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=326600b0ad340d8e0cd5df377b62e046}{%
+           family={Clopath},
+           familyi={C\bibinitperiod},
+           given={Claudia},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=35daf5f5dc97589f181823efb5ea4702}{%
+           family={Silver},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi Angus},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{58eda547014db906315834c3f731faf7}
+      \strng{fullhash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{fullhashraw}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{bibnamehash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{authorbibnamehash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{authornamehash}{58eda547014db906315834c3f731faf7}
+      \strng{authorfullhash}{abe290c6c00ed2afe0572eec37bd44fd}
+      \strng{authorfullhashraw}{abe290c6c00ed2afe0572eec37bd44fd}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract Pattern separation is a fundamental function of the brain. The divergent feedforward networks thought to underlie this computation are widespread, yet exhibit remarkably similar sparse synaptic connectivity. Marr-Albus theory postulates that such networks separate overlapping activity patterns by mapping them onto larger numbers of sparsely active neurons. But spatial correlations in synaptic input and those introduced by network connectivity are likely to compromise performance. To investigate the structural and functional determinants of pattern separation we built models of the cerebellar input layer with spatially correlated input patterns, and systematically varied their synaptic connectivity. Performance was quantified by the learning speed of a classifier trained on either the input or output patterns. Our results show that sparse synaptic connectivity is essential for separating spatially correlated input patterns over a wide range of network activity, and that expansion and correlations, rather than sparse activity, are the major determinants of pattern separation.}
+      \field{day}{24}
+      \field{issn}{2041-1723}
+      \field{journaltitle}{Nature Communications}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{1}
+      \field{shortjournal}{Nat Commun}
+      \field{title}{Sparse Synaptic Connectivity Is Required for Decorrelation and Pattern Separation in Feedforward Networks}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{8}
+      \field{year}{2017}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1116}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41467-017-01109-y
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\MCLGXE4F\Cayco-Gajic et al. - 2017 - Sparse synaptic connectivity is required for decorrelation and pattern separation in feedforward net.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41467-017-01109-y
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41467-017-01109-y
+      \endverb
+      \keyw{MF->GC}
+    \endentry
+    \entry{heffleyClassicalConditioningDrives2019}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=bd4dd2947143dcc93db6194759d4bece}{%
+           family={Heffley},
+           familyi={H\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f1bc8c815a36630b8da3ac44d95a1b53}{%
+           family={Hull},
+           familyi={H\bibinitperiod},
+           given={Court},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{fullhash}{8a008f26cd1112d058000b615c9db903}
+      \strng{fullhashraw}{8a008f26cd1112d058000b615c9db903}
+      \strng{bibnamehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authorbibnamehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authornamehash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authorfullhash}{8a008f26cd1112d058000b615c9db903}
+      \strng{authorfullhashraw}{8a008f26cd1112d058000b615c9db903}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Classical models of cerebellar learning posit that climbing fibers operate according to a supervised learning rule to instruct changes in motor output by signaling the occurrence of movement errors. However, cerebellar output is also associated with non-motor behaviors, and recently with modulating reward association pathways in the VTA. To test how the cerebellum processes reward related signals in the same type of classical conditioning behavior typically studied to evaluate reward processing in the VTA and striatum, we have used calcium imaging to visualize instructional signals carried by climbing fibers across the lateral cerebellum in mice before and after learning. We find distinct climbing fiber responses in three lateral cerebellar regions that can each signal reward prediction. These instructional signals are well suited to guide cerebellar learning based on reward expectation and enable a cerebellar contribution to reward driven behaviors, suggesting a broad role for the lateral cerebellum in reward-based learning.}
+      \field{day}{11}
+      \field{issn}{2050-084X}
+      \field{journaltitle}{eLife}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{title}{Classical Conditioning Drives Learned Reward Prediction Signals in Climbing Fibers across the Lateral Cerebellum}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{8}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{e46764}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.7554/eLife.46764
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\GL8SA467\Heffley and Hull - 2019 - Classical conditioning drives learned reward prediction signals in climbing fibers across the latera.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://elifesciences.org/articles/46764
+      \endverb
+      \verb{url}
+      \verb https://elifesciences.org/articles/46764
+      \endverb
+      \keyw{ENV->IO}
+    \endentry
+    \entry{herzfeldEncodingActionPurkinje2015}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=e8058ec70593cf110cd3194d16b26ae3}{%
+           family={Herzfeld},
+           familyi={H\bibinitperiod},
+           given={David\bibnamedelima J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ac59eff1db74c03341e4c34e1f0310fd}{%
+           family={Kojima},
+           familyi={K\bibinitperiod},
+           given={Yoshiko},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=81ac1fe27a72b16070f123bf6dc04570}{%
+           family={Soetedjo},
+           familyi={S\bibinitperiod},
+           given={Robijanto},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9c478c69852fe12385823d6dfecd3ef6}{%
+           family={Shadmehr},
+           familyi={S\bibinitperiod},
+           given={Reza},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{fullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{fullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \strng{bibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorbibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authornamehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{authorfullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorfullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0028-0836, 1476-4687}
+      \field{journaltitle}{Nature}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{7573}
+      \field{shortjournal}{Nature}
+      \field{title}{Encoding of Action by the {{Purkinje}} Cells of the Cerebellum}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{526}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{439\bibrangedash 442}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1038/nature15693
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\N4T4I2M5\Herzfeld et al. - 2015 - Encoding of action by the Purkinje cells of the cerebellum.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/nature15693
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/nature15693
+      \endverb
+      \keyw{PC->ENV}
+    \endentry
+    \entry{suvrathanTimingRulesSynaptic2016}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=ae5fe792b5581f1dfd924211e389e2d2}{%
+           family={Suvrathan},
+           familyi={S\bibinitperiod},
+           given={Aparna},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7689f4a0031841d30748abc2b8b21ca6}{%
+           family={Payne},
+           familyi={P\bibinitperiod},
+           given={Hannah\bibnamedelima L.},
+           giveni={H\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=88b8fe93c0366cc0a818146fb2154785}{%
+           family={Raymond},
+           familyi={R\bibinitperiod},
+           given={Jennifer\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{719231f6a3d0821b061fb647e2f36192}
+      \strng{fullhash}{1c749966b4237701809f931349dbe4f8}
+      \strng{fullhashraw}{1c749966b4237701809f931349dbe4f8}
+      \strng{bibnamehash}{1c749966b4237701809f931349dbe4f8}
+      \strng{authorbibnamehash}{1c749966b4237701809f931349dbe4f8}
+      \strng{authornamehash}{719231f6a3d0821b061fb647e2f36192}
+      \strng{authorfullhash}{1c749966b4237701809f931349dbe4f8}
+      \strng{authorfullhashraw}{1c749966b4237701809f931349dbe4f8}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{It is widely assumed that the complexity of neural circuits enables them to implement diverse learning tasks using just a few generic forms of synaptic plasticity. In contrast, we report that synaptic plasticity can itself be precisely tuned to the requirements of a learning task. We found that the rules for induction of long-term and single-trial plasticity at parallel fiber-to-Purkinje cell synapses vary across cerebellar regions. In the flocculus, associative plasticity in~vitro and in~vivo is narrowly tuned for an interval of ∼120~ms, which compensates for the specific processing delay for error signals to reach the flocculus during oculomotor learning. In the vermis, which supports a range of behavioral functions, plasticity is induced by a range of intervals, with individual cells tuned for different intervals. Thus, plasticity at a single, anatomically defined type of synapse can have properties that vary in a way that is precisely matched to function.}
+      \field{day}{7}
+      \field{eprinttype}{pubmed}
+      \field{issn}{1097-4199}
+      \field{journaltitle}{Neuron}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{5}
+      \field{shortjournal}{Neuron}
+      \field{title}{Timing {{Rules}} for {{Synaptic Plasticity Matched}} to {{Behavioral Function}}}
+      \field{volume}{92}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{pages}{959\bibrangedash 967}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1016/j.neuron.2016.10.022
+      \endverb
+      \verb{eprint}
+      \verb 27839999
+      \endverb
+      \verb{file}
+      \verb C:\Users\DCCS5\Zotero\storage\BVZ22EGY\Suvrathan et al. - 2016 - Timing Rules for Synaptic Plasticity Matched to Behavioral Function.pdf
+      \endverb
+      \keyw{Animals,Cerebellar Vermis,Cerebellum,Eye Movements,Formative Feedback,In Vitro Techniques,Learning,Long-Term Synaptic Depression,Male,Mice,Neuronal Plasticity,Purkinje Cells,Time Factors}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
