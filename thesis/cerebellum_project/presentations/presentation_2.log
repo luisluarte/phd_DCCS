@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  1 DEC 2025 04:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  1 DEC 2025 11:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1530,7 +1530,7 @@ Overfull \hbox (60.98026pt too wide) has occurred while \output is active
 [9
 
 ]
-Overfull \hbox (60.98026pt too wide) in paragraph at lines 290--290
+Overfull \hbox (60.98026pt too wide) in paragraph at lines 291--291
  [][][][]  
  []
 
@@ -1544,7 +1544,7 @@ Overfull \hbox (60.98026pt too wide) has occurred while \output is active
 [10
 
 ]
-Overfull \hbox (60.98026pt too wide) in paragraph at lines 298--298
+Overfull \hbox (60.98026pt too wide) in paragraph at lines 299--299
  [][][][]  
  []
 
@@ -1558,7 +1558,7 @@ Overfull \hbox (60.98026pt too wide) has occurred while \output is active
 [11
 
 ]
-Overfull \hbox (60.98026pt too wide) in paragraph at lines 306--306
+Overfull \hbox (60.98026pt too wide) in paragraph at lines 307--307
  [][][][]  
  []
 
@@ -1572,7 +1572,7 @@ Overfull \hbox (60.98026pt too wide) has occurred while \output is active
 [12
 
 ]
-Overfull \hbox (60.98026pt too wide) in paragraph at lines 314--314
+Overfull \hbox (60.98026pt too wide) in paragraph at lines 315--315
  [][][][]  
  []
 
@@ -1586,7 +1586,7 @@ Overfull \hbox (60.98026pt too wide) has occurred while \output is active
 [13
 
 ]
-Overfull \hbox (60.98026pt too wide) in paragraph at lines 318--318
+Overfull \hbox (60.98026pt too wide) in paragraph at lines 319--319
  [][][][]  
  []
 
@@ -1622,13 +1622,13 @@ Package logreq Info: Writing requests to 'presentation_2.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36319 strings out of 469590
- 754426 string characters out of 5474513
- 1655875 words of memory out of 5000000
- 62488 multiletter control sequences out of 15000+600000
+ 36326 strings out of 469590
+ 754757 string characters out of 5474513
+ 1656981 words of memory out of 5000000
+ 62494 multiletter control sequences out of 15000+600000
  642156 words of font info for 94 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,123p,1252b,5050s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,15n,123p,3216b,5050s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/tex
 live/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2025
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2025/texmf-dis
@@ -1640,10 +1640,10 @@ ssi10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pf
 b><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb><c:/tex
 live/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2025
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on presentation_2.pdf (14 pages, 168954 bytes).
+Output written on presentation_2.pdf (14 pages, 170748 bytes).
 PDF statistics:
- 258 PDF objects out of 1000 (max. 8388607)
- 170 compressed objects within 2 object streams
- 34 named destinations out of 1000 (max. 500000)
+ 261 PDF objects out of 1000 (max. 8388607)
+ 173 compressed objects within 2 object streams
+ 35 named destinations out of 1000 (max. 500000)
  165 words of extra memory for PDF output out of 10000 (max. 10000000)
 

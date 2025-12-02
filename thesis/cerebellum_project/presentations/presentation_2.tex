@@ -86,7 +86,7 @@
 			\item Error correction: signal to modify the mapping from Embedding $\rightarrow$ Action
 		\end{itemize}
 		
-		\begin{block}{The Marr-Albus insight}
+		\begin{block}{The Marr-Albus insight \parencite{marrTheoryCerebellarCortex1969}}
 			\begin{itemize}
 				\item Mossy Fiber $\rightarrow$ Granule Cell (1:1)
 				\item Each claw samples one input dimension from MF
@@ -272,7 +272,7 @@
 		\begin{itemize}
 			\item \textbf{Objects}: represent the functional information states, such as the set of Mossy Fibers, the set of Granule Cells, and the set of Purkinje Cell output rates
 			\item \textbf{Morphisms}: map the state of one population to another
-			\item \textbf{Optics}: provide explicit rules to morphisms
+			\item \textbf{Optics (Bellman)}: provide explicit rules to morphisms
 		\end{itemize}
 		After the category is generated, running the optics through it yields hypotheses necessary for preserving local and global structure. Similar to how game theory finds 'balances' in games.
 	\end{frame}
@@ -281,9 +281,10 @@
 		After theoretical validation, we perform the empirical validation:
 		\begin{itemize}
 			\item \textbf{Entity linking}: for morphism $A \rightarrow B$ translate objects into canonical identifiers (e.g. MeSH terms) using BERN2
-			\item \textbf{Proposition generation}: transform $A \xrightarrow{R} B$ into a testeable sentence using BART
+			\item \textbf{Proposition generation}: transform $A \xrightarrow{R} B$ into a testeable sentence using (search in PUBMED)
 			\item \textbf{Semantic matching}: (a) get a similarity vector of sentences, (b) derive directionality using zero-shot classification $A \xrightarrow{inhibits} B$ or $A \xrightarrow{excites} B$
-			\item \textbf{Network Structure learning}: based on results generate a proposal $\mathcal{C}$ that improves category quality (optics) and empirical support
+			\item \textbf{Network Structure learning}: based on results generate a proposal $\mathcal{C'}$ that improves category quality (optics) and empirical support
+			\item \textbf{Outcome}: between task similarity
 		\end{itemize}
 		
 		This yields something similar to a systematic review, with the added benefit of an explicit model and hypothesis proposal.
