@@ -1,3 +1,4 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module MycelialState where
 
 -- ========================================================
@@ -59,11 +60,19 @@ data Environment = Environment
 -- the evolvable traits inherited with mutation
 data Genome = Genome
   {
+  -- physics traits
   geneGreed :: Double, -- beta_1
   geneTurbulence :: Double, -- Psi_crit
   geneGrowthRate :: Double, -- eta
   geneMaturity :: Double, -- M_T
-  geneDispersion :: Double -- SD how far the spores go
+  geneDispersion :: Double, -- SD how far the spores go
+
+  -- DCA strategy traits
+  geneBaseOrder :: Double,
+  geneDCAOrder :: Double,
+  geneMaxOrders :: Int,
+  geneDevMult :: Double,
+  geneVolMult :: Double
   } deriving (Show)
 
 -- ========================================================
@@ -80,7 +89,9 @@ data HyphalTip = HyphalTip
   hypPath :: [ParamVector], -- History (with this we compute fractal dimension D)
   hypHoldings :: Position, -- q, v_cost
   hypBiology :: BioState, -- tau (age), pi_bank (internal pressure)
-  hypGenome :: Genome -- G: traits
+  hypGenome :: Genome, -- G: traits
+  hypRefPrice :: Price,
+  hypStepCount :: Int
   } deriving (Show)
 
 -- helper structs for the hypha
@@ -88,7 +99,13 @@ data Position = Position
   {
   posQuantity :: Quantity,
   posCost :: Capital
-  } deriving (Show)
+  } deriving (Show, Eq)
+
+instance Semigroup Position where
+  (Position q1 c1) <> (Position q2 c2) = Position (q1+q2) (c1+c2)
+
+instance Monoid Position where
+  mempty = Position 0 0
 
 data BioState = BioState
   {
