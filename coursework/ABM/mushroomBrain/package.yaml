@@ -39,6 +39,7 @@ library:
     - MycelialState
     - MycelialPhysics
     - MycelialSimulation
+    - MycelialStrategy
   dependencies:
     - base >= 4.7 && < 5
     - random

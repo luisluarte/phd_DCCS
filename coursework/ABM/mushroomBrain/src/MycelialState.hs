@@ -72,7 +72,11 @@ data Genome = Genome
   geneDCAOrder :: Double,
   geneMaxOrders :: Int,
   geneDevMult :: Double,
-  geneVolMult :: Double
+  geneVolMult :: Double,
+
+  -- lifecycle & economy
+  geneMaxChildren :: Int, -- denominator for injection formula
+  geneMaintenance :: Double -- cost per tick to exist
   } deriving (Show)
 
 -- ========================================================
@@ -129,5 +133,6 @@ data Spore = Spore
   {
   sporeTarget :: ParamVector, -- x_target
   sporeGenome :: Genome, -- mutated genome
+  sporeCapital :: Capital, -- the injection capital carried from parent
   sporeTimer :: Int -- t_germ (countdown)
   } deriving (Show)

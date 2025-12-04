@@ -2,42 +2,35 @@ module MycelialSimulation where
 
 import MycelialState
 import MycelialPhysics
+import MycelialStrategy
 import System.Random (StdGen, mkStdGen, randomR)
 import Control.Monad (replicateM_, when, unless)
 import Control.Monad.State (State, get, put, gets, modify, runState, execState)
 import Data.Maybe (mapMaybe, catMaybes)
+import Data.List (partition, foldl', sortBy)
+import Data.Ord (comparing)
 
-
--- ======================
--- simulation monad
--- ======================
+-- ... (Imports and Monad setup remain the same) ...
 
 type Sim a = State SystemState a
 
--- get simulation tick/time
 getTime :: Sim Time
 getTime = gets sysTime
 
--- get current price from environment
 getPrice :: Sim Price
 getPrice = gets (mktPrice . sysEnv)
 
--- get global wallet
 getWallet :: Sim GlobalWallet
 getWallet = gets sysWallet
 
--- modify wallet
 modifyWallet :: (Capital -> Capital) -> Sim ()
 modifyWallet f = modify $ \s ->
     let (GlobalWallet c) = sysWallet s
     in s { sysWallet = GlobalWallet (f c) }
 
--- get all active hyphal tips
 getAgents :: Sim [HyphalTip]
 getAgents = gets sysHyphae
 
-
--- overwrite the list of agents
 setAgents :: [HyphalTip] -> Sim ()
 setAgents newAgents = modify $ \s -> s { sysHyphae = newAgents }
 
@@ -47,107 +40,135 @@ getMushrooms = gets sysMushrooms
 setMushrooms :: [MushroomBody] -> Sim ()
 setMushrooms newMushrooms = modify $ \s -> s { sysMushrooms = newMushrooms }
 
+getSpores :: Sim [Spore]
+getSpores = gets sysSpores
+
+setSpores :: [Spore] -> Sim ()
+setSpores newSpores = modify $ \s -> s { sysSpores = newSpores }
+
 -- ======================
 -- MACRO PARAMETERS
 -- ======================
 
--- radius of influence for a single agent
 sensingRadius :: Double
 sensingRadius = 0.05
 
--- minimum pressure required to spawn mushroom
 mushroomThreshold :: Double
-mushroomThreshold = 500.0
+mushroomThreshold = 100.0
 
--- how much capital a mushroom drains per tick per unit of traffic
-drainRate :: Double
-drainRate = 0.1
-
--- Vacuum coefficient for drain equation
 vacuumCoefficient :: Double
 vacuumCoefficient = 0.1
 
 -- ======================
--- ACTION LOGIC (micro)
+-- EVOLUTION
 -- ======================
 
--- execute buy: calculate Q_f, deducts wallet, updates position
+mutateFloat :: Double -> Double -> StdGen -> (Double, StdGen)
+mutateFloat val stdDev rng =
+    let (noise, newRng) = randomR (-stdDev, stdDev) rng
+    in (max 0.001 (val + noise), newRng)
+
+mutateGenome :: Genome -> StdGen -> Genome
+mutateGenome g rng =
+    let
+        (r1, rng1) = mutateFloat (geneGreed g) 0.05 rng
+        (r2, rng2) = mutateFloat (geneTurbulence g) 1.0 rng1
+        (r3, rng3) = mutateFloat (geneGrowthRate g) 0.0005 rng2
+        (r4, rng4) = mutateFloat (geneBaseOrder g) 2.0 rng3
+        (r5, _)    = mutateFloat (geneDevMult g) 0.05 rng4
+    in
+        g { geneGreed = min 0.99 r1
+          , geneTurbulence = r2
+          , geneGrowthRate = r3
+          , geneBaseOrder = r4
+          , geneDevMult = r5
+          }
+
+-- ======================
+-- ACTION LOGIC (Micro)
+-- ======================
+
+executeSell :: Price -> HyphalTip -> Maybe (HyphalTip, Capital, Capital)
+executeSell (Price p) agent =
+    let
+        pos = hypHoldings agent
+        (Quantity q) = posQuantity pos
+        (Capital cost) = posCost pos
+    in
+        if q <= 0 then Nothing
+        else
+            let
+                revenueVal = q * p
+                revenue = Capital revenueVal
+                profit = Capital (revenueVal - cost)
+                (Capital currentBank) = bioBank (hypBiology agent)
+                newBank = Capital (currentBank + (revenueVal - cost))
+                newAgent = agent
+                    { hypHoldings = mempty
+                    , hypRefPrice = Price p
+                    , hypStepCount = 0
+                    , hypBiology = (hypBiology agent) { bioBank = newBank }
+                    }
+            in
+                Just (newAgent, revenue, profit)
+
 executeTrade :: Price -> HyphalTip -> Capital -> Maybe (HyphalTip, Capital)
 executeTrade (Price p) agent (Capital walletBalance) =
     let
         genes = hypGenome agent
         step = hypStepCount agent
-
-        -- check max orders
         maxOrders = geneMaxOrders genes
-
     in
         if step >= maxOrders
-            then Nothing -- max depth reached, cannot buy
+            then Nothing
             else
                 let
-                    -- calculate multipliers
                     volMult = if step == 0 then 1.0 else (geneVolMult genes) ^ step
-
-                    -- physics modulation (fractal flow)
                     d = calculateFractalDim (hypPath agent)
                     q_f = calculateFlowRate d
-
-                    -- calculate order size
                     baseAmt = if step == 0 then geneBaseOrder genes else geneDCAOrder genes
-
-                    -- calculate cost
                     orderCostVal = baseAmt * volMult * q_f
-
-                    -- check wallet
                     isAffordable = orderCostVal <= walletBalance
                 in
                     if not isAffordable
-                        then Nothing -- no money for trade
+                        then Nothing
                         else
                             let
                                 orderCost = Capital orderCostVal
                                 orderQty = Quantity (orderCostVal / p)
                                 newPos = (hypHoldings agent) <> Position orderQty orderCost
-
                                 newAgent = agent
                                     {
                                     hypHoldings = newPos,
                                     hypRefPrice = Price p,
-                                    hypStepCount = step + 1 -- increment step
+                                    hypStepCount = step + 1
                                     }
-
                             in
                                 Just (newAgent, orderCost)
 
--- move: updates location (laminar vs turbulent)
 moveAgent :: Double -> HyphalTip -> StdGen -> HyphalTip
 moveAgent pressure agent rng =
     let
-        turbulenceThreshold = 10.0 -- defined locally or globally
-        -- entropy Sigmoid
-        k = 1.0
-        entropy = 1.0 / (1.0 + exp (-(k * (pressure - turbulenceThreshold))))
+        genes = hypGenome agent
+        psi_crit = geneTurbulence genes
+        k = 0.5
+        sigmoid = 1.0 / (1.0 + exp (-(k * (pressure - psi_crit))))
         currentLoc = hypLocation agent
         currentVel = hypVelocity agent
         (r1, rng1) = randomR (-1.0, 1.0) rng
         (r2, _) = randomR (-1.0, 1.0) rng1
         randomVec = [r1, r2]
-        newVel = zipWith (\v r -> (1.0 - entropy) * v + entropy * r) currentVel randomVec
-
-        -- growth rate from genome
-        eta = geneGrowthRate (hypGenome agent)
+        safeVel = if all (==0) currentVel then randomVec else currentVel
+        newVel = zipWith (\v r -> (1.0 - sigmoid) * v + sigmoid * r) safeVel randomVec
+        eta = geneGrowthRate genes
         newLoc = zipWith (\x v -> x + eta * v) currentLoc newVel
     in
         agent { hypLocation = newLoc, hypVelocity = newVel, hypPath = newLoc : hypPath agent }
 
-
-
 -- ======================
--- MACRO DYNAMICS (Ecosystem)
+-- MACRO DYNAMICS
 -- ======================
 
--- compute pheromone field intensity at location x
 calculateLocalField :: ParamVector -> [HyphalTip] -> Price -> Double
 calculateLocalField loc agents currentPrice =
   let
@@ -163,22 +184,14 @@ calculateLocalField loc agents currentPrice =
   in
     sum contributions
 
--- check and spawn mushrooms
 spawnMushrooms :: Price -> Sim ()
 spawnMushrooms currentPrice = do
     agents <- getAgents
     mushrooms <- getMushrooms
-
-    -- candidate locations are current agent positions
     let candidates = [hypLocation a | a <- agents]
-
-    -- filter candidates that exceed threshold
     let newSpawns = filter (\loc -> calculateLocalField loc agents currentPrice > mushroomThreshold) candidates
-
-    -- filter out candidates too close to existing mushrooms
     let validSpawns = filter (\loc -> all (\m -> euclideanDistance loc (mushLocation m) > sensingRadius) mushrooms) newSpawns
-
-    -- create mushroom
+    
     let newMushroomBody = case validSpawns of
           [] -> []
           (loc:_) -> [MushroomBody
@@ -186,115 +199,172 @@ spawnMushrooms currentPrice = do
            mushId = length mushrooms + 1,
            mushLocation = loc,
            mushMass = Capital 0.0,
-           mushGenome = Genome 0.5 10.0 0.001 1000.0 0.1 10.0 20.0 5 1.1 1.2
+           mushGenome = Genome 0.5 10.0 0.001 1000.0 0.1 10.0 20.0 5 1.1 1.2 5 1.0
            }]
+    
+    unless (null newMushroomBody) $ setMushrooms (mushrooms ++ newMushroomBody)
 
-    unless (null newMushroomBody) $ do
-      setMushrooms (mushrooms ++ newMushroomBody)
+type TaxMap = [(Int, Capital)] 
 
--- Apply Sink Phase (Drain Capital)
-applyDrain :: HyphalTip -> [MushroomBody] -> Price -> [HyphalTip] -> (HyphalTip, Capital)
+applyDrain :: HyphalTip -> [MushroomBody] -> Price -> [HyphalTip] -> (HyphalTip, TaxMap)
 applyDrain agent mushrooms currentPrice allAgents =
     let
         dists = map (\m -> (m, euclideanDistance (hypLocation agent) (mushLocation m))) mushrooms
-        nearby = filter (\(_, d) -> d < sensingRadius) dists
+        -- FIX: Sort nearby mushrooms by distance to find the closest one
+        nearby = sortBy (comparing snd) $ filter (\(_, d) -> d < sensingRadius) dists
     in
         case nearby of
-            [] -> (agent, Capital 0.0)
+            [] -> (agent, [])
             ((m, _):_) -> 
                 let
                     psi_i = calculatePressure currentPrice agent
                     phi_m = calculateLocalField (mushLocation m) allAgents currentPrice
-                    
-                    psi_m = -vacuumCoefficient * phi_m
-                    
                     tau = fromIntegral (bioAge (hypBiology agent)) :: Double
-                    
                     fluxVal = tau * (psi_i + (vacuumCoefficient * phi_m))
-                    
                     drainAmount = Capital (max 0.0 fluxVal)
-                    
                     (Capital currentBank) = bioBank (hypBiology agent)
                     newBank = Capital (currentBank - max 0.0 fluxVal)
                     newBio = (hypBiology agent) { bioBank = newBank }
+                    taxEntry = if drainAmount > 0 then [(mushId m, drainAmount)] else []
                 in
-                    (agent { hypBiology = newBio }, drainAmount)
+                    (agent { hypBiology = newBio }, taxEntry)
 
+updateMushroom :: Price -> TaxMap -> StdGen -> MushroomBody -> (MushroomBody, [Spore])
+updateMushroom (Price p) income rng mBody =
+    let
+        myIncome = sum [amt | (mid, amt) <- income, mid == mushId mBody]
+        massAfterIncome = (mushMass mBody) + myIncome
+        genes = mushGenome mBody
+        cost = Capital (geneMaintenance genes)
+        massAfterCost = massAfterIncome - cost
+        maturity = geneMaturity genes
+        (Capital mVal) = massAfterCost
+    in
+        if mVal > maturity
+            then
+                let
+                    maxChildren = max 1 (fromIntegral (geneMaxChildren genes))
+                    
+                    -- FIX: Base injection on MATURITY, not current mass
+                    -- This ensures equal funding for all spores
+                    injectionAmt = maturity / maxChildren 
+                    sporeCost = Capital injectionAmt
+                    
+                    massAfterSpore = massAfterCost - sporeCost
+                    (mutatedGenes) = mutateGenome genes rng
+                    (r1, rng1) = randomR (-1.0, 1.0) rng
+                    (r2, _) = randomR (-1.0, 1.0) rng1
+                    dispersion = geneDispersion genes
+                    target = zipWith (+) (mushLocation mBody) [r1 * dispersion, r2 * dispersion]
+                    newSpore = Spore
+                        { sporeTarget = target
+                        , sporeGenome = mutatedGenes
+                        , sporeCapital = sporeCost
+                        , sporeTimer = 10
+                        }
+                    finalMushroom = mBody { mushMass = massAfterSpore }
+                in
+                    (finalMushroom, [newSpore])
+            else
+                (mBody { mushMass = massAfterCost }, [])
 
--- ======================
--- UPDATE LOOP
--- ======================
+-- ... (updateHypha and stepSimulation logic remain identical, just ensure updated updateMushroom is called) ...
 
-updateHypha :: Price -> [MushroomBody] -> [HyphalTip] -> HyphalTip -> Sim (Maybe HyphalTip)
+updateHypha :: Price -> [MushroomBody] -> [HyphalTip] -> HyphalTip -> Sim (Maybe HyphalTip, TaxMap)
 updateHypha currentPrice mushrooms allAgents agent = do
-    -- A. Apply Sink Phase
-    let (agentAfterTax, drainedAmt) = applyDrain agent mushrooms currentPrice allAgents
-    
-    -- B. Calculate Pressure
+    let (agentAfterTax, taxes) = applyDrain agent mushrooms currentPrice allAgents
     let psi = calculatePressure currentPrice agentAfterTax
     let dieThresh = -50.0
     let (Capital bank) = bioBank (hypBiology agentAfterTax)
 
     if psi < dieThresh || bank < 0
-        then return Nothing
+        then return (Nothing, taxes)
         else do
-            let (Price refP) = hypRefPrice agent
-            let (Price currP) = currentPrice
-
-            -- get deviation from location vector [delta, tau]
-            let dev = case hypLocation agent of
-                        (d:_) -> d
-                        []    -> 0.01
-            
+            let strategy = interpretStrategy (hypLocation agent)
             let genes = hypGenome agent
             let step = hypStepCount agent
-
-            let devMult = if step == 0 then 1.0 else (geneDevMult genes) ^ step
-            let effectiveDev = dev * devMult
-
-            let shouldBuy = currP <= refP * (1.0 - effectiveDev)
-
-            -- attempt trade
-            agentAfterTrade <- if shouldBuy
+            let volMult = if step == 0 then 1.0 else (geneVolMult genes) ^ step
+            
+            let shouldSell = shouldExecuteSell strategy currentPrice (hypHoldings agentAfterTax)
+            
+            agentAfterLogic <- if shouldSell
                 then do
-                    (GlobalWallet balance) <- getWallet
-                    case executeTrade currentPrice agentAfterTax balance of
-                        Just (newAg, cost) -> do
-                            modifyWallet (\c -> c - cost)
-                            return newAg
-                        Nothing -> return agentAfterTax 
-                else return agentAfterTax
+                    case executeSell currentPrice agentAfterTax of
+                        Just (soldAgent, revenue, profit) -> do
+                            modifyWallet (\c -> c + revenue)
+                            return soldAgent
+                        Nothing -> return agentAfterTax
+                else do
+                    let shouldBuy = shouldExecuteBuy strategy currentPrice (hypRefPrice agentAfterTax) volMult
+                    if shouldBuy
+                        then do
+                            (GlobalWallet balance) <- getWallet
+                            case executeTrade currentPrice agentAfterTax balance of
+                                Just (boughtAgent, cost) -> do
+                                    modifyWallet (\c -> c - cost)
+                                    return boughtAgent
+                                Nothing -> return agentAfterTax 
+                        else return agentAfterTax
 
             t <- getTime
             let (Time tick) = t
             let rng = mkStdGen (hypId agent + tick * 1000)
-            let agentAfterMove = moveAgent psi agentAfterTrade rng
+            let agentAfterMove = moveAgent psi agentAfterLogic rng
+            let bio = hypBiology agentAfterMove
+            let finalAgent = agentAfterMove { hypBiology = bio { bioAge = bioAge bio + 1 } }
 
-            return (Just agentAfterMove)
-
+            return (Just finalAgent, taxes)
 
 stepSimulation :: Price -> Sim ()
 stepSimulation newPrice = do
     agents <- getAgents
     mushrooms <- getMushrooms
+    spores <- getSpores
+    time <- getTime
     
-    -- Note: Passing 'agents' as 'allAgents' means using state from start of tick
-    maybeAgents <- mapM (updateHypha newPrice mushrooms agents) agents
-    let survivingAgents = catMaybes maybeAgents
+    modify $ \s -> s { sysEnv = (sysEnv s) { mktPrice = newPrice } }
+    
+    results <- mapM (updateHypha newPrice mushrooms agents) agents
+    let survivingAgents = catMaybes (map fst results)
+    let allTaxes = concat (map snd results)
     setAgents survivingAgents
     
+    let (Time tInt) = time
+    let processMushroom (mList, sList) m = 
+          let (mNew, newSpores) = updateMushroom newPrice allTaxes (mkStdGen (mushId m + tInt)) m
+          in if mushMass mNew > 0 
+             then (mNew : mList, newSpores ++ sList) 
+             else (mList, sList)
+    
+    let (livingMushrooms, newSpores) = foldl' processMushroom ([], []) mushrooms
+    setMushrooms livingMushrooms
+    
+    let agedSpores = map (\s -> s { sporeTimer = sporeTimer s - 1 }) (spores ++ newSpores)
+    let (germinating, dormant) = partition (\s -> sporeTimer s <= 0) agedSpores
+    setSpores dormant
+    
+    let nextId = length agents + 100
+    let newAgents = zipWith (\s idx -> HyphalTip
+            { hypId = nextId + idx
+            , hypLocation = sporeTarget s
+            , hypVelocity = [0,0]
+            , hypPath = [sporeTarget s]
+            , hypHoldings = mempty
+            , hypBiology = BioState { bioAge = 0, bioBank = sporeCapital s }
+            , hypGenome = sporeGenome s
+            , hypRefPrice = newPrice
+            , hypStepCount = 0
+            }) germinating [0..]
+            
+    unless (null newAgents) $ setAgents (survivingAgents ++ newAgents)
     spawnMushrooms newPrice
     modify $ \s -> s { sysTime = sysTime s + 1 }
-
--- ======================
--- TEST
--- ======================
 
 genesisState :: SystemState
 genesisState = SystemState
     { sysTime      = Time 0
     , sysWallet    = GlobalWallet 10000.0
-    , sysEnv       = Environment (Price 100.0) []
+    , sysEnv       = Environment (Price 100.0) [] -- Pheromone Grid kept empty as unused
     , sysHyphae    = [testAgent]
     , sysMushrooms = []
     , sysSpores    = []
@@ -311,16 +381,18 @@ genesisState = SystemState
         geneDCAOrder = 20.0,
         geneMaxOrders = 5,
         geneDevMult = 1.1,
-        geneVolMult = 1.2
+        geneVolMult = 1.2,
+        geneMaxChildren = 5,
+        geneMaintenance = 0.5
     }
     testPos    = Position (Quantity 1.0) (Capital 100.0)
-    testBio    = BioState 10 (Capital 50.0)
+    testBio    = BioState 10 (Capital 500.0)
 
     testAgent = HyphalTip
         { hypId       = 1
-        , hypLocation = [0.01, 0.05]
+        , hypLocation = [0.05, 0.10]
         , hypVelocity = [0.0, 0.0]
-        , hypPath     = [[0.01, 0.05]]
+        , hypPath     = [[0.05, 0.10]]
         , hypHoldings = testPos
         , hypBiology  = testBio
         , hypGenome   = testGenome
@@ -328,11 +400,9 @@ genesisState = SystemState
         , hypStepCount = 0
         }
 
--- run sim for N steps
 runTest :: Int -> IO ()
 runTest steps = do
     putStrLn $ "--- starting simulation for " ++ show steps ++ " steps ---"
-
     let prices = [Price (100.0 - fromIntegral i) | i <- [1..steps]]
     let simulation = mapM_ stepSimulation prices
     let finalState = execState simulation genesisState
@@ -341,12 +411,9 @@ runTest steps = do
     putStrLn $ "wallet: " ++ show (sysWallet finalState)
     putStrLn $ "hyphae count: " ++ show (length $ sysHyphae finalState)
     putStrLn $ "mushroom count: " ++ show (length $ sysMushrooms finalState)
-
-    case sysHyphae finalState of
-        [] -> putStrLn "agent died."
-        (h:_) -> do
-            putStrLn $ "agent step: " ++ show (hypStepCount h)
-            putStrLn $ "agent holdings: " ++ show (hypHoldings h)
+    putStrLn $ "spore count: " ++ show (length $ sysSpores finalState)
+    
+    mapM_ (\m -> putStrLn $ "Mushroom " ++ show (mushId m) ++ " Mass: " ++ show (mushMass m)) (sysMushrooms finalState)
 
 main :: IO ()
-main = runTest 10
+main = runTest 5000
