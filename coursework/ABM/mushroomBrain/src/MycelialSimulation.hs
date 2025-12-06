@@ -53,11 +53,8 @@ setSpores newSpores = modify $ \s -> s { sysSpores = newSpores }
 sensingRadius :: Double
 sensingRadius = 0.05
 
-mushroomThreshold :: Double
-mushroomThreshold = 100.0
-
-vacuumCoefficient :: Double
-vacuumCoefficient = 0.1
+dieThresh :: Double
+dieThresh = -50.0
 
 -- ======================
 -- EVOLUTION
@@ -75,13 +72,19 @@ mutateGenome g rng =
         (r2, rng2) = mutateFloat (geneTurbulence g) 1.0 rng1
         (r3, rng3) = mutateFloat (geneGrowthRate g) 0.0005 rng2
         (r4, rng4) = mutateFloat (geneBaseOrder g) 2.0 rng3
-        (r5, _)    = mutateFloat (geneDevMult g) 0.05 rng4
+        (r5, rng5) = mutateFloat (genePhiCritical g) 5.0 rng4
+        (r6, rng6) = mutateFloat (geneReproductiveInvest g) 0.05 rng5
+        (r7, rng7) = mutateFloat (geneVacuumCoefficient g) 0.01 rng6
+        (r8, rng8) = mutateFloat (geneDevMult g) 0.05 rng7
     in
         g { geneGreed = min 0.99 r1
           , geneTurbulence = r2
           , geneGrowthRate = r3
           , geneBaseOrder = r4
-          , geneDevMult = r5
+          , geneBaseOrder = r5
+          , geneReproductiveInvest = min 0.9 (max 0.1 r6)
+          , geneVaccumCoefficient = min 1.0 (max 0.01 r7)
+          , geneDevMult = r8
           }
 
 -- ======================
@@ -206,28 +209,39 @@ spawnMushrooms currentPrice = do
 
 type TaxMap = [(Int, Capital)] 
 
-applyDrain :: HyphalTip -> [MushroomBody] -> Price -> [HyphalTip] -> (HyphalTip, TaxMap)
+applyDrain :: HyphalTip -> [MushroomBody] -> Price -> [HyphalTip] -> (HyphalTip, [(MushroomId, Capital)])
 applyDrain agent mushrooms currentPrice allAgents =
-    let
-        dists = map (\m -> (m, euclideanDistance (hypLocation agent) (mushLocation m))) mushrooms
-        -- FIX: Sort nearby mushrooms by distance to find the closest one
-        nearby = sortBy (comparing snd) $ filter (\(_, d) -> d < sensingRadius) dists
-    in
-        case nearby of
-            [] -> (agent, [])
-            ((m, _):_) -> 
-                let
-                    psi_i = calculatePressure currentPrice agent
-                    phi_m = calculateLocalField (mushLocation m) allAgents currentPrice
-                    tau = fromIntegral (bioAge (hypBiology agent)) :: Double
-                    fluxVal = tau * (psi_i + (vacuumCoefficient * phi_m))
-                    drainAmount = Capital (max 0.0 fluxVal)
-                    (Capital currentBank) = bioBank (hypBiology agent)
-                    newBank = Capital (currentBank - max 0.0 fluxVal)
-                    newBio = (hypBiology agent) { bioBank = newBank }
-                    taxEntry = if drainAmount > 0 then [(mushId m, drainAmount)] else []
-                in
-                    (agent { hypBiology = newBio }, taxEntry)
+  let
+    pid = hypParentId agent
+    parentMaybe = filter (\m -> mushId m == pid) mushrooms
+  in
+    case parentMaybe of
+      [] -> (agent, [])
+      (parent:_) ->
+        let
+          psi_i = calculatePressure currentPrice agent
+          phi_m = calculateLocalField (mushLocation parent) allAgents currentPrice
+
+          k_vac = geneVacuumCoeffient (mushGenome parent)
+          vacuum = -(k_vac * phi_m)
+
+          (Capital currentBank) = bioBank (hypBiology agent)
+          isToxic = psi_i < vacuum
+
+          (drainAmount, newBioBank) = if isToxic
+            then (Capital currentBank, Capital 0)
+            else
+              let
+                tau = fromIntegral (bioAge (hypBiology agent)) :: Double
+                flux = tau * (psi_i - vacuum)
+                tax = max 0.0 flux
+              in (Capital tax, Capital (currentBank - max 0.0 flux))
+
+          newBio = (hypBiology agent) { bioBank = newBioBank }
+          taxEntry = if drainAmount > 0 then [(pid, drainAmount)] else []
+        in
+          (agent {hypBiology = newBio }, taxEntry)
+
 
 updateMushroom :: Price -> TaxMap -> StdGen -> MushroomBody -> (MushroomBody, [Spore])
 updateMushroom (Price p) income rng mBody =

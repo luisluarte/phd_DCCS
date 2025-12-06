@@ -4,7 +4,7 @@ import MycelialState
 
 
 -- ====================================
--- HELPER FUNCTIONS
+-- METRIC SPACE DEFINITION
 -- ====================================
 
 euclideanDistance :: ParamVector -> ParamVector -> Double
@@ -31,7 +31,7 @@ calculateFractalDim path =
     pathLen = sum [euclideanDistance p1 p2 | (p1, p2) <- steps]
 
   in
-    if netDisp < 1.0e-9
+    if netDisp < 1.0e-9 -- to deal with super small hyphae
       then 2.0 -- this is just to avoid division by zero
       else max 1.0 (log pathLen / log netDisp)
       -- avoid fractal dimension being < 1.0
@@ -60,8 +60,7 @@ calculatePressure (Price currentPrice) agent =
     bio = hypBiology agent
     pos = hypHoldings agent
 
-    -- compute unrealized pnl
-    -- here we are using the newtypes
+    -- compute pnl
     Quantity q = posQuantity pos
     Capital c = posCost pos
 
@@ -91,22 +90,3 @@ calculatePressure (Price currentPrice) agent =
 
     in
       sourceTerm - stressTerm
-
-
--- ====================================
--- TEST MAIN
--- ====================================
-
-main :: IO ()
-main = do
-  putStrLn "--- testing physics engine ---"
-
-  let path = [[0,0], [0,1], [1,1], [1,0], [0,0]]
-  let d = calculateFractalDim path
-  let q = calculateFlowRate d
-
-  putStrLn $ "Path: " ++ show path
-  putStrLn $ "Fractal D: " ++ show d
-  putStrLn $ "Flow Rate: " ++ show q
-
-  -- Expected: D should be high (approx 2 or logic cap), Q should be high

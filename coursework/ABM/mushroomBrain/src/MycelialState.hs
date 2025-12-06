@@ -64,7 +64,7 @@ data Environment = Environment
 
 -- The Genome (G)
 -- the evolvable traits inherited with mutation
-data Genome = Genome
+  data Genome = Genome
   {
   -- physics traits
   geneGreed :: Double, -- beta_1
@@ -98,7 +98,7 @@ data Genome = Genome
 -- this is the active trader
 data HyphalTip = HyphalTip
   {
-  hypId :: Int, -- the identification
+  hypId :: HyphalId, -- the identification
   hypParentId :: MushroomID, -- parent mushroom id
   hypLocation :: ParamVector, -- x: current strategy
   hypVelocity :: ParamVector, -- v: growth vector (Intertia)
