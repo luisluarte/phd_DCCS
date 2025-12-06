@@ -17,6 +17,12 @@ newtype Capital = Capital Double -- USDT amount
 newtype Quantity = Quantity Double -- Asset Amount (BTC or other)
   deriving (Show, Eq, Ord, Num, Fractional)
 
+newtype MushroomId = MushroomId Int
+  deriving (Show, Eq, Ord, Enum)
+
+newtype HyphalId = HyphalId Int
+  deriving (Show, Eq, Ord, Enum)
+
 type ParamVector = [Double] -- a vector in a parameter space (of DCA agent)
 
 type PheromoneIntensity = Double -- intensity or agent internal pressure Psi
@@ -74,6 +80,11 @@ data Genome = Genome
   geneDevMult :: Double,
   geneVolMult :: Double,
 
+  -- reproductive economics
+  genePhiCritical :: Double, -- quorum sensing threshold
+  geneReproductiveInvest :: Double, -- percentage of mass to sacrifice
+  geneSporeBatchSize :: Int, -- number of spores to produce
+
   -- lifecycle & economy
   geneMaxChildren :: Int, -- denominator for injection formula
   geneMaintenance :: Double -- cost per tick to exist
@@ -88,6 +99,7 @@ data Genome = Genome
 data HyphalTip = HyphalTip
   {
   hypId :: Int, -- the identification
+  hypParentId :: MushroomID, -- parent mushroom id
   hypLocation :: ParamVector, -- x: current strategy
   hypVelocity :: ParamVector, -- v: growth vector (Intertia)
   hypPath :: [ParamVector], -- History (with this we compute fractal dimension D)
@@ -99,7 +111,7 @@ data HyphalTip = HyphalTip
   } deriving (Show)
 
 -- helper structs for the hypha
-data Position = Position
+data Position = Position -- used to compute average entry price
   {
   posQuantity :: Quantity,
   posCost :: Capital
@@ -133,6 +145,5 @@ data Spore = Spore
   {
   sporeTarget :: ParamVector, -- x_target
   sporeGenome :: Genome, -- mutated genome
-  sporeCapital :: Capital, -- the injection capital carried from parent
-  sporeTimer :: Int -- t_germ (countdown)
+  sporeCapital :: Capital -- the injection capital carried from parent
   } deriving (Show)
