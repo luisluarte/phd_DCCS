@@ -15,15 +15,10 @@ data TradingStrategy = TradingStrategy
 -- Index 1: Profit Target
 interpretStrategy :: ParamVector -> TradingStrategy
 interpretStrategy vec = 
-    let 
-        getParam i def = if length vec > i then vec !! i else def
-        p0 = abs (getParam 0 0.05)
-        p1 = abs (getParam 1 0.10)
-    in
-        TradingStrategy 
-        { stratDropThreshold = max 0.001 p0 
-        , stratProfitTarget = max 0.01 p1 
-        }
+  TradingStrategy 
+    { stratDropThreshold = vec !! 0
+    , stratProfitTarget = vec !! 1
+    }
 
 -- ========================================================
 -- EXECUTION LOGIC
