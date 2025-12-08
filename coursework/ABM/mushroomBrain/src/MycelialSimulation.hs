@@ -257,32 +257,72 @@ updateMushroom (Price p) income rng mBody =
         if mVal > maturity
             then
                 let
-                    maxChildren = max 1 (fromIntegral (geneMaxChildren genes))
-                    
-                    -- FIX: Base injection on MATURITY, not current mass
-                    -- This ensures equal funding for all spores
-                    injectionAmt = maturity / maxChildren 
-                    sporeCost = Capital injectionAmt
-                    
-                    massAfterSpore = massAfterCost - sporeCost
-                    (mutatedGenes) = mutateGenome genes rng
-                    (r1, rng1) = randomR (-1.0, 1.0) rng
-                    (r2, _) = randomR (-1.0, 1.0) rng1
-                    dispersion = geneDispersion genes
-                    target = zipWith (+) (mushLocation mBody) [r1 * dispersion, r2 * dispersion]
-                    newSpore = Spore
-                        { sporeTarget = target
-                        , sporeGenome = mutatedGenes
-                        , sporeCapital = sporeCost
-                        , sporeTimer = 10
+                    gamma = geneReproductiveInvest genes
+                    batchSize = geneSporeBatchSize genes
+
+                    totalSacrifice = mVal * gamma
+
+                    perSporeEndowment = totalSacrifice / fromIntegral batchSize
+
+                    massAfterSporulation = massAfterCost - Capital totalSacrifice
+
+                    createSpore i =
+                        let
+                            (mutatedGenes) = mutateGenome genes (mkStdGen (i * 13 + fromIntegral (mVal)))
+                            (r1, rng1) = randomR (-1.0, 1.0) rng
+                            (r2, _) = randomR (-1.0, 1.0) rng1
+                            disp = geneDispersion genes
+                            target = zipWith (+) (mushLocation mBody) [r1 * disp, r2 * disp]
+                            clampedTarget = clampVector target
+                        in Spore
+                            { sporeTarget = clampedTarget
+                            , sporeGenome = mutatedGenes
+                            , sporeCapital = Capital perSporeEndowment
                         }
-                    finalMushroom = mBody { mushMass = massAfterSpore }
+
+                    newSpores = map createSpore [1..batchSize]
+                    finalMushroom = mBody { mushMass = massAfterSporulation }
                 in
-                    (finalMushroom, [newSpore])
+                    (finalMushroom, newSpores)
             else
                 (mBody { mushMass = massAfterCost }, [])
 
--- ... (updateHypha and stepSimulation logic remain identical, just ensure updated updateMushroom is called) ...
+
+germinateColony :: MushroomId -> HyphalId -> Spore -> Price -> (MushroomBody, [HyphalTip])
+germinateColony mid (HyphalId startAid) spore currentPrice =
+    let
+        genes = sporeGenome spore
+        loc = sporeTarget spore
+        (Capital totalCap) = sporeCapital spore
+
+        nChildren = max 1 (geneMaxChildren genes)
+        shareSize = totalCap / (fromIntegral nChildren + 1.0)
+
+        newMushroom = MushroomBody
+            { mushId = mid
+            , mushLocation = loc
+            , mushMass = Capital shareSize
+            , mushGenome = genes
+        }
+
+        createWorker i = HyphalTip
+            { hypId = HyphalId (startAid + 1)
+            , hypParentId = mid
+            , hypLocation = loc
+            , hypVelocity = [0,0]
+            , hypPath = [loc]
+            , hypHoldings = mempty
+            , hypBiology = BioState { bioAge = 0, bioBank = Capital shareSize }
+            , hypGenome = genes
+            , hypRefPrice = currentPrice
+            , hypStepCount = 0
+        }
+
+        newHyphae = map createWorker [0..(nChildre - 1)]
+
+    in
+        (newMushroom, newHyphae)
+
 
 updateHypha :: Price -> [MushroomBody] -> [HyphalTip] -> HyphalTip -> Sim (Maybe HyphalTip, TaxMap)
 updateHypha currentPrice mushrooms allAgents agent = do
