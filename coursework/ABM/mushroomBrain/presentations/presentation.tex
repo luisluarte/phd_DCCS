@@ -1,0 +1,168 @@
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% --- Theme & Aesthetics ---
+\usetheme{default}
+\usecolortheme{whale} % Professional blue/grey scheme
+\usefonttheme{serif}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[circle]
+
+% --- Packages ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{lmodern}
+\usepackage{tikz}
+
+% --- Definitions ---
+\newcommand{\StateSet}{\mathcal{S}}
+\newcommand{\HyphaSet}{\mathcal{H}}
+\newcommand{\MushroomSet}{\mathcal{M}}
+\newcommand{\PheroField}{\Phi}
+\newcommand{\Pressure}{\Psi}
+\newcommand{\FlowRate}{Q_f}
+\newcommand{\Dimen}{D}
+\newcommand{\TaxRate}{\tau}
+\newcommand{\RefPrice}{P_{ref}}
+\newcommand{\DropThresh}{\delta}
+\newcommand{\ProfitTarg}{\rho}
+
+% --- Title ---
+\title{Mushroom Brain Model}
+\subtitle{Formal specification}
+\author{Luis Luarte}
+\institute{Agent-Based Systems Modeling}
+\date{\today}
+
+\begin{document}
+	
+	% --- Title Slide ---
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% --- Slide 1: Conceptual Narrative ---
+	\begin{frame}{Conceptual Foundation: The Fungus and the Market}
+		\begin{block}{Resource Allocation by Fungal Networks}
+			The model draws its core mechanics from the efficient resource-seeking behavior of fungal mycelia. These networks continuously adapt their topology to optimize nutrient transfer, balancing the costs of network maintenance against the rewards of resource accumulation.
+		\end{block}
+		
+		\vspace{0.3cm}
+		
+		\textbf{Mapping to Financial Agents:}
+		\begin{itemize}
+			\item \textbf{Nutrients / Substrate:} Profit Potential.
+			\item \textbf{Hyphal Tips ($\mathcal{H}$):} Active trading agents (risk-takers).
+			\item \textbf{Mushroom Bodies ($\mathcal{M}$):} Colony sinks; control hyphal-tip exploration.
+			\item \textbf{Pheromone Field ($\PheroField$):} A map of successful exploration, guiding agent deployment.
+		\end{itemize}
+	\end{frame}
+	
+	% --- Slide 2: Global State Definition ---
+	\begin{frame}{System State Space $\StateSet(t)$}
+		The simulation evolves over discrete time steps $t \in \mathbb{N}$, defined by the tuple of all active system components.
+		
+		\begin{equation*}
+			\StateSet(t) = \langle W(t), P(t), \PheroField(t), \HyphaSet(t), \MushroomSet(t) \rangle
+		\end{equation*}
+		
+		\vspace{0.3cm}
+		\textbf{Key Components:}
+		\begin{itemize}
+			\item $W(t)$: Global capital pool (System Liquidity).
+			\item $P(t)$: Market price signal, $P: \mathbb{N} \to \mathbb{R}^{+}$.
+			\item $\PheroField(t)$: The multi-dimensional environment field, $\PheroField: \mathbb{R}^n \to \mathbb{R}^{+}$, representing exploration success.
+			\item $\HyphaSet(t)$: The finite set of active Hyphal Agents.
+			\item $\MushroomSet(t)$: The finite set of Mushroom Sinks.
+		\end{itemize}
+	\end{frame}
+	
+	% --- Slide 3: Hyphal Dynamics I: Efficiency and Flow ---
+	\begin{frame}{Hyphal Dynamics I: Efficiency and Flow}
+		Hyphal Tips operate in a parameter space $\mathbb{R}^n (n = 2, \text{for first iteration})$. Their trajectory defines their efficiency.
+		
+		\begin{block}{Path Complexity and Fractal Dimension ($\Dimen$)}
+			The efficiency of capital transport is inversely proportional to the complexity of the agent's path history. We define the Fractal Dimension ($\Dimen$) as a metric for path convolution:
+			\begin{equation*}
+				\Dimen(t) \approx \frac{\log(\text{Total Path Length})}{\log(\text{Net Displacement})}
+			\end{equation*}
+			where $\Dimen \in [1, 2]$ (1=straight path, 2=area-filling).
+		\end{block}
+		
+		\begin{block}{Flow Rate ($\FlowRate$)}
+			The Flow Rate dictates the agent's trading volume and movement velocity:
+			\begin{equation*}
+				\FlowRate(\Dimen) = 1 - \frac{1}{2^{\Dimen}} \quad \in [0.5, 1.0)
+			\end{equation*}
+			High complexity (high $\Dimen$) results in higher flow rate (exploit surroundings).
+		\end{block}
+	\end{frame}
+	
+	% --- Slide 4: Hyphal Dynamics II: Hydraulic Pressure ---
+	\begin{frame}{Hyphal Dynamics II: Hydraulic Pressure ($\Pressure$)}
+		$\Pressure$ is the agent's internal state variable, representing urgency and resource status. It drives both movement and resource sharing.
+		
+		\begin{block}{Internal Pressure Definition}
+			$\Pressure$ is a balance between realized gain (weighted by $\beta_1$) and unrealized loss (weighted by $1-\beta_1$, normalized by time constant $\tau$).
+			\begin{equation*}
+				\Pressure(t) = \beta_{1} \cdot (\text{Realized PnL} \cdot \FlowRate) - (1-\beta_{1}) \cdot \frac{|\text{Unrealized PnL}|}{\tau}
+			\end{equation*}
+			where $\beta_1 \in [0, 1]$ is the greed factor.
+		\end{block}
+		
+		\vspace{0.3cm}
+		\textbf{Behavioral Bifurcation:}
+		\begin{itemize}
+			\item If $\Pressure \ge \Pressure_{crit}$: \textbf{High Metabolism.} The agent is active, potentially sporulating, and remits capital.
+			\item If $\Pressure < \Pressure_{crit}$: \textbf{Stress/Liquidation.} The agent halts movement and trading, entering a death cascade if $\Pressure$ does not recover.
+		\end{itemize}
+	\end{frame}
+	
+	% --- Slide 5: Trading Strategy: Spatially Encoded DCA ---
+	\begin{frame}{Trading Strategy: Spatially Encoded DCA}
+		Each agent's spatial location $x = (\DropThresh, \ProfitTarg)$ dictates its core Dollar-Cost Averaging (DCA) parameters.
+		
+		\vspace{0.3cm}
+		\begin{columns}
+			\column{0.5\textwidth}
+			\textbf{1. Drop Threshold ($\DropThresh$)}
+			The relative percentage price drop required to trigger a new purchase order ($k$).
+			\begin{equation*}
+				P(t) \le \RefPrice \cdot (1 - \DropThresh \cdot \mathcal{V}_{mult}^{k})
+			\end{equation*}
+			\textit{Order Size:} Scales with $\FlowRate$.
+			
+			\column{0.5\textwidth}
+			\textbf{2. Profit Target ($\ProfitTarg$)}
+			The required gain over the weighted average purchase price ($P_{avg}$) to trigger a sell order.
+			\begin{equation*}
+				P(t) \ge P_{avg} \cdot (1 + \ProfitTarg)
+			\end{equation*}
+		\end{columns}
+	\end{frame}
+	
+	% --- Slide 6: Colonial Coordination ---
+	\begin{frame}{Colonial Coordination: Resource Sinks and Quorum Sensing}
+		\begin{block}{Resource Sinks and Taxation}
+			A Mushroom Body $m \in \MushroomSet$ acts as a centralized capital sink. It applies a pressure vacuum $\Pressure_{vac}$ on its lineage.
+			
+			\begin{itemize}
+				\item \textbf{Remittance Flow ($J$):} If $\Pressure_h > \Pressure_{vac}$, the Hypha remits profit:
+				\[ J_{h\rightarrow m} = \TaxRate \cdot (\Pressure_h - \Pressure_{vac}) \]
+				\item \textbf{Liquidation:} If $\Pressure_h < \Pressure_{vac}$ for $k$ consecutive steps, the agent is dissolved, and capital is recycled to $W$.
+			\end{itemize}
+		\end{block}
+		
+		\vspace{0.1cm}
+		\begin{block}{Sporulation and Germination}
+			The Mushroom sporulates new agents (Spores $\mathcal{S}$) when its mass $M_{mass}$ reaches a threshold. A spore $s$ only germinates (differentiates into a new colony $\MushroomSet'$) if:
+			\begin{equation*}
+				\PheroField(x_s) > \PheroField_{crit}
+			\end{equation*}
+			This ensures colonization only occurs in parameter spaces previously proven successful.
+		\end{block}
+	\end{frame}
+	
+\end{document}

@@ -1,97 +1,46 @@
-cabal-version: 2.2
+cabal-version:      3.0
+name:               mycelial
+version:            0.1.0.0
+license:            MIT
+author:             System Architect
+maintainer:         architect@mycelial.net
+build-type:         Simple
 
--- This file has been generated from package.yaml by hpack version 0.38.1.
---
--- see: https://github.com/sol/hpack
-
-name:           mushroomBrain
-version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/mushroomBrain#readme>
-homepage:       https://github.com/githubuser/mushroomBrain#readme
-bug-reports:    https://github.com/githubuser/mushroomBrain/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2025 Author name here
-license:        BSD-3-Clause
-license-file:   LICENSE
-build-type:     Simple
-extra-source-files:
-    README.md
-    CHANGELOG.md
-
-source-repository head
-  type: git
-  location: https://github.com/githubuser/mushroomBrain
+common warnings
+    ghc-options: -Wall
 
 library
-  exposed-modules:
-      MycelialState
-      MycelialPhysics
-      MycelialSimulation
-      MycelialStrategy
-  other-modules:
-      Lib
-      Paths_mushroomBrain
-  autogen-modules:
-      Paths_mushroomBrain
-  hs-source-dirs:
-      src
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
-  build-depends:
-      base >=4.7 && <5
-    , mtl
-    , random
-  default-language: Haskell2010
+    import:           warnings
+    exposed-modules:  MycelialState
+                    , MycelialPhysics
+                    , MycelialStrategy
+                    , MycelialSimulation
+                    , MycelialMetrics
+                    , SP500Data
+    -- RELAXED CONSTRAINTS:
+    build-depends:    base >= 4.14 && < 5
+                    , random >= 1.2 && < 1.4
+                    , mtl >= 2.2 && < 2.4
+                    , containers >= 0.6 && < 0.8
+    hs-source-dirs:   src
+    default-language: Haskell2010
 
-executable mushroomBrain-exe
-  main-is: Main.hs
-  other-modules:
-      Paths_mushroomBrain
-  autogen-modules:
-      Paths_mushroomBrain
-  hs-source-dirs:
-      app
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      base >=4.7 && <5
-    , mushroomBrain
-    , mtl
-  default-language: Haskell2010
-
-test-suite mushroomBrain-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_mushroomBrain
-  autogen-modules:
-      Paths_mushroomBrain
-  hs-source-dirs:
-      test
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      base >=4.7 && <5
-    , mushroomBrain
-  default-language: Haskell2010
-
-  -- Add this at the very bottom of your existing .cabal file
+executable mycelial-exe
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base >= 4.14 && < 5
+                    , mycelial
+                    , mtl
+                    , random
+                    , text
+    hs-source-dirs:   app
+    default-language: Haskell2010
 
 executable mycelial-test
-  main-is: MycelialTest.hs
-  
-  -- Look for the file in the 'app' folder
-  hs-source-dirs: app
-  
-  -- Compiler flags for performance
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  
-  build-depends:
-      base >=4.7 && <5
-      -- Import your own library (the code in /src)
-    , mushroomBrain
-      -- Import the missing library for State Monad
-    , mtl
-  
-  default-language: Haskell2010
-
-  
-cabal run mycelial-test
+    import:           warnings
+    main-is:          MycelialTest.hs
+    build-depends:    base >= 4.14 && < 5
+                    , mycelial
+                    , mtl
+    hs-source-dirs:   app
+    default-language: Haskell2010

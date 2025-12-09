@@ -5,30 +5,27 @@ module MycelialState where
 -- PRIMITIVE WRAPPERS
 -- ========================================================
 
-newtype Time = Time Int -- our ticks are discrete (t)
+newtype Time = Time Int 
   deriving (Show, Eq, Ord, Num)
 
-newtype Price = Price Double -- Market price a given asset P(t)
+newtype Price = Price Double 
   deriving (Show, Eq, Ord, Num, Fractional)
 
-newtype Capital = Capital Double -- USDT amount
+newtype Capital = Capital Double 
   deriving (Show, Eq, Ord, Num, Fractional)
 
-newtype Quantity = Quantity Double -- Asset Amount (BTC or other)
+newtype Quantity = Quantity Double 
   deriving (Show, Eq, Ord, Num, Fractional)
 
+-- ADDED: Real, Integral to allow fromIntegral usage
 newtype MushroomId = MushroomId Int
-  deriving (Show, Eq, Ord, Enum)
+  deriving (Show, Eq, Ord, Enum, Num, Real, Integral)
 
 newtype HyphalId = HyphalId Int
-  deriving (Show, Eq, Ord, Enum)
+  deriving (Show, Eq, Ord, Enum, Num, Real, Integral)
 
-type ParamVector = [Double] -- a vector in a parameter space (of DCA agent)
-
-type PheromoneIntensity = Double -- intensity or agent internal pressure Psi
-
--- the map is a list of points in the parameter space
--- and their associated intensity
+type ParamVector = [Double] 
+type PheromoneIntensity = Double 
 type PheromoneMap = [(ParamVector, PheromoneIntensity)]
 
 -- ========================================================
@@ -37,81 +34,77 @@ type PheromoneMap = [(ParamVector, PheromoneIntensity)]
 
 data SystemState = SystemState
   {
-  sysTime :: Time, -- t: current time step
-  sysWallet :: GlobalWallet, -- W(t): shared resource
-  sysEnv :: Environment, -- E(t): context
-  sysHyphae :: [HyphalTip], -- H(t): active agents
-  sysMushrooms :: [MushroomBody], -- M(t): resource sinks
-  sysSpores :: [Spore] -- S(t): dormant vectors
+  sysTime :: Time, 
+  sysWallet :: GlobalWallet, 
+  sysEnv :: Environment, 
+  sysHyphae :: [HyphalTip], 
+  sysMushrooms :: [MushroomBody], 
+  sysSpores :: [Spore] 
   } deriving (Show)
 
 -- ========================================================
--- COMPONENTS DEFINITIONS (FORM THE SYSTEM STATE)
+-- COMPONENT DEFINITIONS
 -- ========================================================
 
--- Global wallet (W)
--- represents the single metabolic resource pool
 newtype GlobalWallet = GlobalWallet Capital
   deriving (Show, Eq, Num)
 
--- The Environment (E)
--- contains the exogenous signal (price) and the endogenous map (pheromones)
 data Environment = Environment
   {
-  mktPrice :: Price, -- P(t)
-  pheromoneGrid :: PheromoneMap -- Phi(x, t): the spatial memory
+  mktPrice :: Price, 
+  pheromoneGrid :: PheromoneMap 
   } deriving (Show)
 
--- The Genome (G)
--- the evolvable traits inherited with mutation
-  data Genome = Genome
-  {
-  -- physics traits
-  geneGreed :: Double, -- beta_1
-  geneTurbulence :: Double, -- Psi_crit
-  geneGrowthRate :: Double, -- eta
-  geneMaturity :: Double, -- M_T
-  geneDispersion :: Double, -- SD how far the spores go
+-- ========================================================
+-- THE GENOME (G)
+-- ========================================================
 
-  -- DCA strategy traits
+data Genome = Genome
+  {
+  -- 1. PHYSICS TRAITS
+  geneGreed :: Double,       -- beta_1
+  geneTurbulence :: Double,  -- Psi_crit
+  geneGrowthRate :: Double,  -- eta
+  geneMaturity :: Double,    -- M_T
+  geneDispersion :: Double,  -- sigma_dispersal
+
+  -- 2. SOCIAL & REPRODUCTIVE TRAITS
+  genePhiCritical :: Double,        -- Quorum Sensing
+  geneVacuumCoefficient :: Double,  -- Tax Rate
+  geneReproductiveInvest :: Double, -- Gamma (% Mass sacrifice)
+  geneSporeBatchSize :: Int,        -- N_spore
+
+  -- 3. STRATEGY TRAITS (DCA)
   geneBaseOrder :: Double,
   geneDCAOrder :: Double,
   geneMaxOrders :: Int,
   geneDevMult :: Double,
   geneVolMult :: Double,
 
-  -- reproductive economics
-  genePhiCritical :: Double, -- quorum sensing threshold
-  geneReproductiveInvest :: Double, -- percentage of mass to sacrifice
-  geneSporeBatchSize :: Int, -- number of spores to produce
-
-  -- lifecycle & economy
-  geneMaxChildren :: Int, -- denominator for injection formula
-  geneMaintenance :: Double -- cost per tick to exist
-  } deriving (Show)
+  -- 4. COLONIAL TRAITS
+  geneMaxChildren :: Int,    -- N_brood
+  geneMaintenance :: Double  -- Cost per tick
+  } deriving (Show, Eq) -- Added Eq mostly for consistency, though not strictly required by error
 
 -- ========================================================
 -- AGENT DEFINITIONS
 -- ========================================================
 
--- The hyphal tip (h e H)
--- this is the active trader
 data HyphalTip = HyphalTip
   {
-  hypId :: HyphalId, -- the identification
-  hypParentId :: MushroomID, -- parent mushroom id
-  hypLocation :: ParamVector, -- x: current strategy
-  hypVelocity :: ParamVector, -- v: growth vector (Intertia)
-  hypPath :: [ParamVector], -- History (with this we compute fractal dimension D)
-  hypHoldings :: Position, -- q, v_cost
-  hypBiology :: BioState, -- tau (age), pi_bank (internal pressure)
-  hypGenome :: Genome, -- G: traits
+  hypId :: HyphalId,
+  hypParentId :: MushroomId, -- STRICT: Must have a parent
+  hypLocation :: ParamVector,
+  hypVelocity :: ParamVector,
+  hypPath :: [ParamVector],
+  hypHoldings :: Position,
+  hypBiology :: BioState,
+  hypGenome :: Genome,
   hypRefPrice :: Price,
   hypStepCount :: Int
   } deriving (Show)
 
--- helper structs for the hypha
-data Position = Position -- used to compute average entry price
+data Position = Position
   {
   posQuantity :: Quantity,
   posCost :: Capital
@@ -129,21 +122,17 @@ data BioState = BioState
   bioBank :: Capital
   } deriving (Show)
 
--- The mushroom body (m)
--- the stationary sink
 data MushroomBody = MushroomBody
   {
-  mushId :: Int, -- the identification
-  mushLocation :: ParamVector, -- x_fixed
-  mushMass :: Capital, -- M_mass (accumulated capital)
-  mushGenome :: Genome -- G: template for spores
+  mushId :: MushroomId,
+  mushLocation :: ParamVector,
+  mushMass :: Capital,
+  mushGenome :: Genome
   } deriving (Show)
 
--- The spore (S)
--- the dormant explorer
 data Spore = Spore
   {
-  sporeTarget :: ParamVector, -- x_target
-  sporeGenome :: Genome, -- mutated genome
-  sporeCapital :: Capital -- the injection capital carried from parent
-  } deriving (Show)
+  sporeTarget :: ParamVector,
+  sporeGenome :: Genome,
+  sporeCapital :: Capital
+  } deriving (Show, Eq) -- FIXED: Added Eq here
