@@ -48,40 +48,54 @@ calculateLocalField loc agents mushrooms currentPrice =
 
 type TaxMap = [(MushroomId, Capital)]
 
-applyDrain :: HyphalTip -> [MushroomBody] -> Price -> [HyphalTip] -> (HyphalTip, [(MushroomId, Capital)])
+applyDrain :: HyphalTip -> [MushroomBody] -> Price -> [HyphalTip] -> (HyphalTip, TaxMap)
 applyDrain agent mushrooms currentPrice allAgents =
   let
     pid = hypParentId agent
+    -- note here that filter walks through mushroom list 
+    -- calling \m to return bool TRUE/FALSE, and keeps
+    -- only the elements that are TRUE
     parentMaybe = filter (\m -> mushId m == pid) mushrooms
   in
     case parentMaybe of
       [] -> (agent, [])
       (parent:_) ->
         let
+          -- this is the pressure at hyphal tip
           psi_i = calculatePressure currentPrice agent
           
           -- Updated: Pass mushrooms to field calc
+          -- (mushLocation parent) is the location in the parameter space 
+          -- of the parent mushroom
+          -- this is computed at the mushroom parameter space
           phi_m = calculateLocalField (mushLocation parent) allAgents mushrooms currentPrice
 
           k_vac = geneVacuumCoefficient (mushGenome parent)
           vacuum = -(k_vac * phi_m)
 
           (Capital currentBank) = bioBank (hypBiology agent)
+          -- if agent_i cannot provide capital to the parent mushroom
+          -- its deemed as toxic and its going to die :c
           isToxic = psi_i < vacuum
 
+          -- this to compute, after death, how much bank should be returned
           (drainAmount, newBioBank) = if isToxic
             then (Capital currentBank, Capital 0)
             else
               let
+                -- this is to compute the actual tax
+                -- age is a 'modulator' of tax
                 tau = fromIntegral (bioAge (hypBiology agent)) :: Double
                 flux = tau * (psi_i - vacuum)
                 rawTax = max 0.0 flux
+                -- to deal when full taxation is not possible
                 cappedTax = min rawTax currentBank
               in (Capital cappedTax, Capital (currentBank - cappedTax))
 
           newBio = (hypBiology agent) { bioBank = newBioBank }
           taxEntry = if drainAmount > 0 then [(pid, drainAmount)] else []
         in
+          -- how much does agent_i has to pay in taxes
           (agent {hypBiology = newBio }, taxEntry)
 
 germinateColony :: MushroomId -> HyphalId -> Spore -> Price -> (MushroomBody, [HyphalTip])
@@ -93,6 +107,9 @@ germinateColony mid (HyphalId startAid) spore currentPrice =
 
         nChildren = max 1 (geneMaxChildren genes)
         divisor = fromIntegral nChildren + 1.0
+        -- how much capital to give to each spore
+        -- divisor is + 1.0 to include the mushroom that's
+        -- sporulating
         shareSize = totalCap / divisor
 
         newMushroom = MushroomBody
@@ -102,6 +119,7 @@ germinateColony mid (HyphalId startAid) spore currentPrice =
             , mushGenome = genes
         }
 
+        -- this is to generate the hyphae
         createWorker i = HyphalTip
             { hypId = HyphalId (startAid + i)
             , hypParentId = mid
