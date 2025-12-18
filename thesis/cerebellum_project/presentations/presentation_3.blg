@@ -1,0 +1,21 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'presentation_3.blg'
+[23] biber:342> INFO - === Thu Dec 18, 2025, 05:15:07
+[28] Biber.pm:421> INFO - Reading 'presentation_3.bcf'
+[59] Biber.pm:1002> INFO - Found 12 citekeys in bib section 0
+[67] Biber.pm:4487> INFO - Processing section 0
+[70] Biber.pm:4678> INFO - Looking for bibtex file 'refs.bib' for section 0
+[71] bibtex.pm:1713> INFO - LaTeX decoding ...
+[82] bibtex.pm:1519> INFO - Found BibTeX data source 'refs.bib'
+[146] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[146] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[146] Biber.pm:4307> INFO - Sorting list 'apa/apasortcite//global/global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[146] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[159] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[160] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[160] Biber.pm:4307> INFO - Sorting list 'apa/global//global/global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[160] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[167] bbl.pm:676> INFO - Writing 'presentation_3.bbl' with encoding 'UTF-8'
+[173] bbl.pm:779> INFO - Output to presentation_3.bbl
+[173] Biber.pm:132> WARN - ISBN '978-3-662-13149-7 978-3-662-13147-3' in entry 'ecclesCerebellumNeuronalMachine1967' is invalid - run biber with '--validate_datamodel' for details.
+[173] Biber.pm:134> INFO - WARNINGS: 1

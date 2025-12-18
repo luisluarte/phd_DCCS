@@ -1,0 +1,1715 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{diedrichsenUniversalTransformMultiple2019}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=a9404aa12aa2dc5fa14cd03640822a6e}{%
+           family={Diedrichsen},
+           familyi={D\bibinitperiod},
+           given={Jörn},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2f93dd149a2964344899db6c01b84fb9}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={Maedbh},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0ef732ef3c67e49fb153d9cb9ad471bd}{%
+           family={Hernandez-Castillo},
+           familyi={H\bibinithyphendelim C\bibinitperiod},
+           given={Carlos},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c83221f8b8fda8e9ad87d85c2bd37156}{%
+           family={Sereno},
+           familyi={S\bibinitperiod},
+           given={Marty},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=46f250b68664b3a157a14334053bd281}{%
+           family={Ivry},
+           familyi={I\bibinitperiod},
+           given={Richard\bibnamedelima B.},
+           giveni={R\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ce548333d51f4fc2fe4aca80a2d2bd8a}
+      \strng{fullhash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{fullhashraw}{7faababe3fceed8c129a10a6201a1292}
+      \strng{bibnamehash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{authorbibnamehash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{authornamehash}{ce548333d51f4fc2fe4aca80a2d2bd8a}
+      \strng{authorfullhash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{authorfullhashraw}{7faababe3fceed8c129a10a6201a1292}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{08966273}
+      \field{journaltitle}{Neuron}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{5}
+      \field{shorttitle}{Universal {{Transform}} or {{Multiple Functionality}}?}
+      \field{title}{Universal {{Transform}} or {{Multiple Functionality}}? {{Understanding}} the {{Contribution}} of the {{Human Cerebellum}} across {{Task Domains}}}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{102}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{918\bibrangedash 928}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/j.neuron.2019.04.021
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/GU4LIT37/j_neuron_2019_04_021 -- 6d3532b7da74f0d0ae39c9fb78004bef -- Anna’s Archive.pdf;/home/nicoluarte/Zotero/storage/XNRRPA5U/Diedrichsen et al. - 2019 - Universal Transform or Multiple Functionality Understanding the Contribution of the Human Cerebellu.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0896627319303782
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0896627319303782
+      \endverb
+    \endentry
+    \entry{ecclesCerebellumNeuronalMachine1967}{book}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=2ebe9379b08b521fe7971a7433aa5ae0}{%
+           family={Eccles},
+           familyi={E\bibinitperiod},
+           given={John\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=85871b2b8e84ae4f934cd0b95fec5ac8}{%
+           family={Szentágothai},
+           familyi={S\bibinitperiod},
+           given={János},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer Berlin Heidelberg}%
+      }
+      \strng{namehash}{1b18ed5a7fd60c51b31f4044f397c6c4}
+      \strng{fullhash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{fullhashraw}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{bibnamehash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{authorbibnamehash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{authornamehash}{1b18ed5a7fd60c51b31f4044f397c6c4}
+      \strng{authorfullhash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{authorfullhashraw}{18b35b6764c6ffba241c2e80c334a3e9}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-3-662-13149-7 978-3-662-13147-3}
+      \field{langid}{english}
+      \field{title}{The {{Cerebellum}} as a {{Neuronal Machine}}}
+      \field{urlday}{17}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{year}{1967}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1007/978-3-662-13147-3
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/978-3-662-13147-3
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/978-3-662-13147-3
+      \endverb
+    \endentry
+    \entry{herzfeldEncodingErrorLearning2018}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=e8058ec70593cf110cd3194d16b26ae3}{%
+           family={Herzfeld},
+           familyi={H\bibinitperiod},
+           given={David\bibnamedelima J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ac59eff1db74c03341e4c34e1f0310fd}{%
+           family={Kojima},
+           familyi={K\bibinitperiod},
+           given={Yoshiko},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=81ac1fe27a72b16070f123bf6dc04570}{%
+           family={Soetedjo},
+           familyi={S\bibinitperiod},
+           given={Robijanto},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9c478c69852fe12385823d6dfecd3ef6}{%
+           family={Shadmehr},
+           familyi={S\bibinitperiod},
+           given={Reza},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{fullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{fullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \strng{bibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorbibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authornamehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{authorfullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorfullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1097-6256, 1546-1726}
+      \field{journaltitle}{Nat Neurosci}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{Encoding of Error and Learning to Correct That Error by the {{Purkinje}} Cells of the Cerebellum}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{21}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{736\bibrangedash 743}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1038/s41593-018-0136-y
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/H444APUB/Herzfeld et al. - 2018 - Encoding of error and learning to correct that error by the Purkinje cells of the cerebellum.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41593-018-0136-y
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41593-018-0136-y
+      \endverb
+    \endentry
+    \entry{huangConvergencePontineProprioceptive2013}{article}{}{}
+      \name{author}{8}{}{%
+        {{un=0,uniquepart=base,hash=e03ac47419105ef56f28f5791f658b67}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Cheng-Chiu},
+           giveni={C\bibinithyphendelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2f54909eec3a263f53078e7242bc3e6f}{%
+           family={Sugino},
+           familyi={S\bibinitperiod},
+           given={Ken},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8d382637379c414f5ad07f52d77b6e04}{%
+           family={Shima},
+           familyi={S\bibinitperiod},
+           given={Yasuyuki},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=eb80f3e343308f9d45577cb0a35af0cc}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={Caiying},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=02291f44b6b030377f16ae36214506a0}{%
+           family={Bai},
+           familyi={B\bibinitperiod},
+           given={Suxia},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=efeed3003164a9dde179c5472f66a935}{%
+           family={Mensh},
+           familyi={M\bibinitperiod},
+           given={Brett\bibnamedelima D},
+           giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=942e5ced043fdea1961dc615968d3f91}{%
+           family={Nelson},
+           familyi={N\bibinitperiod},
+           given={Sacha\bibnamedelima B},
+           giveni={S\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3ec8c2694e6eb9ca24a0a3359cef7a5e}{%
+           family={Hantman},
+           familyi={H\bibinitperiod},
+           given={Adam\bibnamedelima W},
+           giveni={A\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{51583c98295a5b01186a951f0438847a}
+      \strng{fullhash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{fullhashraw}{c80013692e4d791246334a480ca2d4c1}
+      \strng{bibnamehash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{authorbibnamehash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{authornamehash}{51583c98295a5b01186a951f0438847a}
+      \strng{authorfullhash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{authorfullhashraw}{c80013692e4d791246334a480ca2d4c1}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cerebellar granule cells constitute the majority of neurons in the brain and are the primary conveyors of sensory and motor-related mossy fiber information to Purkinje cells. The functional capability of the cerebellum hinges on whether individual granule cells receive mossy fiber inputs from multiple precerebellar nuclei or are instead unimodal; this distinction is unresolved. Using cell-type-specific projection mapping with synaptic resolution, we observed the convergence of separate sensory (upper body proprioceptive) and basilar pontine pathways onto individual granule cells and mapped this convergence across cerebellar cortex. These findings inform the long-standing debate about the multimodality of mammalian granule cells and substantiate their associative capacity predicted in the Marr-Albus theory of cerebellar function. We also provide evidence that the convergent basilar pontine pathways carry corollary discharges from upper body motor cortical areas. Such merging of related corollary and sensory streams is a critical component of circuit models of predictive motor control. , Learning a new motor skill, from riding a bicycle to eating with chopsticks, involves the cerebellum—a structure located at the base of the brain underneath the cerebral hemispheres. Although its name translates as ‘little brain' in Latin, the cerebellum contains more neurons than all other regions of the mammalian brain combined. Most cerebellar neurons are granule cells which, although numerous, are simple neurons with an average of only four excitatory inputs, from axons called mossy fibers. These inputs are diverse in nature, originating from virtually every sensory system and from command centers at multiple levels of the motor hierarchy. However, it is unclear whether individual granule cells receive inputs from only a single sensory source or can instead mix modalities. This distinction has important implications for the functional capabilities of the cerebellum. Now, Huang et al. have addressed this question by mapping, at extremely high resolution, the projections of two pathways onto individual granule cells—one carrying sensory feedback from the upper body (the proprioceptive stream), and another carrying motor-related information (the pontine stream). Using a combination of genetic and viral techniques to label the pathways, Huang and co-workers identified regions where the two types of fiber terminated in close proximity. They then showed that around 40\% of proprioceptive granule cells formed junctions, or synapses, with two (or more) fibers carrying different types of input. These cells were not uniformly distributed throughout the cerebellum but tended to occur in ‘hotspots’. Lastly, Huang et al. examined the type of information conveyed by the sensory and motor-related input streams whenever they contacted a single granule cell. They confirmed that when the sensory input consisted of feedback from the upper body, the motor input consisted of copies of motor commands related to the same body region. Because it is thought that the cerebellum converts sensory information into representations of the body's movements, directing motor commands to these same circuits may allow the cerebellum to predict the consequences of a planned movement prior to, or without, the actual movement occurring. The work of Huang et al. provides evidence to support the previously controversial idea that granule cells in the mammalian cerebellum receive both sensory and motor-related inputs. The labeling technique that they used could also be deployed to study the inputs to the cerebellum in greater detail, which should yield new insights into the functioning of this part of the brain.}
+      \field{day}{26}
+      \field{issn}{2050-084X}
+      \field{journaltitle}{eLife}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{title}{Convergence of Pontine and Proprioceptive Streams onto Multimodal Cerebellar Granule Cells}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{2}
+      \field{year}{2013}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{e00400}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.7554/eLife.00400
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/6WCIAU3E/Huang et al. - 2013 - Convergence of pontine and proprioceptive streams onto multimodal cerebellar granule cells.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://elifesciences.org/articles/00400
+      \endverb
+      \verb{url}
+      \verb https://elifesciences.org/articles/00400
+      \endverb
+    \endentry
+    \entry{ishikawaMultimodalSensoryIntegration2015}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=a77d17f9ed7eb4f5baae38f896d7c6d2}{%
+           family={Ishikawa},
+           familyi={I\bibinitperiod},
+           given={Taro},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=91da70040d15b6dfd612d4609d8930f5}{%
+           family={Shimuta},
+           familyi={S\bibinitperiod},
+           given={Misa},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0eafa374d00d9ec8b881979c6b6c7d17}{%
+           family={Häusser},
+           familyi={H\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bb35426f57d92165249a88709b523e2f}
+      \strng{fullhash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{fullhashraw}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{bibnamehash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{authorbibnamehash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{authornamehash}{bb35426f57d92165249a88709b523e2f}
+      \strng{authorfullhash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{authorfullhashraw}{5cf69c08c66040d53f3805e48b8406a6}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The mammalian cerebellum is a highly multimodal structure, receiving inputs from multiple sensory modalities and integrating them during complex sensorimotor coordination tasks. Previously, using cell-type-specific anatomical projection mapping, it was shown that multimodal pathways converge onto individual cerebellar granule cells (Huang et al., 2013). Here we directly measure synaptic currents using in vivo patch-clamp recordings and confirm that a subset of single granule cells receive convergent functional multimodal (somatosensory, auditory, and visual) inputs via separate mossy fibers. Furthermore, we show that the integration of multimodal signals by granule cells can enhance action potential output. These recordings directly demonstrate functional convergence of multimodal signals onto single granule cells.}
+      \field{day}{29}
+      \field{issn}{2050-084X}
+      \field{journaltitle}{eLife}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{title}{Multimodal Sensory Integration in Single Cerebellar Granule Cells in Vivo}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{4}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{e12916}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.7554/eLife.12916
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/M7Q6UCFR/Ishikawa et al. - 2015 - Multimodal sensory integration in single cerebellar granule cells in vivo.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://elifesciences.org/articles/12916
+      \endverb
+      \verb{url}
+      \verb https://elifesciences.org/articles/12916
+      \endverb
+    \endentry
+    \entry{itoMovementThoughtIdentical1993}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{bibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorbibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authornamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \field{extraname}{1}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{01662236}
+      \field{journaltitle}{Trends in Neurosciences}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{11}
+      \field{shorttitle}{Movement and Thought}
+      \field{title}{Movement and Thought: Identical Control Mechanisms by the Cerebellum}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{16}
+      \field{year}{1993}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{448\bibrangedash 450}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1016/0166-2236(93)90073-U
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/YMD6KLVG/Ito - 1993 - Movement and thought identical control mechanisms by the cerebellum.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/016622369390073U
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/016622369390073U
+      \endverb
+    \endentry
+    \entry{itoCerebellarCircuitryNeuronal2006}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{bibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorbibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authornamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \field{extraname}{2}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{03010082}
+      \field{journaltitle}{Progress in Neurobiology}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{3--5}
+      \field{title}{Cerebellar Circuitry as a Neuronal Machine}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{78}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{272\bibrangedash 303}
+      \range{pages}{32}
+      \verb{doi}
+      \verb 10.1016/j.pneurobio.2006.02.006
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0301008206000232
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0301008206000232
+      \endverb
+    \endentry
+    \entry{koziolConsensusPaperCerebellums2014}{article}{}{}
+      \name{author}{16}{}{%
+        {{un=0,uniquepart=base,hash=d5aeb7dad8fd686f312d019fe9f877a5}{%
+           family={Koziol},
+           familyi={K\bibinitperiod},
+           given={Leonard\bibnamedelima F.},
+           giveni={L\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e4d743bdd599e3146131babc2fad1850}{%
+           family={Budding},
+           familyi={B\bibinitperiod},
+           given={Deborah},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2c1a0185fdbd3846b5b8c2531d5efb35}{%
+           family={Andreasen},
+           familyi={A\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bdf7e591918781196936fc44d9d58b3a}{%
+           family={D’Arrigo},
+           familyi={D\bibinitperiod},
+           given={Stefano},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9f5befca7e00d69abe3b23d66fe2fb88}{%
+           family={Bulgheroni},
+           familyi={B\bibinitperiod},
+           given={Sara},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=20ccfe78925efb74ec27fc1e8a993583}{%
+           family={Imamizu},
+           familyi={I\bibinitperiod},
+           given={Hiroshi},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=afe08c74f33119920881166732898ae7}{%
+           family={Manto},
+           familyi={M\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=abb75ad42db775097410e0a8991c9a04}{%
+           family={Marvel},
+           familyi={M\bibinitperiod},
+           given={Cherie},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0d63f49f9f7be99e5f8ed93620c9ee2c}{%
+           family={Parker},
+           familyi={P\bibinitperiod},
+           given={Krystal},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a407d9f6bc90219c5764e676c5b8caa7}{%
+           family={Pezzulo},
+           familyi={P\bibinitperiod},
+           given={Giovanni},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c6fe2599065920ecfa81af003e873997}{%
+           family={Ramnani},
+           familyi={R\bibinitperiod},
+           given={Narender},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a82ef59ea50be49d33a83f268100af96}{%
+           family={Riva},
+           familyi={R\bibinitperiod},
+           given={Daria},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=516a0ca60e0d6eec68b489503722d98b}{%
+           family={Schmahmann},
+           familyi={S\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=aee00b804c2a525db58d317be2e2c7a3}{%
+           family={Vandervert},
+           familyi={V\bibinitperiod},
+           given={Larry},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f1cd95f4c0197fd03aef10eb038d873f}{%
+           family={Yamazaki},
+           familyi={Y\bibinitperiod},
+           given={Tadashi},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{21da7d76625da2571d00641a65b913bb}
+      \strng{fullhash}{ebd5509b9099fec95559206886f145ee}
+      \strng{fullhashraw}{ebd5509b9099fec95559206886f145ee}
+      \strng{bibnamehash}{ebd5509b9099fec95559206886f145ee}
+      \strng{authorbibnamehash}{ebd5509b9099fec95559206886f145ee}
+      \strng{authornamehash}{21da7d76625da2571d00641a65b913bb}
+      \strng{authorfullhash}{ebd5509b9099fec95559206886f145ee}
+      \strng{authorfullhashraw}{ebd5509b9099fec95559206886f145ee}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{1473-4222, 1473-4230}
+      \field{journaltitle}{Cerebellum}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{1}
+      \field{shorttitle}{Consensus {{Paper}}}
+      \field{title}{Consensus {{Paper}}: {{The Cerebellum}}'s {{Role}} in {{Movement}} and {{Cognition}}}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{13}
+      \field{year}{2014}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{151\bibrangedash 177}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1007/s12311-013-0511-x
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/s12311-013-0511-x
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/s12311-013-0511-x
+      \endverb
+    \endentry
+    \entry{pasalarForceFieldEffects2006}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=898c2a72782514806061e27915018fa2}{%
+           family={Pasalar},
+           familyi={P\bibinitperiod},
+           given={S},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7567f46a35a0f1961229f9d302768ccd}{%
+           family={Roitman},
+           familyi={R\bibinitperiod},
+           given={A\bibnamedelima V},
+           giveni={A\bibinitperiod\bibinitdelim V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=671b7a2a279ee076fa55f1851ad637dd}{%
+           family={Durfee},
+           familyi={D\bibinitperiod},
+           given={W\bibnamedelima K},
+           giveni={W\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c655d7129eacb057b2c82fc07f5aa226}{%
+           family={Ebner},
+           familyi={E\bibinitperiod},
+           given={T\bibnamedelima J},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3d39a3b113ef94658f46b11a7faeb181}
+      \strng{fullhash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{fullhashraw}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{bibnamehash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{authorbibnamehash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{authornamehash}{3d39a3b113ef94658f46b11a7faeb181}
+      \strng{authorfullhash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{authorfullhashraw}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1097-6256, 1546-1726}
+      \field{journaltitle}{Nat Neurosci}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{11}
+      \field{title}{Force Field Effects on Cerebellar {{Purkinje}} Cell Discharge with Implications for Internal Models}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{9}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1404\bibrangedash 1411}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1038/nn1783
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/UQIG4P4V/Pasalar et al. - 2006 - Force field effects on cerebellar Purkinje cell discharge with implications for internal models.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/nn1783
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/nn1783
+      \endverb
+    \endentry
+    \entry{schmahmannMovementThoughtAnatomic1996}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=a117c2509bcf0c8c35815e8a4117265e}{%
+           family={Schmahmann},
+           familyi={S\bibinitperiod},
+           given={Jeremy\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{bibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorbibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authornamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{10659471}
+      \field{journaltitle}{Hum. Brain Mapp.}
+      \field{langid}{english}
+      \field{number}{3}
+      \field{shorttitle}{From Movement to Thought}
+      \field{title}{From Movement to Thought: {{Anatomic}} Substrates of the Cerebellar Contribution to Cognitive Processing}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{4}
+      \field{year}{1996}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{174\bibrangedash 198}
+      \range{pages}{25}
+      \verb{doi}
+      \verb 10.1002/(SICI)1097-0193(1996)4:3<174::AID-HBM3>3.0.CO;2-0
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/IHGVMITU/Schmahmann - 1996 - From movement to thought Anatomic substrates of the cerebellar contribution to cognitive processing.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/(SICI)1097-0193(1996)4:3<174::AID-HBM3>3.0.CO;2-0
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/(SICI)1097-0193(1996)4:3%3C174::AID-HBM3%3E3.0.CO;2-0
+      \endverb
+    \endentry
+    \entry{schmahmannDysmetriaThoughtClinical1998}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=a117c2509bcf0c8c35815e8a4117265e}{%
+           family={Schmahmann},
+           familyi={S\bibinitperiod},
+           given={Jeremy\bibnamedelima D},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{bibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorbibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authornamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{13646613}
+      \field{journaltitle}{Trends in Cognitive Sciences}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{number}{9}
+      \field{shorttitle}{Dysmetria of Thought}
+      \field{title}{Dysmetria of Thought: Clinical Consequences of Cerebellar Dysfunction on Cognition and Affect}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{2}
+      \field{year}{1998}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{362\bibrangedash 371}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/S1364-6613(98)01218-2
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1364661398012182
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1364661398012182
+      \endverb
+    \endentry
+    \entry{tsuchiyaRelationalApproachConsciousness2021}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=5837d642b1d8bc073a28ac0eb1515107}{%
+           family={Tsuchiya},
+           familyi={T\bibinitperiod},
+           given={Naotsugu},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4058b8002761e2a3c1a9c547d4d1253d}{%
+           family={Saigo},
+           familyi={S\bibinitperiod},
+           given={Hayato},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{fullhash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{fullhashraw}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{bibnamehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authorbibnamehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authornamehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authorfullhash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authorfullhashraw}{1b49c8cf7c065a258feae938fbce9a0e}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Abstract Characterizing consciousness in and of itself is notoriously difficult. Here, we propose an alternative approach to characterize, and eventually define, consciousness through exhaustive descriptions of consciousness’ relationships to all other consciousness. This approach is founded in category theory. Indeed, category theory can prove that two objects A and B in a category can be equivalent if and only if all the relationships that A holds with others in the category are the same as those of B; this proof is called the Yoneda lemma. To introduce the Yoneda lemma, we gradually introduce key concepts of category theory to consciousness researchers. Along the way, we propose several possible definitions of categories of consciousness, both in terms of level and contents, through the usage of simple examples. We propose to use the categorical structure of consciousness as a gold standard to formalize empirical research (e.g. color qualia structure at fovea and periphery) and, especially, the empirical testing of theories of consciousness.}
+      \field{day}{4}
+      \field{issn}{2057-2107}
+      \field{journaltitle}{Neuroscience of Consciousness}
+      \field{langid}{english}
+      \field{month}{8}
+      \field{number}{2}
+      \field{shorttitle}{A Relational Approach to Consciousness}
+      \field{title}{A Relational Approach to Consciousness: Categories of Level and Contents of Consciousness}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{2021}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{niab034}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1093/nc/niab034
+      \endverb
+      \verb{urlraw}
+      \verb https://academic.oup.com/nc/article/doi/10.1093/nc/niab034/6397521
+      \endverb
+      \verb{url}
+      \verb https://academic.oup.com/nc/article/doi/10.1093/nc/niab034/6397521
+      \endverb
+    \endentry
+  \enddatalist
+  \datalist[entry]{apa/global//global/global/global}
+    \entry{diedrichsenUniversalTransformMultiple2019}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=a9404aa12aa2dc5fa14cd03640822a6e}{%
+           family={Diedrichsen},
+           familyi={D\bibinitperiod},
+           given={Jörn},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2f93dd149a2964344899db6c01b84fb9}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={Maedbh},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0ef732ef3c67e49fb153d9cb9ad471bd}{%
+           family={Hernandez-Castillo},
+           familyi={H\bibinithyphendelim C\bibinitperiod},
+           given={Carlos},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c83221f8b8fda8e9ad87d85c2bd37156}{%
+           family={Sereno},
+           familyi={S\bibinitperiod},
+           given={Marty},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=46f250b68664b3a157a14334053bd281}{%
+           family={Ivry},
+           familyi={I\bibinitperiod},
+           given={Richard\bibnamedelima B.},
+           giveni={R\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ce548333d51f4fc2fe4aca80a2d2bd8a}
+      \strng{fullhash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{fullhashraw}{7faababe3fceed8c129a10a6201a1292}
+      \strng{bibnamehash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{authorbibnamehash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{authornamehash}{ce548333d51f4fc2fe4aca80a2d2bd8a}
+      \strng{authorfullhash}{7faababe3fceed8c129a10a6201a1292}
+      \strng{authorfullhashraw}{7faababe3fceed8c129a10a6201a1292}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{08966273}
+      \field{journaltitle}{Neuron}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{5}
+      \field{shorttitle}{Universal {{Transform}} or {{Multiple Functionality}}?}
+      \field{title}{Universal {{Transform}} or {{Multiple Functionality}}? {{Understanding}} the {{Contribution}} of the {{Human Cerebellum}} across {{Task Domains}}}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{102}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{918\bibrangedash 928}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/j.neuron.2019.04.021
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/GU4LIT37/j_neuron_2019_04_021 -- 6d3532b7da74f0d0ae39c9fb78004bef -- Anna’s Archive.pdf;/home/nicoluarte/Zotero/storage/XNRRPA5U/Diedrichsen et al. - 2019 - Universal Transform or Multiple Functionality Understanding the Contribution of the Human Cerebellu.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0896627319303782
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0896627319303782
+      \endverb
+    \endentry
+    \entry{ecclesCerebellumNeuronalMachine1967}{book}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=2ebe9379b08b521fe7971a7433aa5ae0}{%
+           family={Eccles},
+           familyi={E\bibinitperiod},
+           given={John\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=85871b2b8e84ae4f934cd0b95fec5ac8}{%
+           family={Szentágothai},
+           familyi={S\bibinitperiod},
+           given={János},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer Berlin Heidelberg}%
+      }
+      \strng{namehash}{1b18ed5a7fd60c51b31f4044f397c6c4}
+      \strng{fullhash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{fullhashraw}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{bibnamehash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{authorbibnamehash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{authornamehash}{1b18ed5a7fd60c51b31f4044f397c6c4}
+      \strng{authorfullhash}{18b35b6764c6ffba241c2e80c334a3e9}
+      \strng{authorfullhashraw}{18b35b6764c6ffba241c2e80c334a3e9}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-3-662-13149-7 978-3-662-13147-3}
+      \field{langid}{english}
+      \field{title}{The {{Cerebellum}} as a {{Neuronal Machine}}}
+      \field{urlday}{17}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{year}{1967}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1007/978-3-662-13147-3
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/978-3-662-13147-3
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/978-3-662-13147-3
+      \endverb
+    \endentry
+    \entry{herzfeldEncodingErrorLearning2018}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=e8058ec70593cf110cd3194d16b26ae3}{%
+           family={Herzfeld},
+           familyi={H\bibinitperiod},
+           given={David\bibnamedelima J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ac59eff1db74c03341e4c34e1f0310fd}{%
+           family={Kojima},
+           familyi={K\bibinitperiod},
+           given={Yoshiko},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=81ac1fe27a72b16070f123bf6dc04570}{%
+           family={Soetedjo},
+           familyi={S\bibinitperiod},
+           given={Robijanto},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9c478c69852fe12385823d6dfecd3ef6}{%
+           family={Shadmehr},
+           familyi={S\bibinitperiod},
+           given={Reza},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{fullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{fullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \strng{bibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorbibnamehash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authornamehash}{916108015778e9cd3e781b85e56c5112}
+      \strng{authorfullhash}{99642e3261ad03bc13dd89660241565a}
+      \strng{authorfullhashraw}{99642e3261ad03bc13dd89660241565a}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1097-6256, 1546-1726}
+      \field{journaltitle}{Nat Neurosci}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{Encoding of Error and Learning to Correct That Error by the {{Purkinje}} Cells of the Cerebellum}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{21}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{736\bibrangedash 743}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1038/s41593-018-0136-y
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/H444APUB/Herzfeld et al. - 2018 - Encoding of error and learning to correct that error by the Purkinje cells of the cerebellum.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/s41593-018-0136-y
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/s41593-018-0136-y
+      \endverb
+    \endentry
+    \entry{huangConvergencePontineProprioceptive2013}{article}{}{}
+      \name{author}{8}{}{%
+        {{un=0,uniquepart=base,hash=e03ac47419105ef56f28f5791f658b67}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Cheng-Chiu},
+           giveni={C\bibinithyphendelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2f54909eec3a263f53078e7242bc3e6f}{%
+           family={Sugino},
+           familyi={S\bibinitperiod},
+           given={Ken},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8d382637379c414f5ad07f52d77b6e04}{%
+           family={Shima},
+           familyi={S\bibinitperiod},
+           given={Yasuyuki},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=eb80f3e343308f9d45577cb0a35af0cc}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={Caiying},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=02291f44b6b030377f16ae36214506a0}{%
+           family={Bai},
+           familyi={B\bibinitperiod},
+           given={Suxia},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=efeed3003164a9dde179c5472f66a935}{%
+           family={Mensh},
+           familyi={M\bibinitperiod},
+           given={Brett\bibnamedelima D},
+           giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=942e5ced043fdea1961dc615968d3f91}{%
+           family={Nelson},
+           familyi={N\bibinitperiod},
+           given={Sacha\bibnamedelima B},
+           giveni={S\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3ec8c2694e6eb9ca24a0a3359cef7a5e}{%
+           family={Hantman},
+           familyi={H\bibinitperiod},
+           given={Adam\bibnamedelima W},
+           giveni={A\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{51583c98295a5b01186a951f0438847a}
+      \strng{fullhash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{fullhashraw}{c80013692e4d791246334a480ca2d4c1}
+      \strng{bibnamehash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{authorbibnamehash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{authornamehash}{51583c98295a5b01186a951f0438847a}
+      \strng{authorfullhash}{c80013692e4d791246334a480ca2d4c1}
+      \strng{authorfullhashraw}{c80013692e4d791246334a480ca2d4c1}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cerebellar granule cells constitute the majority of neurons in the brain and are the primary conveyors of sensory and motor-related mossy fiber information to Purkinje cells. The functional capability of the cerebellum hinges on whether individual granule cells receive mossy fiber inputs from multiple precerebellar nuclei or are instead unimodal; this distinction is unresolved. Using cell-type-specific projection mapping with synaptic resolution, we observed the convergence of separate sensory (upper body proprioceptive) and basilar pontine pathways onto individual granule cells and mapped this convergence across cerebellar cortex. These findings inform the long-standing debate about the multimodality of mammalian granule cells and substantiate their associative capacity predicted in the Marr-Albus theory of cerebellar function. We also provide evidence that the convergent basilar pontine pathways carry corollary discharges from upper body motor cortical areas. Such merging of related corollary and sensory streams is a critical component of circuit models of predictive motor control. , Learning a new motor skill, from riding a bicycle to eating with chopsticks, involves the cerebellum—a structure located at the base of the brain underneath the cerebral hemispheres. Although its name translates as ‘little brain' in Latin, the cerebellum contains more neurons than all other regions of the mammalian brain combined. Most cerebellar neurons are granule cells which, although numerous, are simple neurons with an average of only four excitatory inputs, from axons called mossy fibers. These inputs are diverse in nature, originating from virtually every sensory system and from command centers at multiple levels of the motor hierarchy. However, it is unclear whether individual granule cells receive inputs from only a single sensory source or can instead mix modalities. This distinction has important implications for the functional capabilities of the cerebellum. Now, Huang et al. have addressed this question by mapping, at extremely high resolution, the projections of two pathways onto individual granule cells—one carrying sensory feedback from the upper body (the proprioceptive stream), and another carrying motor-related information (the pontine stream). Using a combination of genetic and viral techniques to label the pathways, Huang and co-workers identified regions where the two types of fiber terminated in close proximity. They then showed that around 40\% of proprioceptive granule cells formed junctions, or synapses, with two (or more) fibers carrying different types of input. These cells were not uniformly distributed throughout the cerebellum but tended to occur in ‘hotspots’. Lastly, Huang et al. examined the type of information conveyed by the sensory and motor-related input streams whenever they contacted a single granule cell. They confirmed that when the sensory input consisted of feedback from the upper body, the motor input consisted of copies of motor commands related to the same body region. Because it is thought that the cerebellum converts sensory information into representations of the body's movements, directing motor commands to these same circuits may allow the cerebellum to predict the consequences of a planned movement prior to, or without, the actual movement occurring. The work of Huang et al. provides evidence to support the previously controversial idea that granule cells in the mammalian cerebellum receive both sensory and motor-related inputs. The labeling technique that they used could also be deployed to study the inputs to the cerebellum in greater detail, which should yield new insights into the functioning of this part of the brain.}
+      \field{day}{26}
+      \field{issn}{2050-084X}
+      \field{journaltitle}{eLife}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{title}{Convergence of Pontine and Proprioceptive Streams onto Multimodal Cerebellar Granule Cells}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{2}
+      \field{year}{2013}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{e00400}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.7554/eLife.00400
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/6WCIAU3E/Huang et al. - 2013 - Convergence of pontine and proprioceptive streams onto multimodal cerebellar granule cells.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://elifesciences.org/articles/00400
+      \endverb
+      \verb{url}
+      \verb https://elifesciences.org/articles/00400
+      \endverb
+    \endentry
+    \entry{ishikawaMultimodalSensoryIntegration2015}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=a77d17f9ed7eb4f5baae38f896d7c6d2}{%
+           family={Ishikawa},
+           familyi={I\bibinitperiod},
+           given={Taro},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=91da70040d15b6dfd612d4609d8930f5}{%
+           family={Shimuta},
+           familyi={S\bibinitperiod},
+           given={Misa},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0eafa374d00d9ec8b881979c6b6c7d17}{%
+           family={Häusser},
+           familyi={H\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bb35426f57d92165249a88709b523e2f}
+      \strng{fullhash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{fullhashraw}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{bibnamehash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{authorbibnamehash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{authornamehash}{bb35426f57d92165249a88709b523e2f}
+      \strng{authorfullhash}{5cf69c08c66040d53f3805e48b8406a6}
+      \strng{authorfullhashraw}{5cf69c08c66040d53f3805e48b8406a6}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The mammalian cerebellum is a highly multimodal structure, receiving inputs from multiple sensory modalities and integrating them during complex sensorimotor coordination tasks. Previously, using cell-type-specific anatomical projection mapping, it was shown that multimodal pathways converge onto individual cerebellar granule cells (Huang et al., 2013). Here we directly measure synaptic currents using in vivo patch-clamp recordings and confirm that a subset of single granule cells receive convergent functional multimodal (somatosensory, auditory, and visual) inputs via separate mossy fibers. Furthermore, we show that the integration of multimodal signals by granule cells can enhance action potential output. These recordings directly demonstrate functional convergence of multimodal signals onto single granule cells.}
+      \field{day}{29}
+      \field{issn}{2050-084X}
+      \field{journaltitle}{eLife}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{title}{Multimodal Sensory Integration in Single Cerebellar Granule Cells in Vivo}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{4}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{e12916}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.7554/eLife.12916
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/M7Q6UCFR/Ishikawa et al. - 2015 - Multimodal sensory integration in single cerebellar granule cells in vivo.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://elifesciences.org/articles/12916
+      \endverb
+      \verb{url}
+      \verb https://elifesciences.org/articles/12916
+      \endverb
+    \endentry
+    \entry{itoMovementThoughtIdentical1993}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{bibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorbibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authornamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \field{extraname}{1}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{01662236}
+      \field{journaltitle}{Trends in Neurosciences}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{11}
+      \field{shorttitle}{Movement and Thought}
+      \field{title}{Movement and Thought: Identical Control Mechanisms by the Cerebellum}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{16}
+      \field{year}{1993}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{448\bibrangedash 450}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1016/0166-2236(93)90073-U
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/YMD6KLVG/Ito - 1993 - Movement and thought identical control mechanisms by the cerebellum.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/016622369390073U
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/016622369390073U
+      \endverb
+    \endentry
+    \entry{itoCerebellarCircuitryNeuronal2006}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{fullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{bibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorbibnamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authornamehash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhash}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \strng{authorfullhashraw}{69c3ca5d5ae904faf43b753fe6ac71fe}
+      \field{extraname}{2}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{03010082}
+      \field{journaltitle}{Progress in Neurobiology}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{3--5}
+      \field{title}{Cerebellar Circuitry as a Neuronal Machine}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{78}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{272\bibrangedash 303}
+      \range{pages}{32}
+      \verb{doi}
+      \verb 10.1016/j.pneurobio.2006.02.006
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0301008206000232
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S0301008206000232
+      \endverb
+    \endentry
+    \entry{koziolConsensusPaperCerebellums2014}{article}{}{}
+      \name{author}{16}{}{%
+        {{un=0,uniquepart=base,hash=d5aeb7dad8fd686f312d019fe9f877a5}{%
+           family={Koziol},
+           familyi={K\bibinitperiod},
+           given={Leonard\bibnamedelima F.},
+           giveni={L\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e4d743bdd599e3146131babc2fad1850}{%
+           family={Budding},
+           familyi={B\bibinitperiod},
+           given={Deborah},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2c1a0185fdbd3846b5b8c2531d5efb35}{%
+           family={Andreasen},
+           familyi={A\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bdf7e591918781196936fc44d9d58b3a}{%
+           family={D’Arrigo},
+           familyi={D\bibinitperiod},
+           given={Stefano},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9f5befca7e00d69abe3b23d66fe2fb88}{%
+           family={Bulgheroni},
+           familyi={B\bibinitperiod},
+           given={Sara},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=20ccfe78925efb74ec27fc1e8a993583}{%
+           family={Imamizu},
+           familyi={I\bibinitperiod},
+           given={Hiroshi},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=69c3ca5d5ae904faf43b753fe6ac71fe}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Masao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=afe08c74f33119920881166732898ae7}{%
+           family={Manto},
+           familyi={M\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=abb75ad42db775097410e0a8991c9a04}{%
+           family={Marvel},
+           familyi={M\bibinitperiod},
+           given={Cherie},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0d63f49f9f7be99e5f8ed93620c9ee2c}{%
+           family={Parker},
+           familyi={P\bibinitperiod},
+           given={Krystal},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a407d9f6bc90219c5764e676c5b8caa7}{%
+           family={Pezzulo},
+           familyi={P\bibinitperiod},
+           given={Giovanni},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c6fe2599065920ecfa81af003e873997}{%
+           family={Ramnani},
+           familyi={R\bibinitperiod},
+           given={Narender},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a82ef59ea50be49d33a83f268100af96}{%
+           family={Riva},
+           familyi={R\bibinitperiod},
+           given={Daria},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=516a0ca60e0d6eec68b489503722d98b}{%
+           family={Schmahmann},
+           familyi={S\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=aee00b804c2a525db58d317be2e2c7a3}{%
+           family={Vandervert},
+           familyi={V\bibinitperiod},
+           given={Larry},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f1cd95f4c0197fd03aef10eb038d873f}{%
+           family={Yamazaki},
+           familyi={Y\bibinitperiod},
+           given={Tadashi},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{21da7d76625da2571d00641a65b913bb}
+      \strng{fullhash}{ebd5509b9099fec95559206886f145ee}
+      \strng{fullhashraw}{ebd5509b9099fec95559206886f145ee}
+      \strng{bibnamehash}{ebd5509b9099fec95559206886f145ee}
+      \strng{authorbibnamehash}{ebd5509b9099fec95559206886f145ee}
+      \strng{authornamehash}{21da7d76625da2571d00641a65b913bb}
+      \strng{authorfullhash}{ebd5509b9099fec95559206886f145ee}
+      \strng{authorfullhashraw}{ebd5509b9099fec95559206886f145ee}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{1473-4222, 1473-4230}
+      \field{journaltitle}{Cerebellum}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{1}
+      \field{shorttitle}{Consensus {{Paper}}}
+      \field{title}{Consensus {{Paper}}: {{The Cerebellum}}'s {{Role}} in {{Movement}} and {{Cognition}}}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{13}
+      \field{year}{2014}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{151\bibrangedash 177}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1007/s12311-013-0511-x
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/s12311-013-0511-x
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/s12311-013-0511-x
+      \endverb
+    \endentry
+    \entry{pasalarForceFieldEffects2006}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=898c2a72782514806061e27915018fa2}{%
+           family={Pasalar},
+           familyi={P\bibinitperiod},
+           given={S},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7567f46a35a0f1961229f9d302768ccd}{%
+           family={Roitman},
+           familyi={R\bibinitperiod},
+           given={A\bibnamedelima V},
+           giveni={A\bibinitperiod\bibinitdelim V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=671b7a2a279ee076fa55f1851ad637dd}{%
+           family={Durfee},
+           familyi={D\bibinitperiod},
+           given={W\bibnamedelima K},
+           giveni={W\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c655d7129eacb057b2c82fc07f5aa226}{%
+           family={Ebner},
+           familyi={E\bibinitperiod},
+           given={T\bibnamedelima J},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3d39a3b113ef94658f46b11a7faeb181}
+      \strng{fullhash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{fullhashraw}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{bibnamehash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{authorbibnamehash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{authornamehash}{3d39a3b113ef94658f46b11a7faeb181}
+      \strng{authorfullhash}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \strng{authorfullhashraw}{68fe9bc6d66393d2e0bbb5aded844df3}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1097-6256, 1546-1726}
+      \field{journaltitle}{Nat Neurosci}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{11}
+      \field{title}{Force Field Effects on Cerebellar {{Purkinje}} Cell Discharge with Implications for Internal Models}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{9}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1404\bibrangedash 1411}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1038/nn1783
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/UQIG4P4V/Pasalar et al. - 2006 - Force field effects on cerebellar Purkinje cell discharge with implications for internal models.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.nature.com/articles/nn1783
+      \endverb
+      \verb{url}
+      \verb https://www.nature.com/articles/nn1783
+      \endverb
+    \endentry
+    \entry{schmahmannMovementThoughtAnatomic1996}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=a117c2509bcf0c8c35815e8a4117265e}{%
+           family={Schmahmann},
+           familyi={S\bibinitperiod},
+           given={Jeremy\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{bibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorbibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authornamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{10659471}
+      \field{journaltitle}{Hum. Brain Mapp.}
+      \field{langid}{english}
+      \field{number}{3}
+      \field{shorttitle}{From Movement to Thought}
+      \field{title}{From Movement to Thought: {{Anatomic}} Substrates of the Cerebellar Contribution to Cognitive Processing}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{4}
+      \field{year}{1996}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{174\bibrangedash 198}
+      \range{pages}{25}
+      \verb{doi}
+      \verb 10.1002/(SICI)1097-0193(1996)4:3<174::AID-HBM3>3.0.CO;2-0
+      \endverb
+      \verb{file}
+      \verb /home/nicoluarte/Zotero/storage/IHGVMITU/Schmahmann - 1996 - From movement to thought Anatomic substrates of the cerebellar contribution to cognitive processing.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/(SICI)1097-0193(1996)4:3<174::AID-HBM3>3.0.CO;2-0
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/(SICI)1097-0193(1996)4:3%3C174::AID-HBM3%3E3.0.CO;2-0
+      \endverb
+    \endentry
+    \entry{schmahmannDysmetriaThoughtClinical1998}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=a117c2509bcf0c8c35815e8a4117265e}{%
+           family={Schmahmann},
+           familyi={S\bibinitperiod},
+           given={Jeremy\bibnamedelima D},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{fullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{bibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorbibnamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authornamehash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhash}{a117c2509bcf0c8c35815e8a4117265e}
+      \strng{authorfullhashraw}{a117c2509bcf0c8c35815e8a4117265e}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{13646613}
+      \field{journaltitle}{Trends in Cognitive Sciences}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{number}{9}
+      \field{shorttitle}{Dysmetria of Thought}
+      \field{title}{Dysmetria of Thought: Clinical Consequences of Cerebellar Dysfunction on Cognition and Affect}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{2}
+      \field{year}{1998}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{362\bibrangedash 371}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/S1364-6613(98)01218-2
+      \endverb
+      \verb{urlraw}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1364661398012182
+      \endverb
+      \verb{url}
+      \verb https://linkinghub.elsevier.com/retrieve/pii/S1364661398012182
+      \endverb
+    \endentry
+    \entry{tsuchiyaRelationalApproachConsciousness2021}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=5837d642b1d8bc073a28ac0eb1515107}{%
+           family={Tsuchiya},
+           familyi={T\bibinitperiod},
+           given={Naotsugu},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4058b8002761e2a3c1a9c547d4d1253d}{%
+           family={Saigo},
+           familyi={S\bibinitperiod},
+           given={Hayato},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{fullhash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{fullhashraw}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{bibnamehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authorbibnamehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authornamehash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authorfullhash}{1b49c8cf7c065a258feae938fbce9a0e}
+      \strng{authorfullhashraw}{1b49c8cf7c065a258feae938fbce9a0e}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Abstract Characterizing consciousness in and of itself is notoriously difficult. Here, we propose an alternative approach to characterize, and eventually define, consciousness through exhaustive descriptions of consciousness’ relationships to all other consciousness. This approach is founded in category theory. Indeed, category theory can prove that two objects A and B in a category can be equivalent if and only if all the relationships that A holds with others in the category are the same as those of B; this proof is called the Yoneda lemma. To introduce the Yoneda lemma, we gradually introduce key concepts of category theory to consciousness researchers. Along the way, we propose several possible definitions of categories of consciousness, both in terms of level and contents, through the usage of simple examples. We propose to use the categorical structure of consciousness as a gold standard to formalize empirical research (e.g. color qualia structure at fovea and periphery) and, especially, the empirical testing of theories of consciousness.}
+      \field{day}{4}
+      \field{issn}{2057-2107}
+      \field{journaltitle}{Neuroscience of Consciousness}
+      \field{langid}{english}
+      \field{month}{8}
+      \field{number}{2}
+      \field{shorttitle}{A Relational Approach to Consciousness}
+      \field{title}{A Relational Approach to Consciousness: Categories of Level and Contents of Consciousness}
+      \field{urlday}{18}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{2021}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{niab034}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1093/nc/niab034
+      \endverb
+      \verb{urlraw}
+      \verb https://academic.oup.com/nc/article/doi/10.1093/nc/niab034/6397521
+      \endverb
+      \verb{url}
+      \verb https://academic.oup.com/nc/article/doi/10.1093/nc/niab034/6397521
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
