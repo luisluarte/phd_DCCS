@@ -15,13 +15,20 @@ library
                     , MycelialPhysics
                     , MycelialStrategy
                     , MycelialSimulation
-                    , MycelialMetrics
-                    , SP500Data
-    -- RELAXED CONSTRAINTS:
+                    
+                    , Simulation.Types
+                    , Simulation.Accessors
+                    , Simulation.Evolution
+                    , Simulation.Micro
+                    , Simulation.Macro
+                    , Simulation.Lifecycle
+                    , Simulation.Loop
+
     build-depends:    base >= 4.14 && < 5
                     , random >= 1.2 && < 1.4
                     , mtl >= 2.2 && < 2.4
                     , containers >= 0.6 && < 0.8
+                    , text
     hs-source-dirs:   src
     default-language: Haskell2010
 

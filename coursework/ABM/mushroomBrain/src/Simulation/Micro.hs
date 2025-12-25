@@ -2,7 +2,7 @@ module Simulation.Micro where
 
 import MycelialState
 import MycelialStrategy (interpretStrategy, TradingStrategy(..), shouldExecuteBuy, shouldExecuteSell)
-import MycelialPhysics (calculateFractalDim, calculateFlowRate, clamVector)
+import MycelialPhysics (calculateFractalDim, calculateFlowRate, clampVector)
 import System.Random (StdGen, randomR)
 
 
@@ -48,7 +48,7 @@ executeTrade (Price p) agent (Capital walletBalance) =
             then Nothing
             else
                 let
-	                -- multiplier for DCA buys
+                -- multiplier for DCA buys
                     volMult = if step == 0 then 1.0 else (geneVolMult genes) ^ step
                     -- how complex is the hyphae structure, required to determine flow
                     d = calculateFractalDim (hypPath agent)

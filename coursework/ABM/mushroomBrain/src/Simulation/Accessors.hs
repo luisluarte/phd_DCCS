@@ -19,7 +19,7 @@ getTime = gets sysTime
 -- then, mktPrice returns the market price inside Environment
 -- then, gets returns a monadic action with the specfic a value
 -- gets takes a function of type s -> a
-getPrice :: Sim price
+getPrice :: Sim Price
 getPrice = gets (mktPrice . sysEnv)
 
 -- reading wallet state

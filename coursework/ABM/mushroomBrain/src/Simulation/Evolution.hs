@@ -1,7 +1,11 @@
-module Simulation.Evolution where
+module Simulation.Evolution 
+    ( mutateFloat
+    , mutateGenome
+    , randomizeGenome -- Explicitly exported
+    ) where
 
 import MycelialState
-import System.Random (StdGen, randomR)
+import System.Random (StdGen, randomR, mkStdGen)
 
 
 -- implementation of levy-flight distribution
@@ -35,8 +39,9 @@ mutateFloat :: Double -> Double -> StdGen -> (Double, StdGen)
 mutateFloat val scale rng =
     let
     	(noise, newRng) = levyFlight 1.5 scale rng -- 1.5 is the typical value in foraging
+        newValue = val + noise
     in
-    	(max 0.0001 newVelue, newRng) -- clamped
+    	(max 0.0001 newValue, newRng) -- clamped
 
 mutateGenome :: Genome -> StdGen -> Genome
 mutateGenome g rng =
@@ -59,3 +64,7 @@ mutateGenome g rng =
           , geneVacuumCoefficient = min 1.0 (max 0.01 r7)
           , geneDevMult = r8
           }
+
+
+randomizeGenome :: Genome -> Int -> Genome
+randomizeGenome template seed = mutateGenome template (mkStdGen seed)

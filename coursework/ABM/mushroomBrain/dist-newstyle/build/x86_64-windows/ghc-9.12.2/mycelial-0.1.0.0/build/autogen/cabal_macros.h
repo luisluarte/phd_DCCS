@@ -50,6 +50,16 @@
   (major1) == 1 && (major2) <  3 || \
   (major1) == 1 && (major2) == 3 && (minor) <= 1)
 #endif /* MIN_VERSION_random */
+/* package text-2.1.2 */
+#ifndef VERSION_text
+#define VERSION_text "2.1.2"
+#endif /* VERSION_text */
+#ifndef MIN_VERSION_text
+#define MIN_VERSION_text(major1,major2,minor) (\
+  (major1) <  2 || \
+  (major1) == 2 && (major2) <  1 || \
+  (major1) == 2 && (major2) == 1 && (minor) <= 2)
+#endif /* MIN_VERSION_text */
 
 /* tool gcc-14.0.6 */
 #ifndef TOOL_VERSION_gcc
