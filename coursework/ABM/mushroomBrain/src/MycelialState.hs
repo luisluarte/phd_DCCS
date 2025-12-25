@@ -2,7 +2,7 @@
 module MycelialState where
 
 -- ========================================================
--- PRIMITIVE WRAPPERS
+-- PRIMITIVE WRAPPERS (Fixed: No '!' allowed here)
 -- ========================================================
 
 newtype Time = Time Int 
@@ -17,7 +17,6 @@ newtype Capital = Capital Double
 newtype Quantity = Quantity Double 
   deriving (Show, Eq, Ord, Num, Fractional)
 
--- ADDED: Real, Integral to allow fromIntegral usage
 newtype MushroomId = MushroomId Int
   deriving (Show, Eq, Ord, Enum, Num, Real, Integral)
 
@@ -29,21 +28,50 @@ type PheromoneIntensity = Double
 type PheromoneMap = [(ParamVector, PheromoneIntensity)]
 
 -- ========================================================
--- SYSTEM STATE TUPLE: S(t)
+-- LOGGING TYPES (Strict Fields)
+-- ========================================================
+
+data TransactionType = ActionBuy | ActionSell 
+  deriving (Show, Eq)
+
+-- Strictness (!) IS allowed and recommended here
+data TransactionLog = TransactionLog
+  { tlHyphaId :: !HyphalId
+  , tlType :: !TransactionType
+  , tlCost :: !Capital      
+  , tlPrice :: !Price       
+  , tlQuantity :: !Quantity 
+  , tlTime :: !Time         
+  } deriving (Show)
+
+data SystemSnapshot = SystemSnapshot
+  { snapTime :: !Time
+  , snapMarketPrice :: !Price
+  , snapTotalCash :: !Capital       
+  , snapInventoryValue :: !Capital  
+  , snapMushroomMass :: !Capital    
+  , snapMeanFractalDim :: !Double   
+  , snapTotalWealth :: !Capital     
+  } deriving (Show)
+
+-- ========================================================
+-- SYSTEM STATE
 -- ========================================================
 
 data SystemState = SystemState
   {
-  sysTime :: Time, 
-  sysWallet :: GlobalWallet, 
-  sysEnv :: Environment, 
-  sysHyphae :: [HyphalTip], 
-  sysMushrooms :: [MushroomBody], 
-  sysSpores :: [Spore] 
+  sysTime :: !Time, 
+  sysWallet :: !GlobalWallet, 
+  sysEnv :: !Environment, 
+  sysHyphae :: ![HyphalTip], 
+  sysMushrooms :: ![MushroomBody], 
+  sysSpores :: ![Spore],
+  sysLogs :: ![TransactionLog],    
+  sysSnapshots :: ![SystemSnapshot] 
   } deriving (Show)
 
 -- ========================================================
--- COMPONENT DEFINITIONS
+-- COMPONENTS
 -- ========================================================
 
 newtype GlobalWallet = GlobalWallet Capital
@@ -51,63 +79,56 @@ newtype GlobalWallet = GlobalWallet Capital
 
 data Environment = Environment
   {
-  mktPrice :: Price, 
-  pheromoneGrid :: PheromoneMap 
+  mktPrice :: !Price, 
+  pheromoneGrid :: !PheromoneMap 
   } deriving (Show)
 
 -- ========================================================
--- THE GENOME (G)
+-- GENOME
 -- ========================================================
 
 data Genome = Genome
   {
-  -- 1. PHYSICS TRAITS
-  geneGreed :: Double,       -- beta_1
-  geneTurbulence :: Double,  -- Psi_crit
-  geneGrowthRate :: Double,  -- eta
-  geneMaturity :: Double,    -- M_T
-  geneDispersion :: Double,  -- sigma_dispersal
-
-  -- 2. SOCIAL & REPRODUCTIVE TRAITS
-  genePhiCritical :: Double,        -- Quorum Sensing
-  geneVacuumCoefficient :: Double,  -- Tax Rate
-  geneReproductiveInvest :: Double, -- Gamma (% Mass sacrifice)
-  geneSporeBatchSize :: Int,        -- N_spore
-
-  -- 3. STRATEGY TRAITS (DCA)
-  geneBaseOrder :: Double,
-  geneDCAOrder :: Double,
-  geneMaxOrders :: Int,
-  geneDevMult :: Double,
-  geneVolMult :: Double,
-
-  -- 4. COLONIAL TRAITS
-  geneMaxChildren :: Int,    -- N_brood
-  geneMaintenance :: Double  -- Cost per tick
-  } deriving (Show, Eq) -- Added Eq mostly for consistency, though not strictly required by error
+  geneGreed :: !Double,
+  geneTurbulence :: !Double,
+  geneGrowthRate :: !Double,
+  geneMaturity :: !Double,
+  geneDispersion :: !Double,
+  genePhiCritical :: !Double,
+  geneVacuumCoefficient :: !Double,
+  geneReproductiveInvest :: !Double,
+  geneSporeBatchSize :: !Int,
+  geneBaseOrder :: !Double,
+  geneDCAOrder :: !Double,
+  geneMaxOrders :: !Int,
+  geneDevMult :: !Double,
+  geneVolMult :: !Double,
+  geneMaxChildren :: !Int,
+  geneMaintenance :: !Double
+  } deriving (Show, Eq) 
 
 -- ========================================================
--- AGENT DEFINITIONS
+-- AGENTS
 -- ========================================================
 
 data HyphalTip = HyphalTip
   {
-  hypId :: HyphalId,
-  hypParentId :: MushroomId, -- STRICT: Must have a parent
-  hypLocation :: ParamVector,
-  hypVelocity :: ParamVector,
-  hypPath :: [ParamVector],
-  hypHoldings :: Position,
-  hypBiology :: BioState,
-  hypGenome :: Genome,
-  hypRefPrice :: Price,
-  hypStepCount :: Int
+  hypId :: !HyphalId,
+  hypParentId :: !MushroomId,
+  hypLocation :: !ParamVector,
+  hypVelocity :: !ParamVector,
+  hypPath :: ![ParamVector],
+  hypHoldings :: !Position,
+  hypBiology :: !BioState,
+  hypGenome :: !Genome,
+  hypRefPrice :: !Price,
+  hypStepCount :: !Int
   } deriving (Show)
 
 data Position = Position
   {
-  posQuantity :: Quantity,
-  posCost :: Capital
+  posQuantity :: !Quantity,
+  posCost :: !Capital
   } deriving (Show, Eq)
 
 instance Semigroup Position where
@@ -118,21 +139,21 @@ instance Monoid Position where
 
 data BioState = BioState
   {
-  bioAge :: Int,
-  bioBank :: Capital
+  bioAge :: !Int,
+  bioBank :: !Capital
   } deriving (Show)
 
 data MushroomBody = MushroomBody
   {
-  mushId :: MushroomId,
-  mushLocation :: ParamVector,
-  mushMass :: Capital,
-  mushGenome :: Genome
+  mushId :: !MushroomId,
+  mushLocation :: !ParamVector,
+  mushMass :: !Capital,
+  mushGenome :: !Genome
   } deriving (Show)
 
 data Spore = Spore
   {
-  sporeTarget :: ParamVector,
-  sporeGenome :: Genome,
-  sporeCapital :: Capital
-  } deriving (Show, Eq) -- FIXED: Added Eq here
+  sporeTarget :: !ParamVector,
+  sporeGenome :: !Genome,
+  sporeCapital :: !Capital
+  } deriving (Show, Eq)

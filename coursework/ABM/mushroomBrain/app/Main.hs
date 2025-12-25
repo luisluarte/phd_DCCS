@@ -56,6 +56,53 @@ inspect s = do
             let (Capital mass) = mushMass m
             printf "Mushroom #%d Mass: %.2f\n" mid mass
 
+
+printTradeLog :: SystemState -> IO ()
+printTradeLog s = do
+    let logs = reverse (sysLogs s) 
+    putStrLn "\n=== TRANSACTION LOG ==="
+    -- ADDED: Tick column header
+    putStrLn "Tick | HyphaID | Action     | Cost/Rev  | Price   | Qty"
+    putStrLn "-----------------------------------------------------------"
+    mapM_ printLog logs
+    putStrLn "-----------------------------------------------------------"
+  where
+    printLog :: TransactionLog -> IO ()
+    printLog l = do
+        let (Time t) = tlTime l  -- Extract Time
+        let (HyphalId hid) = tlHyphaId l
+        let action = show (tlType l)
+        let (Capital c) = tlCost l
+        let (Price p) = tlPrice l
+        let (Quantity q) = tlQuantity l
+        
+        -- ADDED: 't' to printf
+        printf "%-4d | %-7d | %-10s | %9.2f | %7.2f | %.4f\n" t hid action c p q
+
+-- | Prints aggregate financial state over time (Mark-to-Market)
+printPerformanceLog :: SystemState -> IO ()
+printPerformanceLog s = do
+    let snaps = reverse (sysSnapshots s)
+    putStrLn "\n=== PERFORMANCE LOG (Equity Curve) ==="
+    putStrLn "Time | MktPrice | Cash       | Stock    | MushMass | FractalDim | TOTAL WEALTH"
+    putStrLn "----------------------------------------------------------------------------------"
+    mapM_ printSnap snaps
+    putStrLn "----------------------------------------------------------------------------------"
+  where
+    printSnap :: SystemSnapshot -> IO ()
+    printSnap sn = do
+        let (Time t) = snapTime sn
+        let (Price p) = snapMarketPrice sn
+        let (Capital c) = snapTotalCash sn
+        let (Capital i) = snapInventoryValue sn
+        let (Capital m) = snapMushroomMass sn
+        let dim = snapMeanFractalDim sn
+        let (Capital w) = snapTotalWealth sn
+        
+        -- Display Fractal Dimension with 4 decimal places
+        printf "%-4d | %8.2f | %10.2f | %8.2f | %8.2f | %10.4f | %12.2f\n" t p c i m dim w
+
+
 -- ==========================================
 -- MAIN ENTRY POINT
 -- ==========================================
@@ -66,11 +113,12 @@ main = do
     putStrLn "Mycelial REPL Environment Loaded."
     putStrLn "Use 'cabal repl' to interact."
     putStrLn "Available commands:"
-    putStrLn "  initState       - Get a fresh genesis state"
-    putStrLn "  step p s        - Advance state 's' with price 'p'"
-    putStrLn "  runSeq ps s     - Advance state 's' with price list 'ps'"
-    putStrLn "  inspect s       - Print summary of state 's'"
+    putStrLn "  initState           - Get a fresh genesis state"
+    putStrLn "  step p s            - Advance state 's' with price 'p'"
+    putStrLn "  runSeq ps s         - Advance state 's' with price list 'ps'"
+    putStrLn "  inspect s           - Print summary of state 's'"
+    putStrLn "  printTradeLog s     - Print transaction history"
+    putStrLn "  printPerformanceLog s - Print equity curve history"
     
-    -- Example usage in compiled run:
     let s0 = initState
     inspect s0

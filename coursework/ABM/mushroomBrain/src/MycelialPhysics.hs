@@ -45,23 +45,33 @@ clampVector vec =
 -- compute fractal dimension of the agent's path
 -- D = log(Total Path Length) / log(Net Displacement)
 calculateFractalDim :: [ParamVector] -> Double
-calculateFractalDim [] = 1.0 -- if history is empty return 1.0
-calculateFractalDim [_] = 1.0 -- if history is of length 1, return 1.0
+calculateFractalDim p | length p < 5 = 1.0 -- Need history to establish trend
 calculateFractalDim path =
   let
-    currentPos = head path -- do not forget! newest element is at the head
-    startPos = last path -- last is the start of the path
+    currentPos = head path 
+    startPos = last path 
 
-    netDisp = euclideanDistance startPos currentPos -- distance start -> end
-
-    steps = zip path (tail path) -- this makes pairs (step1, step2) (step2, step3) ...
-    pathLen = sum [euclideanDistance p1 p2 | (p1, p2) <- steps]
+    netDisp = euclideanDistance startPos currentPos 
+    steps = zip path (tail path)
+    
+    -- Calculate stats
+    n = fromIntegral (length steps) :: Double
+    totalPathLen = sum [euclideanDistance p1 p2 | (p1, p2) <- steps]
+    avgStep = if n > 0 then totalPathLen / n else 0.0
+    
+    -- Avoid singularities
+    safeDisp = max 1.0e-9 netDisp
+    safeStep = max 1.0e-9 avgStep
+    ratio = safeDisp / safeStep
 
   in
-    if netDisp < 1.0e-9 -- to deal with super small hyphae
-      then 2.0 -- this is just to avoid division by zero
-      else max 1.0 (log pathLen / log netDisp)
-      -- avoid fractal dimension being < 1.0
+    if ratio <= 1.0 
+       -- If displacement is less than a single step (looped back), D is maxed
+       then 2.0 
+       -- Standard Fractal Dimension for random walks
+       else 
+          let d = log n / log ratio
+          in max 1.0 (min 2.0 d) -- Clamp to valid range [1, 2]
 
 -- ====================================
 -- FLOW RATE (Q_f)

@@ -1,18 +1,18 @@
 module Simulation.Loop where
 
 import MycelialState
-import MycelialPhysics (euclideanDistance)
+import MycelialPhysics (euclideanDistance, calculateFractalDim)
 import Simulation.Types (Sim) 
 import Simulation.Accessors hiding (Sim)
 import Simulation.Lifecycle (updateHypha, updateMushroom, germinateColony)
 import Simulation.Macro (calculateLocalField, sensingRadius) 
 import Simulation.Evolution (randomizeGenome)
-import Control.Monad.State (modify, execState)
+import Control.Monad.State (modify, execState, gets)
 import System.Random (mkStdGen)
 import Data.List (partition, foldl')
 import Data.Maybe (catMaybes)
+import qualified Data.Map.Strict as Map -- Added Map
 
--- Filter spores that are too close to existing mushrooms (Density Dependent Inhibition)
 filterCrowded :: [Spore] -> [MushroomBody] -> Double -> [Spore]
 filterCrowded candidates mushrooms radius =
     filter (\s -> 
@@ -30,8 +30,17 @@ stepSimulation newPrice = do
     
     modify $ \s -> s { sysEnv = (sysEnv s) { mktPrice = newPrice } }
     
-    -- 1. AGENT PASS
-    results <- mapM (updateHypha newPrice mushrooms agents) agents
+    -- ==========================================================
+    -- OPTIMIZATION: PRE-CALCULATE MUSHROOM FIELDS
+    -- ==========================================================
+    -- Instead of every agent calculating the field, we do it once per mushroom
+    let mushCache = Map.fromList 
+          [ (mushId m, (m, calculateLocalField (mushLocation m) agents mushrooms newPrice)) 
+          | m <- mushrooms 
+          ]
+
+    -- 1. AGENT PASS (Now uses O(log M) cache lookup)
+    results <- mapM (updateHypha newPrice mushCache agents) agents
     let survivingAgents = catMaybes (map fst results)
     let allTaxes = concat (map snd results)
 
@@ -63,23 +72,41 @@ stepSimulation newPrice = do
 
     -- 4. SPORE PASS
     let allSpores = spores ++ newlyReleasedSpores
+    
+    -- SNAPSHOT
+    (GlobalWallet wCap) <- getWallet 
+    let (Capital w) = wCap 
+    let (Price p) = newPrice
+    let agentCash = sum [c | a <- keptAgents, let (Capital c) = bioBank (hypBiology a)]
+    let agentStockVal = sum [q * p | a <- keptAgents, let (Quantity q) = posQuantity (hypHoldings a)]
+    let mushVal = sum [m | mBody <- livingMushrooms, let (Capital m) = mushMass mBody]
+    let sporeVal = sum [s | sp <- allSpores, let (Capital s) = sporeCapital sp]
+    let dimensions = map (calculateFractalDim . hypPath) keptAgents
+    let meanDim = if null dimensions then 0.0 else sum dimensions / fromIntegral (length dimensions)
 
-    -- UPDATED: Pass mushrooms to checkQuorum field calc
+    let snapshot = SystemSnapshot 
+          { snapTime = time + 1
+          , snapMarketPrice = newPrice
+          , snapTotalCash = Capital (w + agentCash)
+          , snapInventoryValue = Capital agentStockVal
+          , snapMushroomMass = Capital mushVal
+          , snapMeanFractalDim = meanDim
+          , snapTotalWealth = Capital (w + agentCash + agentStockVal + mushVal + sporeVal)
+          }
+    modify $ \s -> s { sysSnapshots = snapshot : sysSnapshots s }
+
+    -- Spore logic
     let checkQuorum s =
           let
               loc = sporeTarget s
-              -- FIXED: Include mushrooms in the field calculation
               field = calculateLocalField loc keptAgents livingMushrooms newPrice
               threshold = genePhiCritical (sporeGenome s)
           in
               field > threshold
 
     let (potentialColonizers, failures) = partition checkQuorum allSpores
-
     let exclusionRadius = sensingRadius * 0.25 
-    
     let colonizers = filterCrowded potentialColonizers livingMushrooms exclusionRadius
-
     let crowdedOut = filter (\s -> not (s `elem` colonizers)) potentialColonizers
     let totalFailures = failures ++ crowdedOut
 
@@ -110,7 +137,7 @@ stepSimulation newPrice = do
             foldl' processSpore ([], [], startMid, startHid) colonizers
 
     -- 5. COMMIT
-    setSpores []
+    setSpores [] 
     setMushrooms (fedMushrooms ++ newColonies)
     setAgents (keptAgents ++ newWorkers)
 
@@ -125,6 +152,8 @@ genesisState = SystemState
     , sysHyphae    = initialAgents 
     , sysMushrooms = [genesisMushroom]
     , sysSpores    = []
+    , sysLogs      = []
+    , sysSnapshots = []
     }
   where
     genesisGenome = Genome
@@ -171,4 +200,4 @@ genesisState = SystemState
             , hypStepCount = 0
             }
         | i <- [1..10]
-        ] 
+        ]
