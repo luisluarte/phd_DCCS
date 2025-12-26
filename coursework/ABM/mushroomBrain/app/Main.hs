@@ -11,7 +11,8 @@ import MycelialPhysics
 
 import Control.Monad.State
 import Text.Printf (printf)
-import System.IO (hFlush, stdout, hSetBuffering, BufferMode(..))
+import System.IO (hFlush, stdout, hSetBuffering, BufferMode(..), getContents)
+import System.Environment (getArgs)
 
 -- ==========================================
 -- REPL HELPER FUNCTIONS
@@ -102,6 +103,45 @@ printPerformanceLog s = do
         -- Display Fractal Dimension with 4 decimal places
         printf "%-4d | %8.2f | %10.2f | %8.2f | %8.2f | %10.4f | %12.2f\n" t p c i m dim w
 
+-- ==========================================
+-- PIPELINE MODE (R-integration)
+-- ==========================================
+runPipelineMode :: IO ()
+runPipelineMode = do
+    -- read input from STDIN (comming from R)
+    input <- getContents
+
+    -- parse input (1 price per line)
+    let priceLines = lines input
+    -- ignore empty lines
+    let cleanLines = filter (not . null) priceLines
+    let prices = map (Price . read) cleanLines
+
+    -- run simulation
+    let finalState = runSeq prices initState
+
+    -- extract equity curve
+    let history = reverse (sysSnapshots finalState)
+    let equityCurve = map (\s -> let (Capital w) = snapTotalWealth s in w) history
+
+    -- print to STDOUT
+    mapM_ print equityCurve
+
+
+-- ==========================================
+-- INTERACTIVE MODE (Existing REPL)
+-- ==========================================
+runInteractiveMode :: IO ()
+runInteractiveMode = do
+    putStrLn "Mycelial REPL Environment Loaded."
+    putStrLn "Use 'cabal repl' to interact."
+    putStrLn "Available commands:"
+    putStrLn "  inspect s             - Print summary of state 's'"
+    putStrLn "  printTradeLog s       - Print transaction history"
+    putStrLn "  printPerformanceLog s - Print equity curve table"
+    
+    let s0 = initState
+    inspect s0
 
 -- ==========================================
 -- MAIN ENTRY POINT
@@ -110,15 +150,7 @@ printPerformanceLog s = do
 main :: IO ()
 main = do
     hSetBuffering stdout NoBuffering
-    putStrLn "Mycelial REPL Environment Loaded."
-    putStrLn "Use 'cabal repl' to interact."
-    putStrLn "Available commands:"
-    putStrLn "  initState           - Get a fresh genesis state"
-    putStrLn "  step p s            - Advance state 's' with price 'p'"
-    putStrLn "  runSeq ps s         - Advance state 's' with price list 'ps'"
-    putStrLn "  inspect s           - Print summary of state 's'"
-    putStrLn "  printTradeLog s     - Print transaction history"
-    putStrLn "  printPerformanceLog s - Print equity curve history"
-    
-    let s0 = initState
-    inspect s0
+    args <- getArgs
+    case args of
+        ["--pipeline"] -> runPipelineMode
+        _              -> runInteractiveMode
