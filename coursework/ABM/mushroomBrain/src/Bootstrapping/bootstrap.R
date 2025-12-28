@@ -33,7 +33,37 @@ pw
 b_circular <- pw$BlockLength[2]
 b_circular
 
-# generate log return bootstraps ----
+# synthetic bootstrap ----
+
+# Pure Bull: Linear upward trend (Pt​=Pt−1​+c).
+# Pure Bear: Linear downward trend (Pt​=Pt−1​−c).
+# Pure Oscillation: Sine wave (Pt​=Asin(wt)+noise).
+# Shock/Crash: Stable price followed by a 20% instantaneous drop.
+bull_series <- function(sim_size) {
+    (rbeta(n = sim_size, shape1 = 2, shape2 = 1) / 500) - (0.5 / 500)
+}
+bear_series <- function(sim_size) {
+    (rbeta(n = sim_size, shape1 = 1, shape2 = 2) / 500) - (0.5 / 500)
+}
+sideways_series <- function(sim_size) {
+    (rbeta(n = sim_size, shape1 = 2, shape2 = 2) / 500) - (0.5 / 500)
+}
+crash_series <- function(sim_size) {
+    pivot_point <- floor(runif(n = 1, min = sim_size * 0.3, max = sim_size * 0.7))
+    print(pivot_point)
+    c(bull_series(pivot_point), bear_series(sim_size - pivot_point))[1:sim_size]
+}
+regimes <- function(sim_size, regime_type, n_sims) {
+    switch(regime_type,
+        "bull" = replicate(n = n_sims, bull_series(sim_size), simplify = FALSE),
+        "bear" = replicate(n = n_sims, bear_series(sim_size), simplify = FALSE),
+        "sideways_series" = replicate(n = n_sims, sideways_series(sim_size), simplify = FALSE),
+        "crash_series" = replicate(n = n_sims, crash_series(sim_size), simplify = FALSE),
+        stop("invalid choice")
+    )
+}
+regimes(252, "crash_series", 10)
+# bootstrap with spx ----
 get_bootstrap <- function(block_size, sim_size, data, sims) {
     f_size <- floor(sim_size / block_size)
     dat <- c(data, data)
@@ -72,39 +102,10 @@ results <- ts_boot %>%
             equity_xts <- xts(equity_curve[1:len], order.by = dates[1:len])
             benchmark_returns <- Return.calculate(benchmark_xts)
             sim_returns <- Return.calculate(equity_xts)
-            ret_sim <- table.DownsideRiskRatio(sim_returns)
-            benchmark_sim <- table.DownsideRiskRatio(benchmark_returns)
-            out <- tibble(
-                metric = rownames(benchmark_sim),
-                benchmark = benchmark_sim[, 1],
-                mushroomBrain = ret_sim[, 1]
-            )
-            return(out)
+            return(list(spx_mb = sim_returns, spx_bh = benchmark_returns))
         }
     )
 
 
-res_bind <- bind_rows(results) %>%
-    pivot_longer(cols = -metric)
-
-lm_mdl <- lm(
-    data = res_bind %>%
-        filter(metric == "Sortino ratio") %>%
-        mutate(value = value * sqrt(ts_length)),
-    value ~ name
-)
-summary(lm_mdl)
-emmeans::emmeans(
-    lm_mdl,
-    pairwise ~ name
-)
-
-bind_rows(results) %>%
-    pivot_longer(cols = -metric) %>%
-    ggplot(aes(
-        name, value
-    )) +
-    geom_boxplot(outlier.shape = NA) +
-    geom_point() +
-    facet_wrap(~metric, scales = "free") +
-    ggpubr::theme_classic2()
+# process data ----
+results[[1]]$spx_mb %>% table.AnnualizedReturns()
