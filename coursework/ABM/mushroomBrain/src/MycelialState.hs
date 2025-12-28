@@ -1,5 +1,9 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveGeneric #-}
 module MycelialState where
+
+import GHC.Generics (Generic)
+import Data.Aeson (FromJSON, ToJSON)
 
 -- ========================================================
 -- PRIMITIVE WRAPPERS (Fixed: No '!' allowed here)
