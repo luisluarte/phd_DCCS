@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
@@ -10,15 +11,24 @@ import Data.Aeson
 
 type ParamVector = [Double]
 
-newtype Price = Price Double deriving (Show, Generic, Eq, Ord, FromJSON, ToJSON)
-newtype Capital = Capital Double deriving (Show, Generic, Eq, Ord, Num, Fractional, FromJSON, ToJSON)
-newtype Quantity = Quantity Double deriving (Show, Generic, Eq, Ord, Num, Fractional, FromJSON, ToJSON)
-newtype Time = Time Int deriving (Show, Generic, Eq, Ord, Num, FromJSON, ToJSON)
+-- 1. Use 'deriving newtype' for Num/Fractional/JSON to treat them as simple numbers
+newtype Price = Price Double 
+    deriving stock (Show, Generic, Eq, Ord)
+    deriving newtype (FromJSON, ToJSON)
 
--- ========================================================
--- CONFIGURATION & GENOME
--- ========================================================
+newtype Capital = Capital Double 
+    deriving stock (Show, Generic, Eq, Ord)
+    deriving newtype (Num, Fractional, FromJSON, ToJSON)
 
+newtype Quantity = Quantity Double 
+    deriving stock (Show, Generic, Eq, Ord)
+    deriving newtype (Num, Fractional, FromJSON, ToJSON)
+
+newtype Time = Time Int 
+    deriving stock (Show, Generic, Eq, Ord)
+    deriving newtype (Num, FromJSON, ToJSON)
+
+-- 2. Use 'deriving anyclass' for JSON on complex Record types
 data SimConfig = SimConfig
     { cfgEnableMutation        :: Bool
     , cfgEnableIntelligence    :: Bool
@@ -32,12 +42,13 @@ data SimConfig = SimConfig
     , cfgInitGrowthRate        :: Double
     , cfgInitPhiCritical       :: Double
     , cfgInitVacuumCoefficient :: Double
-    , cfgInitReproductiveInvest:: Double -- Added this missing field
+    , cfgInitReproductiveInvest:: Double
     , cfgInitDevMult           :: Double
     , cfgDispersionRadius      :: Double
     , cfgInitBaseOrder         :: Double
     , cfgDcaOrder              :: Double
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data Genome = Genome
     { geneGreed              :: Double
@@ -56,21 +67,20 @@ data Genome = Genome
     , geneDevMult            :: Double
     , geneVolMult            :: Double
     , geneMaxChildren        :: Int
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
-
--- ========================================================
--- SIMULATION OBJECTS
--- ========================================================
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data BioState = BioState
     { bioAge  :: Int
     , bioBank :: Capital
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data Position = Position 
     { posQuantity :: Quantity
     , posCost     :: Capital 
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 -- Helper function required by Loop.hs
 calculatePosCost :: Position -> Capital
@@ -81,8 +91,13 @@ instance Semigroup Position where
 instance Monoid Position where 
     mempty = Position 0 0
 
-newtype HyphalId = HyphalId Int deriving (Show, Generic, Eq, Ord, FromJSON, ToJSON)
-newtype MushroomId = MushroomId Int deriving (Show, Generic, Eq, Ord, FromJSON, ToJSON)
+newtype HyphalId = HyphalId Int 
+    deriving stock (Show, Generic, Eq, Ord)
+    deriving newtype (FromJSON, ToJSON)
+
+newtype MushroomId = MushroomId Int 
+    deriving stock (Show, Generic, Eq, Ord)
+    deriving newtype (FromJSON, ToJSON)
 
 data HyphalTip = HyphalTip
     { hypId        :: HyphalId
@@ -95,34 +110,41 @@ data HyphalTip = HyphalTip
     , hypGenome    :: Genome
     , hypRefPrice  :: Price
     , hypStepCount :: Int
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data MushroomBody = MushroomBody
     { mushId       :: MushroomId
     , mushLocation :: [Double]
     , mushMass     :: Capital
     , mushGenome   :: Genome
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data Spore = Spore
     { sporeTarget  :: [Double]
     , sporeGenome  :: Genome
     , sporeCapital :: Capital
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 newtype GlobalWallet = GlobalWallet Capital 
-    deriving (Show, Generic, Eq, Ord, Num, FromJSON, ToJSON)
+    deriving stock (Show, Generic, Eq, Ord)
+    deriving newtype (Num, FromJSON, ToJSON)
 
 data Environment = Environment
     { mktPrice     :: Price
     , mktHistory   :: [Price]
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data SimStats = SimStats
     { statTick                   :: Int
     , statTotalWealth            :: Double
     , statMktPrice               :: Double
     , statPopSize                :: Int
+    , statMushroomCount          :: Int
+    , statMushroomMasses         :: [Double] -- <--- NEW FIELD
     , statFractalDims            :: [Double]
     , statHoldings               :: [Double]
     , statBioBank                :: [Double]
@@ -136,7 +158,8 @@ data SimStats = SimStats
     , statGeneDevMult            :: [Double]
     , statStratDrop              :: [Double]
     , statStratProfit            :: [Double]
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data SystemState = SystemState
     { sysTime      :: Time
@@ -147,18 +170,21 @@ data SystemState = SystemState
     , sysSpores    :: [Spore]
     , sysLogs      :: [String]
     , sysSnapshots :: [SimStats]
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 -- ========================================================
--- IO PAYLOADS (Used by Main.hs)
+-- IO PAYLOADS
 -- ========================================================
 
 data InputPayload = InputPayload
     { inputPrices :: [Double]
     , inputConfig :: SimConfig
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)
 
 data OutputPayload = OutputPayload
     { outputEquityCurve :: [Double]
     , outputStats       :: [SimStats]
-    } deriving (Show, Generic, Eq, FromJSON, ToJSON)
+    } deriving stock (Show, Generic, Eq)
+      deriving anyclass (FromJSON, ToJSON)

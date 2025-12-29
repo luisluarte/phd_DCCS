@@ -1,20 +1,20 @@
 module Simulation.Loop where
 
-import MycelialState
+import MycelialState 
+
 import qualified Simulation.Types as T
 import MycelialPhysics (euclideanDistance, calculateFractalDim)
 import Simulation.Types (Sim) 
 import Simulation.Accessors hiding (Sim)
 import Simulation.Lifecycle (updateHypha, updateMushroom, germinateColony)
 import Simulation.Macro (calculateLocalField, sensingRadius, applyDrain) 
-import Simulation.Evolution (randomizeGenome) -- ADDED THIS IMPORT
+import Simulation.Evolution (randomizeGenome) 
 import Control.Monad.State (modify)
 import System.Random (mkStdGen)
 import Data.List (partition, foldl')
 import Data.Maybe (catMaybes)
 import qualified Data.Map.Strict as Map 
 
--- Filter spores that are too close to existing mushrooms
 filterCrowded :: [Spore] -> [MushroomBody] -> Double -> [Spore]
 filterCrowded candidates mushrooms radius =
     filter (\s -> 
@@ -41,16 +41,9 @@ stepSimulation config newPrice = do
     -- 2. AGENT PASS
     let intelligenceEnabled = cfgEnableIntelligence config
 
-    -- updateHypha returns (Maybe Agent, Taxes, MaintenancePaid)
     results <- mapM (updateHypha intelligenceEnabled newPrice mushCache agents) agents
     
     let survivingAgents = [a | (Just a, _, _) <- results]
-    
-    -- IMPORTANT: Taxes are now calculated via Macro.applyDrain inside Loop usually, 
-    -- but here we assume Lifecycle/Micro handles the trade/move, and we check taxes here 
-    -- OR Lifecycle returns them.
-    -- In your previous Macro.hs, applyDrain was a standalone function.
-    -- If Lifecycle.updateHypha returns taxes (middle tuple element), we use them.
     let allTaxes = concat [t | (_, t, _) <- results]
     let totalAgentMaint = sum [m | (_, _, m) <- results]
 
@@ -63,13 +56,18 @@ stepSimulation config newPrice = do
              (MushroomId midInt) = mushId m
              seed = midInt + tInt
              rng = mkStdGen seed
+             -- updateMushroom returns (NewBody, NewSpores, InvestmentSpent)
              (mNew, newSpores, maintPaid) = updateMushroom mutationEnabled newPrice allTaxes rng m
           in 
              if mushMass mNew > 0
-             then (mNew : mList, newSpores ++ sList, recycledTotal + maintPaid)
+             then 
+                -- FIXED: Do NOT recycle 'maintPaid' (investment) here, as it is inside 'newSpores'.
+                -- Adding it back would cause exponential inflation.
+                (mNew : mList, newSpores ++ sList, recycledTotal)
              else 
+                -- If dead, recycle the remaining mass of the corpse
                 let (Capital deadVal) = mushMass mNew
-                in (mList, sList, recycledTotal + maintPaid + Capital (max 0.0 deadVal))
+                in (mList, sList, recycledTotal + Capital (max 0.0 deadVal))
     
     let (livingMushroomsRaw, newlyReleasedSpores, mushroomRecycled) = 
             foldl' processMushroom ([], [], Capital 0.0) mushrooms
@@ -104,11 +102,14 @@ stepSimulation config newPrice = do
     let (Price p) = newPrice
     let agentCash = sum [c | a <- keptAgents, let (Capital c) = bioBank (hypBiology a)]
     let agentStockVal = sum [q * p | a <- keptAgents, let (Quantity q) = posQuantity (hypHoldings a)]
+    
+    -- Extract Mushroom Masses for Stats
+    let mushMasses = map (\m -> let (Capital c) = mushMass m in c) livingMushrooms
     let mushVal = sum [m | mBody <- livingMushrooms, let (Capital m) = mushMass mBody]
+    
     let sporeVal = sum [s | sp <- allSpores, let (Capital s) = sporeCapital sp]
     
     let currentGenomes = map hypGenome keptAgents
-
     let locations = map hypLocation keptAgents
     let stratDrops = map (\loc -> (if null loc then 0.0 else loc !! 0) * 0.05) locations
     let stratProfits = map (\loc -> (if length loc < 2 then 0.0 else loc !! 1) * 0.05) locations
@@ -118,6 +119,8 @@ stepSimulation config newPrice = do
           , statTotalWealth = agentCash + agentStockVal + mushVal + sporeVal
           , statMktPrice = p
           , statPopSize = length keptAgents
+          , statMushroomCount = length livingMushrooms
+          , statMushroomMasses = mushMasses -- <--- POPULATED HERE
           , statFractalDims = map (calculateFractalDim . hypPath) keptAgents
           , statHoldings    = map (\a -> let (Quantity q) = posQuantity (hypHoldings a) in q) keptAgents
           , statBioBank     = map (\a -> let (Capital c) = bioBank (hypBiology a) in c) keptAgents
@@ -183,13 +186,13 @@ stepSimulation config newPrice = do
     modify $ \s -> s { sysTime = sysTime s + 1 }
 
 -- GENESIS STATE
-genesisState :: SystemState
-genesisState = SystemState
+genesisState :: Int -> SystemState
+genesisState initialCount = SystemState
     { sysTime      = Time 0
     , sysWallet    = GlobalWallet 100.0
     , sysEnv       = Environment (Price 1.0) []
     , sysHyphae    = initialAgents 
-    , sysMushrooms = [genesisMushroom]
+    , sysMushrooms = genesisMushrooms 
     , sysSpores    = []
     , sysLogs      = []
     , sysSnapshots = []
@@ -212,37 +215,47 @@ genesisState = SystemState
         geneMaxOrders = 10,
         geneDevMult = 1.0,
         geneVolMult = 1.0,
-        geneMaxChildren = 5
+        geneMaxChildren = initialCount
         }
 
-    genesisMushroom = MushroomBody
-        { mushId = MushroomId 1
-        , mushLocation = [0.5, 0.5]
-        , mushMass = Capital 100.0
-        , mushGenome = genesisGenome
-        }
+    -- 5 Locations: Center + 4 Corners
+    mushroomLocs = [[0.5, 0.5], [0.2, 0.2], [0.8, 0.8], [0.2, 0.8], [0.8, 0.2]]
+    
+    colonyCapital = 100.0
+    mushPortion   = colonyCapital * 0.5
+    agentPortion  = colonyCapital - mushPortion
+    
+    perWorkerCap = if initialCount > 0 
+                   then agentPortion / fromIntegral initialCount 
+                   else 0.0
 
-    -- HIGH-ENTROPY INITIALIZATION
-    initialAgents = 
-        [ HyphalTip
-            { hypId = HyphalId i
-            , hypParentId = MushroomId 1
-            , hypLocation = [0.5 + (dx * 0.01), 0.5 + (dy * 0.01)] 
-            , hypVelocity = [dx * 0.001, dy * 0.001]
-            , hypPath     = [[0.5, 0.5]]
-            , hypHoldings = mempty
-            , hypBiology  = BioState 0 (Capital 100.0)
-            
-            -- FIX: Apply randomization here as requested
-            , hypGenome   = randomizeGenome genesisGenome (i * 1337)
-            
-            -- FIX: Correct field name from hypAvgEntry to hypRefPrice
-            , hypRefPrice = Price 1.0
-            
-            , hypStepCount = 0
+    genesisMushrooms = 
+        [ MushroomBody 
+            { mushId = MushroomId mid
+            , mushLocation = loc
+            , mushMass = Capital mushPortion 
+            , mushGenome = genesisGenome
             }
-        | i <- [1..5]
-        , let angle = (fromIntegral i / 5.0) * 2 * pi
-        , let dx = cos angle
-        , let dy = sin angle
+        | (mid, loc) <- zip [1..] mushroomLocs
+        ]
+
+    initialAgents = concat
+        [ [ HyphalTip
+              { hypId = HyphalId (mid * 100 + i) 
+              , hypParentId = MushroomId mid
+              , hypLocation = [mx + (dx * 0.01), my + (dy * 0.01)]
+              , hypVelocity = [dx * 0.001, dy * 0.001]
+              , hypPath     = [[mx, my]]
+              , hypHoldings = mempty
+              , hypBiology  = BioState 0 (Capital perWorkerCap)
+              , hypGenome   = randomizeGenome genesisGenome ((mid * 100 + i) * 1337)
+              , hypRefPrice = Price 1.0
+              , hypStepCount = 0
+              }
+          | i <- [1..initialCount]
+          , let angle = (fromIntegral i / fromIntegral initialCount) * 2 * pi
+          , let dx = cos angle
+          , let dy = sin angle
+          ]
+        | (mid, [mx, my]) <- zip [1..] mushroomLocs
         ]

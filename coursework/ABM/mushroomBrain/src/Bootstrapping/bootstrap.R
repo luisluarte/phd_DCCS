@@ -44,15 +44,15 @@ run_simulation <- function(price_segment, greed, mutation_on) {
             cfgDispersionRadius = 0.1,
             cfgInitMaturity = 50.0,
             cfgMaxOrders = 10,
-            cfgMaxChildren = 5,
+            cfgMaxChildren = 4,
             cfgInitGreed = greed,
-            cfgDcaOrder = 0.5,
-            cfgInitBaseOrder = 0.5,
+            cfgDcaOrder = 1.0,
+            cfgInitBaseOrder = 1.0,
             cfgInitTurbulence = 0.1, # 10% random motion noise
             cfgInitGrowthRate = 0.01, # 1% growth per trade/tick
             cfgInitPhiCritical = 1.0, # Quorum sensing threshold
-            cfgInitReproductiveInvest = 0.9, # Sacrifice 20% mass to reproduce
-            cfgInitVacuumCoefficient = 0.0, # Strong suction toward price targets
+            cfgInitReproductiveInvest = 0.5, # Sacrifice 20% mass to reproduce
+            cfgInitVacuumCoefficient = 0.1, # Strong suction toward price targets
             cfgInitDevMult = 1.0 # No deviation multiplier initially
         )
     )
@@ -124,7 +124,7 @@ plan(multisession, workers = 4)
 results <- boot_data %>%
     map(
         ., function(time_series) {
-            raw_output <- run_simulation(time_series, 0.5, mutation_on = FALSE)
+            raw_output <- run_simulation(time_series, 0.5, mutation_on = TRUE)
             # raw_output <- system2(
             #     command = "cabal",
             #     args = c("run", "-v0", "mycelial-exe", "--", "--pipeline"),
@@ -154,15 +154,22 @@ stats_df <- stats_df %>%
         mean_vacuum = map_dbl(statGeneVacuumCoefficient, mean),
         mean_drop = map_dbl(statStratDrop, mean),
         mean_tp = map_dbl(statStratProfit, mean),
+        mean_fractal = map_dbl(statFractalDims, mean),
         sum_biobank = map_dbl(statBioBank, sum),
-        sum_holding = map_dbl(statHoldings, sum)
+        sum_holdings = map_dbl(statHoldings, sum)
     )
 stats_df %>%
     pivot_longer(cols = c(
-        mean_tp, mean_drop, mean_biobank,
-        mean_holding, sum_biobank, sum_holding, statMktPrice,
-        statPopSize, mean_vacuum, mean_phi
+        statMushroomCount, statPopSize,
+        statTotalWealth, statMktPrice,
+        sum_biobank, sum_holdings
     )) %>%
     ggplot(aes(statTick, value, color = name)) +
     geom_line() +
     facet_wrap(~name, scale = "free")
+
+summary(stats_df$statBioBank[[1]])
+summary(stats_df$statBioBank[[2]])
+summary(stats_df$statBioBank[[3]])
+summary(stats_df$statBioBank[[5]])
+summary(stats_df$statBioBank[[200]])

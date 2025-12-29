@@ -4,6 +4,7 @@ import MycelialState
 import qualified Simulation.Types as T
 import Simulation.Accessors hiding (Sim)
 import Simulation.Micro (executeTrade, executeSell, moveAgent)
+import Simulation.Macro (applyDrain, MushroomCache) 
 import Simulation.Evolution (mutateGenome)
 import MycelialStrategy (interpretStrategy, shouldExecuteBuy, shouldExecuteSell)
 import MycelialPhysics (calculatePressure, clampVector)
@@ -13,7 +14,7 @@ import Control.Monad.State (get, modify)
 import Data.List (mapAccumL)
 
 -- | 1. Update Hyphal Tip (Agent)
-updateHypha :: Bool -> Price -> Map.Map MushroomId any -> [HyphalTip] -> HyphalTip -> T.Sim (Maybe HyphalTip, [(MushroomId, Capital)], Capital)
+updateHypha :: Bool -> Price -> MushroomCache -> [HyphalTip] -> HyphalTip -> T.Sim (Maybe HyphalTip, [(MushroomId, Capital)], Capital)
 updateHypha intel p mushMap allA agent = do
     -- 1. Deduct Maintenance
     let (Capital bank) = bioBank (hypBiology agent)
@@ -23,41 +24,54 @@ updateHypha intel p mushMap allA agent = do
     if bank <= maintVal 
         then return (Nothing, [], 0) -- Starvation Death
         else do
-            let agentAfterMaint = agent { hypBiology = (hypBiology agent) { bioBank = Capital (bank - maintVal) } }
+            -- FIXED: Increment bioAge here!
+            let oldBio = hypBiology agent
+            let newAge = bioAge oldBio + 1
+            
+            -- Update bank AND age
+            let agentAfterMaint = agent 
+                    { hypBiology = oldBio 
+                        { bioBank = Capital (bank - maintVal)
+                        , bioAge = newAge -- <--- CRITICAL FIX
+                        } 
+                    }
             
             -- 2. Calculate Pressure & Move
             let (HyphalId hid) = hypId agentAfterMaint
-            let (Price priceVal) = p -- FIXED: Match Price, not Capital
+            let (Price priceVal) = p 
             
             let pressure = calculatePressure p agentAfterMaint
             
             -- Generate a seed for movement logic
-            let rngSeed = hid + (bioAge (hypBiology agentAfterMaint) * 1000)
+            -- Now that bioAge changes, this seed will change every tick (Randomness restored)
+            let rngSeed = hid + (newAge * 1000)
             let rng = mkStdGen rngSeed
             
             let movedAgent = moveAgent pressure agentAfterMaint rng
 
             -- 3. Strategy & Trading Logic
-            -- FIXED: interpretStrategy takes (HyphalTip -> Price -> TradingStrategy)
             let strategy = interpretStrategy movedAgent p 
 
-            -- FIXED: shouldExecute* functions only check the strategy enum
             let trySell = shouldExecuteSell strategy
             let tryBuy = shouldExecuteBuy strategy
             
             finalAgentResult <- if trySell
                 then case executeSell p movedAgent of
-                        Just (soldAgent, _, _) -> return (Just soldAgent) -- Successful Sell
+                        Just (soldAgent, _, _) -> return (Just soldAgent) 
                         Nothing -> return (Just movedAgent)
                 else if tryBuy
                      then case executeTrade p movedAgent of
-                            Just (boughtAgent, _) -> return (Just boughtAgent) -- Successful Buy
+                            Just (boughtAgent, _) -> return (Just boughtAgent) 
                             Nothing -> return (Just movedAgent)
                      else return (Just movedAgent)
 
+            -- 4. Apply Vacuum
             case finalAgentResult of
-                Just ag -> return (Just ag, [], maint)
                 Nothing -> return (Nothing, [], maint)
+                Just traderAgent -> do
+                    -- Taxes will now flow because Age > 0
+                    let (drainedAgent, taxes) = applyDrain traderAgent mushMap p
+                    return (Just drainedAgent, taxes, maint)
 
 
 -- | 2. Update Mushroom Body
@@ -65,10 +79,8 @@ updateMushroom :: Bool -> Price -> [(MushroomId, Capital)] -> StdGen -> Mushroom
 updateMushroom enableMutation currentPrice taxes rng mush =
     let
         -- 1. Absorb Taxes
-        -- Calculate total taxes for this mushroom
         myTaxes = sum [amt | (mid, amt) <- taxes, mid == mushId mush]
         
-        -- FIXED: Use Num instance for Capital addition (mushMass is Capital, myTaxes is Capital)
         newMass = (mushMass mush) + myTaxes
         
         -- 2. Check Maturity for Sporulation
@@ -81,11 +93,17 @@ updateMushroom enableMutation currentPrice taxes rng mush =
                     investment = newMass * (Capital reproInvest)
                     sporeCount = geneSporeBatchSize (mushGenome mush)
                     costPerSpore = investment / (fromIntegral sporeCount)
+                    dispersion = geneDispersion (mushGenome mush)
+                    parentLoc = mushLocation mush
                     
                     (sporesCreated, _) = foldl (\(acc, r) _ -> 
                         let 
-                            (targetX, r1) = randomR (0.0, 1.0) r
-                            (targetY, r2) = randomR (0.0, 1.0) r1
+                            (dx, r1) = randomR (-dispersion, dispersion) r
+                            (dy, r2) = randomR (-dispersion, dispersion) r1
+                            
+                            targetX = max 0.0 (min 1.0 (head parentLoc + dx))
+                            targetY = max 0.0 (min 1.0 (parentLoc !! 1 + dy))
+                            
                             childGenome = if enableMutation 
                                           then mutateGenome (mushGenome mush) r2 
                                           else mushGenome mush
@@ -106,18 +124,28 @@ updateMushroom enableMutation currentPrice taxes rng mush =
         (finalMush, spores, spentMass)
 
 
--- | 3. Germinate Colony
+-- | 3. Germinate Colony (Conserving Mass)
 germinateColony :: MushroomId -> HyphalId -> Spore -> Price -> (MushroomBody, [HyphalTip])
 germinateColony newMid (HyphalId startHid) spore (Price p) =
     let
+        count = geneMaxChildren (sporeGenome spore)
+        (Capital availableCap) = sporeCapital spore
+        
+        -- STRICT CONSERVATION OF MASS: Split spore capital
+        mushPortion = availableCap * 0.5
+        workerPortion = availableCap - mushPortion
+        
+        perWorkerCap = if count > 0 
+                       then workerPortion / fromIntegral count 
+                       else 0.0
+
         newMush = MushroomBody
             { mushId = newMid
             , mushLocation = sporeTarget spore
-            , mushMass = sporeCapital spore
+            , mushMass = Capital mushPortion 
             , mushGenome = sporeGenome spore
             }
 
-        count = 5 
         newAgents = 
             [ HyphalTip
                 { hypId = HyphalId (startHid + i)
@@ -126,7 +154,7 @@ germinateColony newMid (HyphalId startHid) spore (Price p) =
                 , hypVelocity = [0, 0]
                 , hypPath     = [sporeTarget spore]
                 , hypHoldings = mempty
-                , hypBiology  = BioState 0 (Capital 10.0)
+                , hypBiology  = BioState 0 (Capital perWorkerCap)
                 , hypGenome   = sporeGenome spore
                 , hypRefPrice = Price p
                 , hypStepCount = 0
