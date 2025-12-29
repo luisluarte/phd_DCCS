@@ -15,102 +15,85 @@ import qualified Data.Map.Strict as Map
 dieThresh :: Double
 dieThresh = -50.0
 
--- UPDATED: Now accepts 'Bool' for Intelligence Switch
-updateHypha :: Bool -> Price -> MushroomCache -> [HyphalTip] -> HyphalTip -> Sim (Maybe HyphalTip, TaxMap)
+updateHypha :: Bool -> Price -> MushroomCache -> [HyphalTip] -> HyphalTip -> Sim (Maybe HyphalTip, TaxMap, Capital)
 updateHypha enableIntelligence currentPrice mushCache allAgents agent = do
     
     let (agentAfterTax, taxes) = applyDrain agent mushCache currentPrice
     
-    -- ============================================================
-    -- INTELLIGENCE SWITCH IMPLEMENTATION
-    -- ============================================================
+    -- METABOLIC COST
+    let genes = hypGenome agent
+    let maintCostVal = geneMaintenance genes
+    let maintCost = Capital maintCostVal
+    
+    let (Capital currentBank) = bioBank (hypBiology agentAfterTax)
+    let newBankVal = currentBank - maintCostVal
+    
+    let agentAfterCost = agentAfterTax 
+          { hypBiology = (hypBiology agentAfterTax) { bioBank = Capital newBankVal } }
+
     t <- getTime
     let (Time tick) = t
-    
-    -- 1. Calculate Real Physics (Signal)
-    let signalPsi = calculatePressure currentPrice agentAfterTax
-    
-    -- 2. Calculate Random Noise (No Signal)
-    -- We use a deterministic seed based on AgentID + Tick so it's reproducible
     let (HyphalId hid) = hypId agent
-    let noiseSeed = hid + tick * 7919 -- Prime number multiplier
-    let noiseRng = mkStdGen noiseSeed
-    -- Range +/- 100.0 to allow for both growth and death (below -50.0)
-    let (noisePsi, _) = randomR (-100.0, 100.0) noiseRng 
     
-    -- 3. Select based on Switch
+    let signalPsi = calculatePressure currentPrice agentAfterCost 
+    let noiseSeed = hid + tick * 7919 
+    let noiseRng = mkStdGen noiseSeed
+    let (noisePsi, _) = randomR (-100.0, 100.0) noiseRng 
     let psi = if enableIntelligence then signalPsi else noisePsi
-    -- ============================================================
 
-    let (Capital bank) = bioBank (hypBiology agentAfterTax) 
-
-    if psi < dieThresh || bank < 0 
+    if psi < dieThresh || newBankVal < 0 
         then do
-            modifyWallet (\c -> c + Capital bank)
-            return (Nothing, taxes)
+            modifyWallet (\c -> c + max 0 (Capital newBankVal))
+            return (Nothing, taxes, maintCost)
         else do
             let strategy = interpretStrategy (hypLocation agent)
-            let genes = hypGenome agent
             let devMult = if (hypStepCount agent) == 0 then 1.0 else (geneDevMult genes) ^ (hypStepCount agent)
             
-            let shouldSell = shouldExecuteSell strategy currentPrice (hypHoldings agentAfterTax)
+            let shouldSell = shouldExecuteSell strategy currentPrice (hypHoldings agentAfterCost)
             
             agentAfterLogic <- if shouldSell
                 then do
-                    case executeSell currentPrice agentAfterTax of
-                        Just (soldAgent, revenue, _) -> do
-                            modifyWallet (\c -> c + revenue)
-                            
-                            -- LOGGING SELL
-                            let (Quantity q) = posQuantity (hypHoldings agentAfterTax)
+                    case executeSell currentPrice agentAfterCost of
+                        Just (soldAgent, revenue, profit) -> do
+                            modifyWallet (\c -> c - revenue)
+                            let (Quantity q) = posQuantity (hypHoldings agentAfterCost)
                             let logEntry = TransactionLog 
-                                    { tlHyphaId = hypId agent
-                                    , tlType = ActionSell
-                                    , tlCost = revenue 
-                                    , tlPrice = currentPrice
-                                    , tlQuantity = Quantity q
-                                    , tlTime = t
-                                    }
+                                    { tlHyphaId = hypId agent, tlType = ActionSell, tlCost = revenue, tlPrice = currentPrice, tlQuantity = Quantity q, tlTime = t }
                             modify $ \s -> s { sysLogs = logEntry : sysLogs s }
                             return soldAgent
-
-                        Nothing -> return agentAfterTax
+                        Nothing -> return agentAfterCost
                 else do
-                    let shouldBuy = shouldExecuteBuy strategy currentPrice (hypRefPrice agentAfterTax) devMult
+                    -- Forced Entry Logic
+                    let shouldBuy = (hypStepCount agent == 0) || shouldExecuteBuy strategy currentPrice (hypRefPrice agentAfterCost) devMult
+
                     if shouldBuy
                         then do
-                            (GlobalWallet balance) <- getWallet
-                            case executeTrade currentPrice agentAfterTax balance of
+                            case executeTrade currentPrice agentAfterCost of
                                 Just (boughtAgent, cost) -> do
-                                    modifyWallet (\c -> c - cost)
-
-                                    -- LOGGING BUY
+                                    modifyWallet (\c -> c + cost)
                                     let (Capital costVal) = cost
-                                    let (Price pVal) = currentPrice
-                                    let qty = Quantity (costVal / pVal)
+                                    let qty = Quantity (costVal / (let (Price p) = currentPrice in p))
                                     let logEntry = TransactionLog 
-                                            { tlHyphaId = hypId agent
-                                            , tlType = ActionBuy
-                                            , tlCost = -cost 
-                                            , tlPrice = currentPrice
-                                            , tlQuantity = qty
-                                            , tlTime = t
-                                            }
+                                            { tlHyphaId = hypId agent, tlType = ActionBuy, tlCost = -cost, tlPrice = currentPrice, tlQuantity = qty, tlTime = t }
                                     modify $ \s -> s { sysLogs = logEntry : sysLogs s }
                                     return boughtAgent
 
-                                Nothing -> return agentAfterTax 
-                        else return agentAfterTax
+                                -- FIX: BREAK THE POVERTY LOOP
+                                -- If trade fails (too poor), we MUST increment step count.
+                                -- Otherwise, step stays 0, forcing a buy attempt every tick until death.
+                                Nothing -> 
+                                    return agentAfterCost { hypStepCount = hypStepCount agentAfterCost + 1 }
 
-            -- MOVEMENT (Driven by Psi)
+                        else return agentAfterCost
+
             let moveRng = mkStdGen (hid + tick * 1000)
             let agentAfterMove = moveAgent psi agentAfterLogic moveRng
             let bio = hypBiology agentAfterMove
             let finalAgent = agentAfterMove { hypBiology = bio { bioAge = bioAge bio + 1 } }
 
-            return (Just finalAgent, taxes)
+            return (Just finalAgent, taxes, maintCost)
 
--- (updateMushroom and germinateColony remain unchanged)
+-- (Keep updateMushroom and germinateColony as they are)
 updateMushroom :: Bool -> Price -> TaxMap -> StdGen -> MushroomBody -> (MushroomBody, [Spore], Capital)
 updateMushroom enableMutation (Price _) income rng mBody =
     let
@@ -138,25 +121,18 @@ updateMushroom enableMutation (Price _) income rng mBody =
                             (mutatedGenes) = if enableMutation
                                              then mutateGenome genes (mkStdGen seed)
                                              else genes
-                            
                             (r1, rng1) = randomR (-1.0, 1.0) currentRng
                             (r2, rng2) = randomR (-1.0, 1.0) rng1
                             disp = geneDispersion genes
                             target = zipWith (+) (mushLocation mBody) [r1 * disp, r2 * disp]
                             clampedTarget = clampVector target
                             spore = Spore
-                                { sporeTarget = clampedTarget
-                                , sporeGenome = mutatedGenes
-                                , sporeCapital = Capital perSporeEndowment
-                                }
-                        in
-                            (rng2, spore)
+                                { sporeTarget = clampedTarget, sporeGenome = mutatedGenes, sporeCapital = Capital perSporeEndowment }
+                        in (rng2, spore)
                     (_, newSpores) = mapAccumL generateSpore rng [1..batchSize]
                     finalMushroom = mBody { mushMass = massAfterSporulation }
-                in
-                    (finalMushroom, newSpores, maintenanceCost)
-            else
-                (mBody { mushMass = massAfterCost }, [], maintenanceCost)
+                in (finalMushroom, newSpores, maintenanceCost)
+            else (mBody { mushMass = massAfterCost }, [], maintenanceCost)
 
 germinateColony :: MushroomId -> HyphalId -> Spore -> Price -> (MushroomBody, [HyphalTip])
 germinateColony mid (HyphalId startAid) spore currentPrice =
@@ -167,24 +143,9 @@ germinateColony mid (HyphalId startAid) spore currentPrice =
         nChildren = max 1 (geneMaxChildren genes)
         divisor = fromIntegral nChildren + 1.0
         shareSize = totalCap / divisor
-        newMushroom = MushroomBody
-            { mushId = mid
-            , mushLocation = loc
-            , mushMass = Capital shareSize
-            , mushGenome = genes
-        }
+        newMushroom = MushroomBody { mushId = mid, mushLocation = loc, mushMass = Capital shareSize, mushGenome = genes }
         createWorker i = HyphalTip
-            { hypId = HyphalId (startAid + i)
-            , hypParentId = mid
-            , hypLocation = loc
-            , hypVelocity = [0,0]
-            , hypPath = [loc]
-            , hypHoldings = mempty
-            , hypBiology = BioState { bioAge = 0, bioBank = Capital shareSize }
-            , hypGenome = genes
-            , hypRefPrice = currentPrice
-            , hypStepCount = 0
-        }
+            { hypId = HyphalId (startAid + i), hypParentId = mid, hypLocation = loc, hypVelocity = [0,0], hypPath = [loc], hypHoldings = mempty
+            , hypBiology = BioState { bioAge = 0, bioBank = Capital shareSize }, hypGenome = genes, hypRefPrice = currentPrice, hypStepCount = 0 }
         newHyphae = map createWorker [0..(nChildren - 1)]
-    in
-        (newMushroom, newHyphae)
+    in (newMushroom, newHyphae)

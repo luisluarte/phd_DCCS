@@ -12,7 +12,7 @@ import Data.List (partition, foldl')
 import Data.Maybe (catMaybes)
 import qualified Data.Map.Strict as Map 
 
--- (filterCrowded helper remains the same)
+-- Filter spores that are too close to existing mushrooms
 filterCrowded :: [Spore] -> [MushroomBody] -> Double -> [Spore]
 filterCrowded candidates mushrooms radius =
     filter (\s -> 
@@ -30,55 +30,70 @@ stepSimulation config newPrice = do
     
     modify $ \s -> s { sysEnv = (sysEnv s) { mktPrice = newPrice } }
     
-    -- 1. OPTIMIZATION: PRE-CALCULATE MUSHROOM FIELDS
+    -- 1. PRE-CALCULATE MUSHROOM FIELDS (Optimization)
     let mushCache = Map.fromList 
           [ (mushId m, (m, calculateLocalField (mushLocation m) agents mushrooms newPrice)) 
           | m <- mushrooms 
           ]
 
-    -- 2. AGENT PASS (INTELLIGENCE SWITCH APPLIED)
-    let intelligenceEnabled = cfgEnableIntelligence config -- <--- READ CONFIG
+    -- 2. AGENT PASS
+    let intelligenceEnabled = cfgEnableIntelligence config
 
-    -- Pass 'intelligenceEnabled' to updateHypha
+    -- updateHypha returns (Maybe Agent, Taxes, MaintenancePaid)
     results <- mapM (updateHypha intelligenceEnabled newPrice mushCache agents) agents
     
-    let survivingAgents = catMaybes (map fst results)
-    let allTaxes = concat (map snd results)
+    let survivingAgents = [a | (Just a, _, _) <- results]
+    let allTaxes = concat [t | (_, t, _) <- results]
+    let totalAgentMaint = sum [m | (_, _, m) <- results] -- Collected maintenance
 
-    -- 3. MUSHROOM PASS (MUTATION SWITCH APPLIED)
+    -- 3. MUSHROOM PASS
     let (Time tInt) = time
-    let mutationEnabled = cfgEnableMutation config -- <--- READ CONFIG
+    let mutationEnabled = cfgEnableMutation config
 
     let processMushroom (mList, sList, recycledTotal) m =
           let 
              (MushroomId midInt) = mushId m
              seed = midInt + tInt
              rng = mkStdGen seed
-             -- Pass 'mutationEnabled' to updateMushroom
              (mNew, newSpores, maintPaid) = updateMushroom mutationEnabled newPrice allTaxes rng m
           in 
              if mushMass mNew > 0
              then (mNew : mList, newSpores ++ sList, recycledTotal + maintPaid)
              else 
-                let deadMass = mushMass mNew
-                in (mList, sList, recycledTotal + maintPaid + max (Capital 0.0) deadMass)
+                let (Capital deadVal) = mushMass mNew
+                in (mList, sList, recycledTotal + maintPaid + Capital (max 0.0 deadVal))
     
-    let (livingMushrooms, newlyReleasedSpores, totalRecycled) = foldl' processMushroom ([], [], Capital 0.0) mushrooms
+    let (livingMushroomsRaw, newlyReleasedSpores, mushroomRecycled) = 
+            foldl' processMushroom ([], [], Capital 0.0) mushrooms
     
-    -- ... (Rest of the function remains the same) ...
-    modifyWallet (\c -> c + totalRecycled)
-
-    -- 4. CASCADE DEATH
-    let survivorIds = [mushId m | m <- livingMushrooms]
+    -- 4. CASCADE DEATH & ASSET COLLECTION (Redistribution Logic)
+    let survivorIds = [mushId m | m <- livingMushroomsRaw]
     let (orphans, keptAgents) = partition (\a -> not ((hypParentId a) `elem` survivorIds)) survivingAgents
     
+    -- Calculate liquidation value of dead/orphaned agents
     let orphanCash = sum [c | a <- orphans, let (Capital c) = bioBank (hypBiology a)]
-    modifyWallet (\c -> c + Capital orphanCash)
+    let orphanStockVal = sum [q * p | a <- orphans, 
+                                let (Quantity q) = posQuantity (hypHoldings a), 
+                                let (Price p) = newPrice]
+    
+    -- Total pool to redistribute: Agent Maint + Mushroom Maint + Dead Mushroom Mass + Dead Agent Assets
+    let totalRecyclePool = mushroomRecycled + totalAgentMaint + Capital (orphanCash + orphanStockVal)
 
-    -- 5. SPORE PASS
+    -- 5. REDISTRIBUTE TO SURVIVING MUSHROOMS
+    -- Instead of modifyWallet (the leak), we distribute the pool equally among living mushrooms.
+    let livingCount = length livingMushroomsRaw
+    let livingMushrooms = if livingCount > 0 && totalRecyclePool > 0
+          then
+              let 
+                  share = totalRecyclePool / fromIntegral livingCount
+                  feed m = m { mushMass = mushMass m + share }
+              in map feed livingMushroomsRaw
+          else livingMushroomsRaw
+
+    -- 6. SPORE PASS
     let allSpores = spores ++ newlyReleasedSpores
     
-    -- SNAPSHOT
+    -- 7. SNAPSHOT & STATS
     (GlobalWallet wCap) <- getWallet 
     let (Capital w) = wCap 
     let (Price p) = newPrice
@@ -87,21 +102,21 @@ stepSimulation config newPrice = do
     let mushVal = sum [m | mBody <- livingMushrooms, let (Capital m) = mushMass mBody]
     let sporeVal = sum [s | sp <- allSpores, let (Capital s) = sporeCapital sp]
     
-    -- Extract Genome Lists
     let currentGenomes = map hypGenome keptAgents
+
+    let locations = map hypLocation keptAgents
+    let stratDrops = map (\loc -> (if null loc then 0.0 else loc !! 0) * 0.05) locations
+    let stratProfits = map (\loc -> (if length loc < 2 then 0.0 else loc !! 1) * 0.05) locations
 
     let snapshot = SimStats 
           { statTick = tInt + 1
-          , statTotalWealth = w + agentCash + agentStockVal + mushVal + sporeVal
+          -- TotalWealth now excludes 'w' (GlobalWallet) as wealth stays within the colony
+          , statTotalWealth = agentCash + agentStockVal + mushVal + sporeVal
           , statMktPrice = p
           , statPopSize = length keptAgents
-          
-          -- Behavioral
           , statFractalDims = map (calculateFractalDim . hypPath) keptAgents
           , statHoldings    = map (\a -> let (Quantity q) = posQuantity (hypHoldings a) in q) keptAgents
           , statBioBank     = map (\a -> let (Capital c) = bioBank (hypBiology a) in c) keptAgents
-
-          -- Genes
           , statGeneGreed              = map geneGreed currentGenomes
           , statGeneTurbulence         = map geneTurbulence currentGenomes
           , statGeneGrowthRate         = map geneGrowthRate currentGenomes
@@ -110,10 +125,12 @@ stepSimulation config newPrice = do
           , statGeneReproductiveInvest = map geneReproductiveInvest currentGenomes
           , statGeneVacuumCoefficient  = map geneVacuumCoefficient currentGenomes
           , statGeneDevMult            = map geneDevMult currentGenomes
+          , statStratDrop   = stratDrops
+          , statStratProfit = stratProfits
           }
     modify $ \s -> s { sysSnapshots = snapshot : sysSnapshots s }
 
-    -- Spore logic
+    -- 8. COLONIZATION (Quorum Sensing)
     let checkQuorum s =
           let
               loc = sporeTarget s
@@ -128,17 +145,18 @@ stepSimulation config newPrice = do
     let crowdedOut = filter (\s -> not (s `elem` colonizers)) potentialColonizers
     let totalFailures = failures ++ crowdedOut
 
-    let recycleAmount = sum [c | (Spore _ _ (Capital c)) <- totalFailures]
-    let fedMushrooms = if not (null livingMushrooms) && recycleAmount > 0
+    -- Recycle failed spores into the surviving mushrooms
+    let sporeRecycleAmount = sum [c | (Spore _ _ (Capital c)) <- totalFailures]
+    let finalMushrooms = if not (null livingMushrooms) && sporeRecycleAmount > 0
           then
               let
-                  share = recycleAmount / fromIntegral (length livingMushrooms)
+                  share = sporeRecycleAmount / fromIntegral (length livingMushrooms)
                   feed m = m { mushMass = mushMass m + Capital share }
               in
                   map feed livingMushrooms
           else livingMushrooms
 
-    let maxMid = if null fedMushrooms then 0 else maximum [i | (MushroomBody (MushroomId i) _ _ _) <- fedMushrooms]
+    let maxMid = if null finalMushrooms then 0 else maximum [i | (MushroomBody (MushroomId i) _ _ _) <- finalMushrooms]
     let maxHid = if null keptAgents then 0 else maximum [i | (HyphalTip (HyphalId i ) _ _ _ _ _ _ _ _ _) <- keptAgents]
 
     let startMid = maxMid + 1
@@ -154,19 +172,19 @@ stepSimulation config newPrice = do
     let (newColonies, newWorkers, _, _) = 
             foldl' processSpore ([], [], startMid, startHid) colonizers
 
-    -- 5. COMMIT
+    -- 9. COMMIT STATE
     setSpores [] 
-    setMushrooms (fedMushrooms ++ newColonies)
+    setMushrooms (finalMushrooms ++ newColonies)
     setAgents (keptAgents ++ newWorkers)
 
     modify $ \s -> s { sysTime = sysTime s + 1 }
 
--- (genesisState remains the same)
+-- GENESIS STATE
 genesisState :: SystemState
 genesisState = SystemState
     { sysTime      = Time 0
-    , sysWallet    = GlobalWallet 10000.0
-    , sysEnv       = Environment (Price 100.0) [] 
+    , sysWallet    = GlobalWallet 100.0
+    , sysEnv       = Environment (Price 1.0) []
     , sysHyphae    = initialAgents 
     , sysMushrooms = [genesisMushroom]
     , sysSpores    = []
@@ -179,19 +197,16 @@ genesisState = SystemState
         geneGreed = 0.5,
         geneTurbulence = 2.0,
         geneGrowthRate = 0.01,
-        
-        geneMaturity = 500.0,
+        geneMaturity = 50.0,
         geneDispersion = 0.25,
-        geneMaintenance = 0.2,
-
+        geneMaintenance = 0.001,
         genePhiCritical = 1.0,
         geneVacuumCoefficient = 0.2,
         geneReproductiveInvest = 0.2,
         geneSporeBatchSize = 5,
-
-        geneBaseOrder = 200.0,
-        geneDCAOrder = 200.0,
-        geneMaxOrders = 5,
+        geneBaseOrder = 10.0,
+        geneDCAOrder = 10.0,
+        geneMaxOrders = 10,
         geneDevMult = 1.0,
         geneVolMult = 1.0,
         geneMaxChildren = 5
@@ -199,8 +214,8 @@ genesisState = SystemState
 
     genesisMushroom = MushroomBody
         { mushId = MushroomId 1
-        , mushLocation = [0.03, 0.05] 
-        , mushMass = Capital 1000.0
+        , mushLocation = [0.5, 0.5]
+        , mushMass = Capital 100.0
         , mushGenome = genesisGenome
         }
 
@@ -208,14 +223,17 @@ genesisState = SystemState
         [ HyphalTip
             { hypId = HyphalId i
             , hypParentId = MushroomId 1
-            , hypLocation = [0.03 + (fromIntegral i * 0.001), 0.05 + (fromIntegral i * 0.001)] 
-            , hypVelocity = [0.001 * fromIntegral (i `mod` 3 - 1), 0.001 * fromIntegral (i `mod` 2 - 1)]
-            , hypPath     = [[0.03, 0.05]]
+            , hypLocation = [0.5 + (dx * 0.01), 0.5 + (dy * 0.01)] 
+            , hypVelocity = [dx * 0.001, dy * 0.001]
+            , hypPath     = [[0.5, 0.5]]
             , hypHoldings = mempty
-            , hypBiology  = BioState 0 (Capital 200.0)
+            , hypBiology  = BioState 0 (Capital 100.0)
             , hypGenome   = genesisGenome
-            , hypRefPrice = Price 100.0
+            , hypRefPrice = Price 1.0
             , hypStepCount = 0
             }
-        | i <- [1..10]
+        | i <- [1..5]
+        , let angle = (fromIntegral i / 10.0) * 2 * pi
+        , let dx = cos angle
+        , let dy = sin angle
         ]

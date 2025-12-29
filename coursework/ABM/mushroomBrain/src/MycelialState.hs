@@ -31,6 +31,7 @@ data SimConfig = SimConfig
   , cfgInitReproductiveInvest :: Double
   , cfgInitVacuumCoefficient  :: Double
   , cfgInitDevMult            :: Double
+  , cfgInitMaturity           :: Double
   } deriving (Show, Generic)
 
 instance FromJSON SimConfig
@@ -129,6 +130,8 @@ data SimStats = SimStats
   , statGeneReproductiveInvest :: [Double]
   , statGeneVacuumCoefficient  :: [Double]
   , statGeneDevMult            :: [Double]
+  , statStratDrop   :: [Double] -- The effective Buy Drop % (Location X)
+  , statStratProfit :: [Double] -- The effective Take Profit % (Location Y)
   } deriving (Show, Generic)
 
 instance ToJSON SimStats

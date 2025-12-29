@@ -5,13 +5,13 @@ import MycelialStrategy (interpretStrategy, TradingStrategy(..), shouldExecuteBu
 import MycelialPhysics (calculateFractalDim, calculateFlowRate, clampVector)
 import System.Random (StdGen, randomR)
 
-
--- takes a price an agents and returns a maybe with the agent, and 
--- the modification in Capital
+-- ========================================================
+-- EXECUTE SELL (Corrected & Clean)
+-- ========================================================
 executeSell :: Price -> HyphalTip -> Maybe (HyphalTip, Capital, Capital)
 executeSell (Price p) agent =
     let
-        pos = hypHoldings agent -- this is the bank
+        pos = hypHoldings agent 
         (Quantity q) = posQuantity pos
         (Capital cost) = posCost pos
     in
@@ -19,13 +19,14 @@ executeSell (Price p) agent =
         else
             let
                 revenueVal = q * p
-                -- this what give us safety, casting Capital newtype over revenueVal
-                -- ensure that Capital interacts as double only over the Capital type
                 revenue = Capital revenueVal
                 profit = Capital (revenueVal - cost)
+                
                 (Capital currentBank) = bioBank (hypBiology agent)
-                newBank = Capital (currentBank + (revenueVal - cost))
-                -- this return agent' with 0 holdings
+                
+                -- CORRECT MATH: Return Principal + Profit
+                newBank = Capital (currentBank + revenueVal) 
+                
                 newAgent = agent
                     { hypHoldings = mempty
                     , hypRefPrice = Price p
@@ -35,28 +36,32 @@ executeSell (Price p) agent =
             in
                 Just (newAgent, revenue, profit)
 
-executeTrade :: Price -> HyphalTip -> Capital -> Maybe (HyphalTip, Capital)
-executeTrade (Price p) agent (Capital walletBalance) =
+-- ========================================================
+-- EXECUTE TRADE (With Safety Buffer)
+-- ========================================================
+executeTrade :: Price -> HyphalTip -> Maybe (HyphalTip, Capital)
+executeTrade (Price p) agent =
     let
-    -- get all relevant data from the data structure
         genes = hypGenome agent
         step = hypStepCount agent
         maxOrders = geneMaxOrders genes
     in
-    -- agent can only perform maxOrders number of buy orders
         if step >= maxOrders
             then Nothing
             else
                 let
-                -- multiplier for DCA buys
                     volMult = if step == 0 then 1.0 else (geneVolMult genes) ^ step
-                    -- how complex is the hyphae structure, required to determine flow
                     d = calculateFractalDim (hypPath agent)
                     q_f = calculateFlowRate d
                     baseAmt = if step == 0 then geneBaseOrder genes else geneDCAOrder genes
                     orderCostVal = baseAmt * volMult * q_f
-                    -- final check to determine is buy action is possible
-                    isAffordable = orderCostVal <= walletBalance
+                    
+                    (Capital myBank) = bioBank (hypBiology agent)
+
+                    -- Safety Buffer: 20 ticks of maintenance
+                    safetyMargin = (geneMaintenance genes) * 20.0
+                    
+                    isAffordable = (orderCostVal + safetyMargin) <= myBank
                 in
                     if not isAffordable
                         then Nothing
@@ -64,16 +69,22 @@ executeTrade (Price p) agent (Capital walletBalance) =
                             let
                                 orderCost = Capital orderCostVal
                                 orderQty = Quantity (orderCostVal / p)
+                                
+                                newBank = Capital (myBank - orderCostVal)
+                                
                                 newPos = (hypHoldings agent) <> Position orderQty orderCost
                                 newAgent = agent
-                                    {
-                                    hypHoldings = newPos,
-                                    hypRefPrice = Price p,
-                                    hypStepCount = step + 1
+                                    { hypHoldings = newPos
+                                    , hypRefPrice = Price p
+                                    , hypStepCount = step + 1
+                                    , hypBiology = (hypBiology agent) { bioBank = newBank } 
                                     }
                             in
                                 Just (newAgent, orderCost)
 
+-- ========================================================
+-- MOVEMENT
+-- ========================================================
 moveAgent :: Double -> HyphalTip -> StdGen -> HyphalTip
 moveAgent pressure agent rng =
     let

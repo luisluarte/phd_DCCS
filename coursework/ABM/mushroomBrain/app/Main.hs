@@ -36,9 +36,9 @@ makeCustomGenesis cfg =
             , geneMaxChildren       = cfgMaxChildren cfg
             , geneDispersion        = cfgDispersionRadius cfg
             , geneMaintenance       = cfgMaintenanceCost cfg
+            , geneMaturity          = cfgInitMaturity cfg
             
             -- Defaults (Not exposed to R in this iteration, keeping hardcoded defaults)
-            , geneMaturity          = 500.0 
             , geneVolMult           = 1.0
             }
 
