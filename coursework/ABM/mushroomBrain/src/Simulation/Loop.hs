@@ -1,12 +1,13 @@
 module Simulation.Loop where
 
-import MycelialState (Price, SimConfig, HyphalTip(..), calculatePosCost)
+import MycelialState
 import qualified Simulation.Types as T
 import MycelialPhysics (euclideanDistance, calculateFractalDim)
 import Simulation.Types (Sim) 
 import Simulation.Accessors hiding (Sim)
 import Simulation.Lifecycle (updateHypha, updateMushroom, germinateColony)
-import Simulation.Macro (calculateLocalField, sensingRadius) 
+import Simulation.Macro (calculateLocalField, sensingRadius, applyDrain) 
+import Simulation.Evolution (randomizeGenome) -- ADDED THIS IMPORT
 import Control.Monad.State (modify)
 import System.Random (mkStdGen)
 import Data.List (partition, foldl')
@@ -31,7 +32,7 @@ stepSimulation config newPrice = do
     
     modify $ \s -> s { sysEnv = (sysEnv s) { mktPrice = newPrice } }
     
-    -- 1. PRE-CALCULATE MUSHROOM FIELDS (Optimization)
+    -- 1. PRE-CALCULATE MUSHROOM FIELDS
     let mushCache = Map.fromList 
           [ (mushId m, (m, calculateLocalField (mushLocation m) agents mushrooms newPrice)) 
           | m <- mushrooms 
@@ -44,8 +45,14 @@ stepSimulation config newPrice = do
     results <- mapM (updateHypha intelligenceEnabled newPrice mushCache agents) agents
     
     let survivingAgents = [a | (Just a, _, _) <- results]
+    
+    -- IMPORTANT: Taxes are now calculated via Macro.applyDrain inside Loop usually, 
+    -- but here we assume Lifecycle/Micro handles the trade/move, and we check taxes here 
+    -- OR Lifecycle returns them.
+    -- In your previous Macro.hs, applyDrain was a standalone function.
+    -- If Lifecycle.updateHypha returns taxes (middle tuple element), we use them.
     let allTaxes = concat [t | (_, t, _) <- results]
-    let totalAgentMaint = sum [m | (_, _, m) <- results] -- Collected maintenance
+    let totalAgentMaint = sum [m | (_, _, m) <- results]
 
     -- 3. MUSHROOM PASS
     let (Time tInt) = time
@@ -67,21 +74,18 @@ stepSimulation config newPrice = do
     let (livingMushroomsRaw, newlyReleasedSpores, mushroomRecycled) = 
             foldl' processMushroom ([], [], Capital 0.0) mushrooms
     
-    -- 4. CASCADE DEATH & ASSET COLLECTION (Redistribution Logic)
+    -- 4. CASCADE DEATH & ASSET COLLECTION
     let survivorIds = [mushId m | m <- livingMushroomsRaw]
     let (orphans, keptAgents) = partition (\a -> not ((hypParentId a) `elem` survivorIds)) survivingAgents
     
-    -- Calculate liquidation value of dead/orphaned agents
     let orphanCash = sum [c | a <- orphans, let (Capital c) = bioBank (hypBiology a)]
     let orphanStockVal = sum [q * p | a <- orphans, 
                                 let (Quantity q) = posQuantity (hypHoldings a), 
                                 let (Price p) = newPrice]
     
-    -- Total pool to redistribute: Agent Maint + Mushroom Maint + Dead Mushroom Mass + Dead Agent Assets
     let totalRecyclePool = mushroomRecycled + totalAgentMaint + Capital (orphanCash + orphanStockVal)
 
     -- 5. REDISTRIBUTE TO SURVIVING MUSHROOMS
-    -- Instead of modifyWallet (the leak), we distribute the pool equally among living mushrooms.
     let livingCount = length livingMushroomsRaw
     let livingMushrooms = if livingCount > 0 && totalRecyclePool > 0
           then
@@ -111,7 +115,6 @@ stepSimulation config newPrice = do
 
     let snapshot = SimStats 
           { statTick = tInt + 1
-          -- TotalWealth now excludes 'w' (GlobalWallet) as wealth stays within the colony
           , statTotalWealth = agentCash + agentStockVal + mushVal + sporeVal
           , statMktPrice = p
           , statPopSize = length keptAgents
@@ -131,7 +134,7 @@ stepSimulation config newPrice = do
           }
     modify $ \s -> s { sysSnapshots = snapshot : sysSnapshots s }
 
-    -- 8. COLONIZATION (Quorum Sensing)
+    -- 8. COLONIZATION
     let checkQuorum s =
           let
               loc = sporeTarget s
@@ -146,7 +149,6 @@ stepSimulation config newPrice = do
     let crowdedOut = filter (\s -> not (s `elem` colonizers)) potentialColonizers
     let totalFailures = failures ++ crowdedOut
 
-    -- Recycle failed spores into the surviving mushrooms
     let sporeRecycleAmount = sum [c | (Spore _ _ (Capital c)) <- totalFailures]
     let finalMushrooms = if not (null livingMushrooms) && sporeRecycleAmount > 0
           then
@@ -220,6 +222,7 @@ genesisState = SystemState
         , mushGenome = genesisGenome
         }
 
+    -- HIGH-ENTROPY INITIALIZATION
     initialAgents = 
         [ HyphalTip
             { hypId = HyphalId i
@@ -229,12 +232,17 @@ genesisState = SystemState
             , hypPath     = [[0.5, 0.5]]
             , hypHoldings = mempty
             , hypBiology  = BioState 0 (Capital 100.0)
-            , hypGenome   = genesisGenome
-            , hypAvgEntry = Price 1.0
+            
+            -- FIX: Apply randomization here as requested
+            , hypGenome   = randomizeGenome genesisGenome (i * 1337)
+            
+            -- FIX: Correct field name from hypAvgEntry to hypRefPrice
+            , hypRefPrice = Price 1.0
+            
             , hypStepCount = 0
             }
         | i <- [1..5]
-        , let angle = (fromIntegral i / 10.0) * 2 * pi
+        , let angle = (fromIntegral i / 5.0) * 2 * pi
         , let dx = cos angle
         , let dy = sin angle
         ]
