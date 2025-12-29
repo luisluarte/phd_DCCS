@@ -3,26 +3,45 @@ module Simulation.Lifecycle where
 import MycelialState
 import Simulation.Accessors
 import Simulation.Micro (executeTrade, executeSell, moveAgent)
-import Simulation.Macro (applyDrain, TaxMap, MushroomCache) -- Import Cache type
+import Simulation.Macro (applyDrain, TaxMap, MushroomCache) 
 import Simulation.Evolution (mutateGenome)
 import MycelialPhysics (calculatePressure, clampVector)
 import MycelialStrategy (interpretStrategy, TradingStrategy(..), shouldExecuteBuy, shouldExecuteSell)
 import System.Random (StdGen, mkStdGen, randomR)
 import Control.Monad.State (get, modify)
 import Data.List (mapAccumL)
-import qualified Data.Map.Strict as Map -- Ensure Map is available
+import qualified Data.Map.Strict as Map 
 
 dieThresh :: Double
 dieThresh = -50.0
 
--- UPDATED: Takes MushroomCache instead of [MushroomBody]
-updateHypha :: Price -> MushroomCache -> [HyphalTip] -> HyphalTip -> Sim (Maybe HyphalTip, TaxMap)
-updateHypha currentPrice mushCache allAgents agent = do
+-- UPDATED: Now accepts 'Bool' for Intelligence Switch
+updateHypha :: Bool -> Price -> MushroomCache -> [HyphalTip] -> HyphalTip -> Sim (Maybe HyphalTip, TaxMap)
+updateHypha enableIntelligence currentPrice mushCache allAgents agent = do
     
-    -- Pass cache to applyDrain
     let (agentAfterTax, taxes) = applyDrain agent mushCache currentPrice
     
-    let psi = calculatePressure currentPrice agentAfterTax
+    -- ============================================================
+    -- INTELLIGENCE SWITCH IMPLEMENTATION
+    -- ============================================================
+    t <- getTime
+    let (Time tick) = t
+    
+    -- 1. Calculate Real Physics (Signal)
+    let signalPsi = calculatePressure currentPrice agentAfterTax
+    
+    -- 2. Calculate Random Noise (No Signal)
+    -- We use a deterministic seed based on AgentID + Tick so it's reproducible
+    let (HyphalId hid) = hypId agent
+    let noiseSeed = hid + tick * 7919 -- Prime number multiplier
+    let noiseRng = mkStdGen noiseSeed
+    -- Range +/- 100.0 to allow for both growth and death (below -50.0)
+    let (noisePsi, _) = randomR (-100.0, 100.0) noiseRng 
+    
+    -- 3. Select based on Switch
+    let psi = if enableIntelligence then signalPsi else noisePsi
+    -- ============================================================
+
     let (Capital bank) = bioBank (hypBiology agentAfterTax) 
 
     if psi < dieThresh || bank < 0 
@@ -43,7 +62,6 @@ updateHypha currentPrice mushCache allAgents agent = do
                             modifyWallet (\c -> c + revenue)
                             
                             -- LOGGING SELL
-                            t <- getTime
                             let (Quantity q) = posQuantity (hypHoldings agentAfterTax)
                             let logEntry = TransactionLog 
                                     { tlHyphaId = hypId agent
@@ -67,7 +85,6 @@ updateHypha currentPrice mushCache allAgents agent = do
                                     modifyWallet (\c -> c - cost)
 
                                     -- LOGGING BUY
-                                    t <- getTime
                                     let (Capital costVal) = cost
                                     let (Price pVal) = currentPrice
                                     let qty = Quantity (costVal / pVal)
@@ -85,19 +102,17 @@ updateHypha currentPrice mushCache allAgents agent = do
                                 Nothing -> return agentAfterTax 
                         else return agentAfterTax
 
-            t <- getTime
-            let (Time tick) = t
-            let (HyphalId hid) = hypId agent
-            let rng = mkStdGen (hid + tick * 1000)
-            let agentAfterMove = moveAgent psi agentAfterLogic rng
+            -- MOVEMENT (Driven by Psi)
+            let moveRng = mkStdGen (hid + tick * 1000)
+            let agentAfterMove = moveAgent psi agentAfterLogic moveRng
             let bio = hypBiology agentAfterMove
             let finalAgent = agentAfterMove { hypBiology = bio { bioAge = bioAge bio + 1 } }
 
             return (Just finalAgent, taxes)
 
--- (Keep updateMushroom and germinateColony as they were, they are fine)
-updateMushroom :: Price -> TaxMap -> StdGen -> MushroomBody -> (MushroomBody, [Spore], Capital)
-updateMushroom (Price _) income rng mBody =
+-- (updateMushroom and germinateColony remain unchanged)
+updateMushroom :: Bool -> Price -> TaxMap -> StdGen -> MushroomBody -> (MushroomBody, [Spore], Capital)
+updateMushroom enableMutation (Price _) income rng mBody =
     let
         myIncome = sum [amt | (mid, amt) <- income, mid == mushId mBody]
         massAfterIncome = (mushMass mBody) + myIncome
@@ -116,10 +131,14 @@ updateMushroom (Price _) income rng mBody =
                     perSporeEndowment = totalSacrifice / fromIntegral batchSize
                     massAfterSporulation = massAfterCost - Capital totalSacrifice
                     (MushroomId midInt) = mushId mBody
+                    
                     generateSpore currentRng i =
                         let
                             seed = i * 13 + round mVal + (midInt * 7918)
-                            (mutatedGenes) = mutateGenome genes (mkStdGen seed)
+                            (mutatedGenes) = if enableMutation
+                                             then mutateGenome genes (mkStdGen seed)
+                                             else genes
+                            
                             (r1, rng1) = randomR (-1.0, 1.0) currentRng
                             (r2, rng2) = randomR (-1.0, 1.0) rng1
                             disp = geneDispersion genes

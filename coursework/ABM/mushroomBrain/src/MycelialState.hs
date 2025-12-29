@@ -1,44 +1,102 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric #-} -- Required for JSON
 module MycelialState where
 
 import GHC.Generics (Generic)
 import Data.Aeson (FromJSON, ToJSON)
 
 -- ========================================================
--- PRIMITIVE WRAPPERS (Fixed: No '!' allowed here)
+-- 1. CONFIGURATION (Input from R)
+-- ========================================================
+
+data SimConfig = SimConfig
+  { -- A. Simulation Control
+    cfgEnableMutation     :: Bool
+  , cfgEnableIntelligence :: Bool 
+  , cfgSporeBatchSize     :: Int
+
+  -- B. Fixed System Parameters
+  , cfgDcaOrder           :: Double 
+  , cfgMaxOrders          :: Int    
+  , cfgMaxChildren        :: Int    
+  , cfgDispersionRadius   :: Double 
+  , cfgMaintenanceCost    :: Double 
+  
+  -- C. Genesis Genome (Starting Values for Mutating Genes)
+  , cfgInitGreed              :: Double
+  , cfgInitTurbulence         :: Double
+  , cfgInitGrowthRate         :: Double
+  , cfgInitBaseOrder          :: Double
+  , cfgInitPhiCritical        :: Double
+  , cfgInitReproductiveInvest :: Double
+  , cfgInitVacuumCoefficient  :: Double
+  , cfgInitDevMult            :: Double
+  } deriving (Show, Generic)
+
+instance FromJSON SimConfig
+instance ToJSON SimConfig
+
+data InputPayload = InputPayload
+  { inputPrices :: [Double]
+  , inputConfig :: SimConfig
+  } deriving (Show, Generic)
+
+instance FromJSON InputPayload
+instance ToJSON InputPayload
+
+-- ========================================================
+-- PRIMITIVE WRAPPERS
 -- ========================================================
 
 newtype Time = Time Int 
-  deriving (Show, Eq, Ord, Num)
+  deriving (Show, Eq, Ord, Num, Real, Enum, Integral, Generic)
+
+instance ToJSON Time
+instance FromJSON Time
 
 newtype Price = Price Double 
-  deriving (Show, Eq, Ord, Num, Fractional)
+  deriving (Show, Eq, Ord, Num, Fractional, Real, RealFrac, Generic)
+
+instance ToJSON Price
+instance FromJSON Price
 
 newtype Capital = Capital Double 
-  deriving (Show, Eq, Ord, Num, Fractional)
+  deriving (Show, Eq, Ord, Num, Fractional, Real, RealFrac, Generic)
+
+instance ToJSON Capital
+instance FromJSON Capital
 
 newtype Quantity = Quantity Double 
-  deriving (Show, Eq, Ord, Num, Fractional)
+  deriving (Show, Eq, Ord, Num, Fractional, Real, RealFrac, Generic)
+
+instance ToJSON Quantity
+instance FromJSON Quantity
 
 newtype MushroomId = MushroomId Int
-  deriving (Show, Eq, Ord, Enum, Num, Real, Integral)
+  deriving (Show, Eq, Ord, Enum, Num, Real, Integral, Generic)
+
+instance ToJSON MushroomId
+instance FromJSON MushroomId
 
 newtype HyphalId = HyphalId Int
-  deriving (Show, Eq, Ord, Enum, Num, Real, Integral)
+  deriving (Show, Eq, Ord, Enum, Num, Real, Integral, Generic)
+
+instance ToJSON HyphalId
+instance FromJSON HyphalId
 
 type ParamVector = [Double] 
 type PheromoneIntensity = Double 
 type PheromoneMap = [(ParamVector, PheromoneIntensity)]
 
 -- ========================================================
--- LOGGING TYPES (Strict Fields)
+-- LOGGING & STATS TYPES
 -- ========================================================
 
 data TransactionType = ActionBuy | ActionSell 
-  deriving (Show, Eq)
+  deriving (Show, Eq, Generic)
 
--- Strictness (!) IS allowed and recommended here
+instance ToJSON TransactionType
+
 data TransactionLog = TransactionLog
   { tlHyphaId :: !HyphalId
   , tlType :: !TransactionType
@@ -46,8 +104,43 @@ data TransactionLog = TransactionLog
   , tlPrice :: !Price       
   , tlQuantity :: !Quantity 
   , tlTime :: !Time         
-  } deriving (Show)
+  } deriving (Show, Generic)
 
+instance ToJSON TransactionLog
+
+-- COMPREHENSIVE STATS FOR R ANALYSIS
+data SimStats = SimStats
+  { statTick          :: Int
+  , statTotalWealth   :: Double
+  , statMktPrice      :: Double
+  , statPopSize       :: Int
+  
+  -- BEHAVIORAL STATE
+  , statFractalDims   :: [Double]
+  , statHoldings      :: [Double]
+  , statBioBank       :: [Double]
+
+  -- EVOLUTIONARY STATE (The 8 Mutating Genes)
+  , statGeneGreed              :: [Double]
+  , statGeneTurbulence         :: [Double]
+  , statGeneGrowthRate         :: [Double]
+  , statGeneBaseOrder          :: [Double]
+  , statGenePhiCritical        :: [Double]
+  , statGeneReproductiveInvest :: [Double]
+  , statGeneVacuumCoefficient  :: [Double]
+  , statGeneDevMult            :: [Double]
+  } deriving (Show, Generic)
+
+instance ToJSON SimStats
+
+data OutputPayload = OutputPayload
+  { outputEquityCurve :: [Double]
+  , outputStats       :: [SimStats] 
+  } deriving (Show, Generic)
+
+instance ToJSON OutputPayload
+
+-- Legacy Snapshot (Keep for internal compatibility if referenced)
 data SystemSnapshot = SystemSnapshot
   { snapTime :: !Time
   , snapMarketPrice :: !Price
@@ -71,7 +164,8 @@ data SystemState = SystemState
   sysMushrooms :: ![MushroomBody], 
   sysSpores :: ![Spore],
   sysLogs :: ![TransactionLog],    
-  sysSnapshots :: ![SystemSnapshot] 
+  -- We now store SimStats in the history for JSON output
+  sysSnapshots :: ![SimStats] 
   } deriving (Show)
 
 -- ========================================================
@@ -109,7 +203,10 @@ data Genome = Genome
   geneVolMult :: !Double,
   geneMaxChildren :: !Int,
   geneMaintenance :: !Double
-  } deriving (Show, Eq) 
+  } deriving (Show, Eq, Generic) 
+
+instance ToJSON Genome
+instance FromJSON Genome
 
 -- ========================================================
 -- AGENTS

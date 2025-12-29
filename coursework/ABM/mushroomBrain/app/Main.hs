@@ -1,156 +1,112 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
--- Import the unified simulation module
-import MycelialSimulation 
--- Import state definitions to inspect data structures
 import MycelialState
--- Import strategy and physics for deep inspection if needed
-import MycelialStrategy
-import MycelialPhysics
-
-import Control.Monad.State
-import Text.Printf (printf)
-import System.IO (hFlush, stdout, hSetBuffering, BufferMode(..), getContents)
+import MycelialSimulation (runSeq)
+import Simulation.Loop (genesisState) 
+import Data.Aeson (decode, encode)
+import qualified Data.ByteString.Lazy as B
+import System.IO (hSetBuffering, stdout, BufferMode(..))
 import System.Environment (getArgs)
 
--- ==========================================
--- REPL HELPER FUNCTIONS
--- ==========================================
+-- ============================================================================
+-- 1. CUSTOM GENESIS INITIALIZATION
+-- ============================================================================
+-- This function overwrites the default 'genesisState' with the specific 
+-- parameters passed from R (via SimConfig).
 
--- | Initialize a fresh simulation state
-initState :: SystemState
-initState = genesisState
+makeCustomGenesis :: SimConfig -> SystemState
+makeCustomGenesis cfg =
+    let 
+        -- 1. Construct the Genome based on R input
+        customGenome = Genome
+            { geneGreed             = cfgInitGreed cfg
+            , geneTurbulence        = cfgInitTurbulence cfg
+            , geneGrowthRate        = cfgInitGrowthRate cfg
+            , geneBaseOrder         = cfgInitBaseOrder cfg
+            , genePhiCritical       = cfgInitPhiCritical cfg
+            , geneReproductiveInvest= cfgInitReproductiveInvest cfg
+            , geneVacuumCoefficient = cfgInitVacuumCoefficient cfg
+            , geneDevMult           = cfgInitDevMult cfg
+            
+            -- Fixed / System Parameters mapped from Config
+            , geneSporeBatchSize    = cfgSporeBatchSize cfg
+            , geneDCAOrder          = cfgDcaOrder cfg
+            , geneMaxOrders         = cfgMaxOrders cfg
+            , geneMaxChildren       = cfgMaxChildren cfg
+            , geneDispersion        = cfgDispersionRadius cfg
+            , geneMaintenance       = cfgMaintenanceCost cfg
+            
+            -- Defaults (Not exposed to R in this iteration, keeping hardcoded defaults)
+            , geneMaturity          = 500.0 
+            , geneVolMult           = 1.0
+            }
 
--- | Step the simulation forward by one tick with a given price
--- Usage in REPL: 
--- let s1 = step (Price 100.0) initState
--- let s2 = step (Price 101.0) s1
-step :: Price -> SystemState -> SystemState
-step p s = execState (stepSimulation p) s
-
--- | Run a sequence of prices and return the final state
--- Usage: let final = runSeq [Price 100, Price 105, Price 95] initState
-runSeq :: [Price] -> SystemState -> SystemState
-runSeq prices startState = foldl (flip step) startState prices
-
--- | Print a summary of the current state to the console
-inspect :: SystemState -> IO ()
-inspect s = do
-    let (Time t) = sysTime s
-    let (GlobalWallet (Capital w)) = sysWallet s
-    let (Price p) = mktPrice (sysEnv s)
-    let agents = sysHyphae s
-    let mushrooms = sysMushrooms s
-    let spores = sysSpores s
-    
-    putStrLn $ "--- State at Tick " ++ show t ++ " ---"
-    printf "Market Price  : %.2f\n" p
-    printf "Global Wallet : %.2f\n" w
-    printf "Population    : %d Hyphae, %d Mushrooms, %d Spores\n" (length agents) (length mushrooms) (length spores)
-    
-    -- Print details of first few mushrooms if any
-    case mushrooms of
-        [] -> putStrLn "No Mushrooms."
-        (m:_) -> do
-            let (MushroomId mid) = mushId m
-            let (Capital mass) = mushMass m
-            printf "Mushroom #%d Mass: %.2f\n" mid mass
-
-
-printTradeLog :: SystemState -> IO ()
-printTradeLog s = do
-    let logs = reverse (sysLogs s) 
-    putStrLn "\n=== TRANSACTION LOG ==="
-    -- ADDED: Tick column header
-    putStrLn "Tick | HyphaID | Action     | Cost/Rev  | Price   | Qty"
-    putStrLn "-----------------------------------------------------------"
-    mapM_ printLog logs
-    putStrLn "-----------------------------------------------------------"
-  where
-    printLog :: TransactionLog -> IO ()
-    printLog l = do
-        let (Time t) = tlTime l  -- Extract Time
-        let (HyphalId hid) = tlHyphaId l
-        let action = show (tlType l)
-        let (Capital c) = tlCost l
-        let (Price p) = tlPrice l
-        let (Quantity q) = tlQuantity l
+        -- 2. Helper to update a Mushroom's genome
+        updateMush m = m { mushGenome = customGenome }
         
-        -- ADDED: 't' to printf
-        printf "%-4d | %-7d | %-10s | %9.2f | %7.2f | %.4f\n" t hid action c p q
-
--- | Prints aggregate financial state over time (Mark-to-Market)
-printPerformanceLog :: SystemState -> IO ()
-printPerformanceLog s = do
-    let snaps = reverse (sysSnapshots s)
-    putStrLn "\n=== PERFORMANCE LOG (Equity Curve) ==="
-    putStrLn "Time | MktPrice | Cash       | Stock    | MushMass | FractalDim | TOTAL WEALTH"
-    putStrLn "----------------------------------------------------------------------------------"
-    mapM_ printSnap snaps
-    putStrLn "----------------------------------------------------------------------------------"
-  where
-    printSnap :: SystemSnapshot -> IO ()
-    printSnap sn = do
-        let (Time t) = snapTime sn
-        let (Price p) = snapMarketPrice sn
-        let (Capital c) = snapTotalCash sn
-        let (Capital i) = snapInventoryValue sn
-        let (Capital m) = snapMushroomMass sn
-        let dim = snapMeanFractalDim sn
-        let (Capital w) = snapTotalWealth sn
+        -- 3. Helper to update a Hypha's genome
+        updateHyp h = h { hypGenome = customGenome }
         
-        -- Display Fractal Dimension with 4 decimal places
-        printf "%-4d | %8.2f | %10.2f | %8.2f | %8.2f | %10.4f | %12.2f\n" t p c i m dim w
+        -- 4. Get the default state
+        s0 = genesisState
+    in 
+        -- 5. Return state with updated agents
+        s0
+        { sysMushrooms = map updateMush (sysMushrooms s0)
+        , sysHyphae    = map updateHyp (sysHyphae s0)
+        }
 
--- ==========================================
--- PIPELINE MODE (R-integration)
--- ==========================================
+-- ============================================================================
+-- 2. PIPELINE MODE
+-- ============================================================================
+
 runPipelineMode :: IO ()
 runPipelineMode = do
-    -- read input from STDIN (comming from R)
-    input <- getContents
-
-    -- parse input (1 price per line)
-    let priceLines = lines input
-    -- ignore empty lines
-    let cleanLines = filter (not . null) priceLines
-    let prices = map (Price . read) cleanLines
-
-    -- run simulation
-    let finalState = runSeq prices initState
-
-    -- extract equity curve
-    let history = reverse (sysSnapshots finalState)
-    let equityCurve = map (\s -> let (Capital w) = snapTotalWealth s in w) history
-
-    -- print to STDOUT
-    mapM_ print equityCurve
-
-
--- ==========================================
--- INTERACTIVE MODE (Existing REPL)
--- ==========================================
-runInteractiveMode :: IO ()
-runInteractiveMode = do
-    putStrLn "Mycelial REPL Environment Loaded."
-    putStrLn "Use 'cabal repl' to interact."
-    putStrLn "Available commands:"
-    putStrLn "  inspect s             - Print summary of state 's'"
-    putStrLn "  printTradeLog s       - Print transaction history"
-    putStrLn "  printPerformanceLog s - Print equity curve table"
+    -- 1. Read Raw JSON from Stdin (passed by R)
+    inputRaw <- B.getContents
     
-    let s0 = initState
-    inspect s0
+    -- 2. Decode the InputPayload
+    let payload = decode inputRaw :: Maybe InputPayload
+    
+    case payload of
+        Nothing -> error "JSON Decoding Failed: Check input format in R."
+        Just (InputPayload pricesRaw config) -> do
+            
+            -- 3. Initialize System with Custom Config
+            let s0 = makeCustomGenesis config
+            let prices = map Price pricesRaw
+            
+            -- 4. Run Simulation 
+            -- We pass 'config' to runSeq so it can control Mutation/Intelligence logic
+            let finalState = runSeq config prices s0
+            
+            -- 5. Extract Statistics (SimStats) from the History
+            -- sysSnapshots is stored in reverse order, so we reverse it back
+            let stats = reverse (sysSnapshots finalState)
+            
+            -- 6. Extract Equity Curve (Total Wealth) separately for easy plotting
+            let equity = map statTotalWealth stats
+            
+            -- 7. Construct Output Payload
+            let output = OutputPayload 
+                  { outputEquityCurve = equity
+                  , outputStats = stats 
+                  }
+            
+            -- 8. Print JSON to Stdout
+            B.putStr (encode output)
 
--- ==========================================
--- MAIN ENTRY POINT
--- ==========================================
+-- ============================================================================
+-- 3. ENTRY POINT
+-- ============================================================================
 
 main :: IO ()
 main = do
+    -- Ensure stdout doesn't buffer, so R gets data immediately if needed
     hSetBuffering stdout NoBuffering
+    
     args <- getArgs
     case args of
         ["--pipeline"] -> runPipelineMode
-        _              -> runInteractiveMode
+        _              -> putStrLn "Usage: mycelial-exe --pipeline < input.json"

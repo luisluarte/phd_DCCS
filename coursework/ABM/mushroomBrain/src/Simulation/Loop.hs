@@ -6,13 +6,13 @@ import Simulation.Types (Sim)
 import Simulation.Accessors hiding (Sim)
 import Simulation.Lifecycle (updateHypha, updateMushroom, germinateColony)
 import Simulation.Macro (calculateLocalField, sensingRadius) 
-import Simulation.Evolution (randomizeGenome)
-import Control.Monad.State (modify, execState, gets)
+import Control.Monad.State (modify)
 import System.Random (mkStdGen)
 import Data.List (partition, foldl')
 import Data.Maybe (catMaybes)
-import qualified Data.Map.Strict as Map -- Added Map
+import qualified Data.Map.Strict as Map 
 
+-- (filterCrowded helper remains the same)
 filterCrowded :: [Spore] -> [MushroomBody] -> Double -> [Spore]
 filterCrowded candidates mushrooms radius =
     filter (\s -> 
@@ -21,8 +21,8 @@ filterCrowded candidates mushrooms radius =
         in not isCrowded
     ) candidates
 
-stepSimulation :: Price -> Sim ()
-stepSimulation newPrice = do
+stepSimulation :: SimConfig -> Price -> Sim ()
+stepSimulation config newPrice = do
     agents <- getAgents
     mushrooms <- getMushrooms
     spores <- getSpores
@@ -30,28 +30,32 @@ stepSimulation newPrice = do
     
     modify $ \s -> s { sysEnv = (sysEnv s) { mktPrice = newPrice } }
     
-    -- ==========================================================
-    -- OPTIMIZATION: PRE-CALCULATE MUSHROOM FIELDS
-    -- ==========================================================
-    -- Instead of every agent calculating the field, we do it once per mushroom
+    -- 1. OPTIMIZATION: PRE-CALCULATE MUSHROOM FIELDS
     let mushCache = Map.fromList 
           [ (mushId m, (m, calculateLocalField (mushLocation m) agents mushrooms newPrice)) 
           | m <- mushrooms 
           ]
 
-    -- 1. AGENT PASS (Now uses O(log M) cache lookup)
-    results <- mapM (updateHypha newPrice mushCache agents) agents
+    -- 2. AGENT PASS (INTELLIGENCE SWITCH APPLIED)
+    let intelligenceEnabled = cfgEnableIntelligence config -- <--- READ CONFIG
+
+    -- Pass 'intelligenceEnabled' to updateHypha
+    results <- mapM (updateHypha intelligenceEnabled newPrice mushCache agents) agents
+    
     let survivingAgents = catMaybes (map fst results)
     let allTaxes = concat (map snd results)
 
-    -- 2. MUSHROOM PASS
+    -- 3. MUSHROOM PASS (MUTATION SWITCH APPLIED)
     let (Time tInt) = time
+    let mutationEnabled = cfgEnableMutation config -- <--- READ CONFIG
+
     let processMushroom (mList, sList, recycledTotal) m =
           let 
              (MushroomId midInt) = mushId m
              seed = midInt + tInt
              rng = mkStdGen seed
-             (mNew, newSpores, maintPaid) = updateMushroom newPrice allTaxes rng m
+             -- Pass 'mutationEnabled' to updateMushroom
+             (mNew, newSpores, maintPaid) = updateMushroom mutationEnabled newPrice allTaxes rng m
           in 
              if mushMass mNew > 0
              then (mNew : mList, newSpores ++ sList, recycledTotal + maintPaid)
@@ -61,16 +65,17 @@ stepSimulation newPrice = do
     
     let (livingMushrooms, newlyReleasedSpores, totalRecycled) = foldl' processMushroom ([], [], Capital 0.0) mushrooms
     
+    -- ... (Rest of the function remains the same) ...
     modifyWallet (\c -> c + totalRecycled)
 
-    -- 3. CASCADE DEATH
+    -- 4. CASCADE DEATH
     let survivorIds = [mushId m | m <- livingMushrooms]
     let (orphans, keptAgents) = partition (\a -> not ((hypParentId a) `elem` survivorIds)) survivingAgents
     
     let orphanCash = sum [c | a <- orphans, let (Capital c) = bioBank (hypBiology a)]
     modifyWallet (\c -> c + Capital orphanCash)
 
-    -- 4. SPORE PASS
+    -- 5. SPORE PASS
     let allSpores = spores ++ newlyReleasedSpores
     
     -- SNAPSHOT
@@ -81,17 +86,30 @@ stepSimulation newPrice = do
     let agentStockVal = sum [q * p | a <- keptAgents, let (Quantity q) = posQuantity (hypHoldings a)]
     let mushVal = sum [m | mBody <- livingMushrooms, let (Capital m) = mushMass mBody]
     let sporeVal = sum [s | sp <- allSpores, let (Capital s) = sporeCapital sp]
-    let dimensions = map (calculateFractalDim . hypPath) keptAgents
-    let meanDim = if null dimensions then 0.0 else sum dimensions / fromIntegral (length dimensions)
+    
+    -- Extract Genome Lists
+    let currentGenomes = map hypGenome keptAgents
 
-    let snapshot = SystemSnapshot 
-          { snapTime = time + 1
-          , snapMarketPrice = newPrice
-          , snapTotalCash = Capital (w + agentCash)
-          , snapInventoryValue = Capital agentStockVal
-          , snapMushroomMass = Capital mushVal
-          , snapMeanFractalDim = meanDim
-          , snapTotalWealth = Capital (w + agentCash + agentStockVal + mushVal + sporeVal)
+    let snapshot = SimStats 
+          { statTick = tInt + 1
+          , statTotalWealth = w + agentCash + agentStockVal + mushVal + sporeVal
+          , statMktPrice = p
+          , statPopSize = length keptAgents
+          
+          -- Behavioral
+          , statFractalDims = map (calculateFractalDim . hypPath) keptAgents
+          , statHoldings    = map (\a -> let (Quantity q) = posQuantity (hypHoldings a) in q) keptAgents
+          , statBioBank     = map (\a -> let (Capital c) = bioBank (hypBiology a) in c) keptAgents
+
+          -- Genes
+          , statGeneGreed              = map geneGreed currentGenomes
+          , statGeneTurbulence         = map geneTurbulence currentGenomes
+          , statGeneGrowthRate         = map geneGrowthRate currentGenomes
+          , statGeneBaseOrder          = map geneBaseOrder currentGenomes
+          , statGenePhiCritical        = map genePhiCritical currentGenomes
+          , statGeneReproductiveInvest = map geneReproductiveInvest currentGenomes
+          , statGeneVacuumCoefficient  = map geneVacuumCoefficient currentGenomes
+          , statGeneDevMult            = map geneDevMult currentGenomes
           }
     modify $ \s -> s { sysSnapshots = snapshot : sysSnapshots s }
 
@@ -143,7 +161,7 @@ stepSimulation newPrice = do
 
     modify $ \s -> s { sysTime = sysTime s + 1 }
 
-
+-- (genesisState remains the same)
 genesisState :: SystemState
 genesisState = SystemState
     { sysTime      = Time 0
@@ -193,7 +211,7 @@ genesisState = SystemState
             , hypLocation = [0.03 + (fromIntegral i * 0.001), 0.05 + (fromIntegral i * 0.001)] 
             , hypVelocity = [0.001 * fromIntegral (i `mod` 3 - 1), 0.001 * fromIntegral (i `mod` 2 - 1)]
             , hypPath     = [[0.03, 0.05]]
-            , hypHoldings = Position (Quantity 0.0) (Capital 0.0)
+            , hypHoldings = mempty
             , hypBiology  = BioState 0 (Capital 200.0)
             , hypGenome   = genesisGenome
             , hypRefPrice = Price 100.0

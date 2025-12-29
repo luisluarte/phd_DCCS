@@ -10,6 +10,16 @@
   (major1) == 0 && (major2) <  1 || \
   (major1) == 0 && (major2) == 1 && (minor) <= 0)
 #endif /* MIN_VERSION_mycelial */
+/* package aeson-2.2.3.0 */
+#ifndef VERSION_aeson
+#define VERSION_aeson "2.2.3.0"
+#endif /* VERSION_aeson */
+#ifndef MIN_VERSION_aeson
+#define MIN_VERSION_aeson(major1,major2,minor) (\
+  (major1) <  2 || \
+  (major1) == 2 && (major2) <  2 || \
+  (major1) == 2 && (major2) == 2 && (minor) <= 3)
+#endif /* MIN_VERSION_aeson */
 /* package base-4.21.0.0 */
 #ifndef VERSION_base
 #define VERSION_base "4.21.0.0"
@@ -20,6 +30,16 @@
   (major1) == 4 && (major2) <  21 || \
   (major1) == 4 && (major2) == 21 && (minor) <= 0)
 #endif /* MIN_VERSION_base */
+/* package bytestring-0.12.2.0 */
+#ifndef VERSION_bytestring
+#define VERSION_bytestring "0.12.2.0"
+#endif /* VERSION_bytestring */
+#ifndef MIN_VERSION_bytestring
+#define MIN_VERSION_bytestring(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  12 || \
+  (major1) == 0 && (major2) == 12 && (minor) <= 2)
+#endif /* MIN_VERSION_bytestring */
 /* package mtl-2.3.1 */
 #ifndef VERSION_mtl
 #define VERSION_mtl "2.3.1"
