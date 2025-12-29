@@ -48,11 +48,11 @@ mutateGenome g rng =
     let
         (r1, rng1) = mutateFloat (geneGreed g) 0.05 rng
         (r2, rng2) = mutateFloat (geneTurbulence g) 1.0 rng1
-        (r3, rng3) = mutateFloat (geneGrowthRate g) 0.0005 rng2
+        (r3, rng3) = mutateFloat (geneGrowthRate g) 0.01 rng2
         (r4, rng4) = mutateFloat (geneBaseOrder g) 2.0 rng3
-        (r5, rng5) = mutateFloat (genePhiCritical g) 5.0 rng4
+        (r5, rng5) = mutateFloat (genePhiCritical g) 0.5 rng4
         (r6, rng6) = mutateFloat (geneReproductiveInvest g) 0.05 rng5
-        (r7, rng7) = mutateFloat (geneVacuumCoefficient g) 0.01 rng6
+        (r7, rng7) = mutateFloat (geneVacuumCoefficient g) 0.1 rng6
         (r8, _)    = mutateFloat (geneDevMult g) 0.05 rng7
     in
         g { geneGreed = min 0.99 r1
