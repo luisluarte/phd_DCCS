@@ -1,6 +1,7 @@
 module Simulation.Loop where
 
-import MycelialState
+import MycelialState (Price, SimConfig, HyphalTip(..), calculatePosCost)
+import qualified Simulation.Types as T
 import MycelialPhysics (euclideanDistance, calculateFractalDim)
 import Simulation.Types (Sim) 
 import Simulation.Accessors hiding (Sim)
@@ -21,7 +22,7 @@ filterCrowded candidates mushrooms radius =
         in not isCrowded
     ) candidates
 
-stepSimulation :: SimConfig -> Price -> Sim ()
+stepSimulation :: SimConfig -> Price -> T.Sim ()
 stepSimulation config newPrice = do
     agents <- getAgents
     mushrooms <- getMushrooms
@@ -229,7 +230,7 @@ genesisState = SystemState
             , hypHoldings = mempty
             , hypBiology  = BioState 0 (Capital 100.0)
             , hypGenome   = genesisGenome
-            , hypRefPrice = Price 1.0
+            , hypAvgEntry = Price 1.0
             , hypStepCount = 0
             }
         | i <- [1..5]
