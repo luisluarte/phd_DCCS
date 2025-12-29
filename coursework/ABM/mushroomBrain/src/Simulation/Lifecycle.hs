@@ -24,7 +24,6 @@ updateHypha intel p mushMap allA agent = do
     if bank <= maintVal 
         then return (Nothing, [], 0) -- Starvation Death
         else do
-            -- FIXED: Increment bioAge here!
             let oldBio = hypBiology agent
             let newAge = bioAge oldBio + 1
             
@@ -32,22 +31,34 @@ updateHypha intel p mushMap allA agent = do
             let agentAfterMaint = agent 
                     { hypBiology = oldBio 
                         { bioBank = Capital (bank - maintVal)
-                        , bioAge = newAge -- <--- CRITICAL FIX
+                        , bioAge = newAge 
                         } 
                     }
             
-            -- 2. Calculate Pressure & Move
+            -- 2. Calculate Pressure & Move (WITH STRESS)
             let (HyphalId hid) = hypId agentAfterMaint
             let (Price priceVal) = p 
             
             let pressure = calculatePressure p agentAfterMaint
             
+            -- IMPLEMENTING THE STRESS IDEA:
+            -- Metabolic Anxiety: If bank is low, increase turbulence (Panic Searching)
+            let geneTurb = geneTurbulence (hypGenome agent)
+            let safeThreshold = 20.0
+            
+            -- Stress Multiplier: 1.0 (Calm) -> ~3.0 (Panic)
+            let stressMult = if bank < safeThreshold
+                             then 1.0 + (2.0 * ((safeThreshold - bank) / safeThreshold))
+                             else 1.0
+            
+            let effectiveTurbulence = geneTurb * stressMult
+            
             -- Generate a seed for movement logic
-            -- Now that bioAge changes, this seed will change every tick (Randomness restored)
             let rngSeed = hid + (newAge * 1000)
             let rng = mkStdGen rngSeed
             
-            let movedAgent = moveAgent pressure agentAfterMaint rng
+            -- FIXED: Pass effectiveTurbulence to moveAgent
+            let movedAgent = moveAgent pressure effectiveTurbulence agentAfterMaint rng
 
             -- 3. Strategy & Trading Logic
             let strategy = interpretStrategy movedAgent p 
@@ -69,7 +80,6 @@ updateHypha intel p mushMap allA agent = do
             case finalAgentResult of
                 Nothing -> return (Nothing, [], maint)
                 Just traderAgent -> do
-                    -- Taxes will now flow because Age > 0
                     let (drainedAgent, taxes) = applyDrain traderAgent mushMap p
                     return (Just drainedAgent, taxes, maint)
 
@@ -131,7 +141,7 @@ germinateColony newMid (HyphalId startHid) spore (Price p) =
         count = geneMaxChildren (sporeGenome spore)
         (Capital availableCap) = sporeCapital spore
         
-        -- STRICT CONSERVATION OF MASS: Split spore capital
+        -- STRICT CONSERVATION OF MASS
         mushPortion = availableCap * 0.5
         workerPortion = availableCap - mushPortion
         

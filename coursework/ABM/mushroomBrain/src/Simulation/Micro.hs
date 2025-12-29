@@ -15,15 +15,21 @@ import System.Random (StdGen, randomR)
 -- MOVEMENT LOGIC
 -- ========================================================
 
-moveAgent :: Double -> HyphalTip -> StdGen -> HyphalTip
-moveAgent pressure agent rng =
+-- | Moves the agent based on local pressure and turbulence
+-- FIXED: Now accepts 'turbulence' (scalar) to determine movement magnitude
+moveAgent :: Double -> Double -> HyphalTip -> StdGen -> HyphalTip
+moveAgent pressure turbulence agent rng =
     let
         loc = hypLocation agent
-        scale = 0.01 
+        
+        -- Base Scale comes from Turbulence (Genome + Stress)
+        -- We multiply by a small physics delta (e.g., 0.01) to keep it continuous
+        scale = turbulence * 0.01 
         
         (dx, rng1) = randomR (-scale, scale) rng
         (dy, _)    = randomR (-scale, scale) rng1
         
+        -- Apply Brownian Motion + Pressure (Gradient Descent/Ascent could go here)
         newLocRaw = zipWith (+) loc [dx, dy]
         newLoc = clampVector newLocRaw 
     in
@@ -43,13 +49,11 @@ executeTrade (Price p) agent =
         genome = hypGenome agent
         (Capital bank) = bioBank (hypBiology agent)
         
-        -- PARAMETER CONNECTED: Use geneBaseOrder instead of hardcoded 1.0
         baseOrder = geneBaseOrder genome
         maxOrders = geneMaxOrders genome
         currentOrders = hypStepCount agent
         
     in
-        -- CHECK: Sufficient Capital AND Max Orders Check
         if bank > baseOrder && currentOrders < maxOrders
         then 
             let
@@ -57,7 +61,6 @@ executeTrade (Price p) agent =
                 (Quantity currentQ) = posQuantity pos
                 (Capital currentCost) = posCost pos
                 
-                -- Execute Buy
                 quantityBought = baseOrder / p
                 newPos = Position (Quantity (currentQ + quantityBought)) (Capital (currentCost + baseOrder))
                 

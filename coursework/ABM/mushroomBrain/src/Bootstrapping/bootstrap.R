@@ -52,7 +52,7 @@ run_simulation <- function(price_segment, greed, mutation_on) {
             cfgInitGrowthRate = 0.01, # 1% growth per trade/tick
             cfgInitPhiCritical = 1.0, # Quorum sensing threshold
             cfgInitReproductiveInvest = 0.5, # Sacrifice 20% mass to reproduce
-            cfgInitVacuumCoefficient = 0.1, # Strong suction toward price targets
+            cfgInitVacuumCoefficient = 0.0, # Strong suction toward price targets
             cfgInitDevMult = 1.0 # No deviation multiplier initially
         )
     )
@@ -156,13 +156,15 @@ stats_df <- stats_df %>%
         mean_tp = map_dbl(statStratProfit, mean),
         mean_fractal = map_dbl(statFractalDims, mean),
         sum_biobank = map_dbl(statBioBank, sum),
-        sum_holdings = map_dbl(statHoldings, sum)
+        sum_holdings = map_dbl(statHoldings, sum),
+        sum_mass = map_dbl(statMushroomMasses, sum)
     )
 stats_df %>%
     pivot_longer(cols = c(
         statMushroomCount, statPopSize,
         statTotalWealth, statMktPrice,
-        sum_biobank, sum_holdings
+        sum_biobank, sum_holdings,
+        mean_tp, mean_drop, sum_mass, mean_fractal
     )) %>%
     ggplot(aes(statTick, value, color = name)) +
     geom_line() +
