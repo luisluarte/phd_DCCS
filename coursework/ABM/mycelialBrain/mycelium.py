@@ -16,7 +16,7 @@ import sys
 
 # --- 1. FIXED ENVIRONMENT ---
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-WINDOW_SIZE = 5000
+WINDOW_SIZE = 1000
 NUM_ITERATIONS = 50  # Total randomized runs
 
 class LevyForager:
@@ -50,7 +50,8 @@ class LevyForager:
         
         self.biomass = F.conv2d(self.biomass, kernel.view(1,1,k_size,k_size), padding=k_size//2)
         self.biomass = self.biomass[:, :, :self.size, :self.size]
-        self.biomass = torch.clamp(self.biomass - self.decay_rate, min=0)
+        # self.biomass = torch.clamp(self.biomass - self.decay_rate, min=0)
+        self.biomass = self.biomass * (1 - self.decay_rate)
 
     def get_risk(self):
         return np.exp(-0.005 * self.biomass.sum().item())
