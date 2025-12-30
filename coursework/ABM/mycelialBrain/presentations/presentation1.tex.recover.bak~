@@ -1,0 +1,116 @@
+\documentclass[10pt]{beamer}
+
+% Theme Selection
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage[style=apa,backend=biber]{biblatex}
+\addbibresource{refs.bib}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning, arrows.meta, shapes, calc, fit}
+\usepackage{graphicx}
+\usepackage{amsthm}
+
+% Metadata
+\title{Mycelial Brain}
+\author{Luis Luarte}
+\date{\today}
+
+\begin{document}
+	
+
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{The Mycelial intuition}
+		\begin{itemize}
+			\item \textbf{The problem:} financial market present highly non-stationary structure, often destroying trading strategies during regime shifts
+			\item \textbf{The natural solution:} biological organisms thrive in ecosystems with regimes shifts in resources; often using simple local rules that provide an apparent solution to complex non-stationary structures
+			\item \textbf{Uncertainty:} organisms often use "metabolic stress" (failure to find nutrients) as a proxy for environmental uncertainty, triggering a shift in their search strategy from exploitation to exploration
+			\item \textbf{Mycelial networks:} present a exemplar case of solving the exploration/exploitation dilemma using extremely simple physical mechanisms
+		\end{itemize}
+		On a personal note I find mycelium fascinating, and I wanted to abstract its mechanisms for solving ecological problem into more abstract problems of higher-frequency trading
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{The mycelial mechanism}
+		\begin{figure}
+		\includegraphics[width=0.5\textwidth]{mycelium.jpg}
+		\caption{Mycelium is the main vegetative part of the organism, consisting of a vast, interconnected network of thread-like filament called hyphae. Typically grows submerged within a substrate and functions as the primary growing and feeding structure responsible for colonizing environment. Importantly it does not have a brain}
+		\end{figure}
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{The vesicle supply center}
+		\begin{equation}
+			dV(\phi) = \frac{\dot{N} \cdot \cos(\phi)}{4\pi \cdot r^2}
+			\end{equation}
+			where:
+			\begin{itemize}
+				\item $dV(\phi)$ is the rate of wall surface expansion at angle $\phi$
+				\item $\dot{N}$ the total rate of vesicle supply from the vesicle supply center
+				\item $r$ is the distance from the VSC to the specific point on the cell
+				\item $\phi$ is the angle between the point on the wall and the direction of growth
+			\end{itemize}
+			Then:
+			\begin{equation}
+				x_{VSC}(t + \Delta t) = x_{VSC}(t) + (v_{arrival} - v_{fusion}) \Delta t
+			\end{equation}
+			if:
+			\begin{itemize}
+				\item $v_{arrival} > v_{fusion}$ brownian motion
+				\item $v_{arrival} < v_{fusion}$ diffusive motion
+			\end{itemize}
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{Exploration vs. Exploitation}
+		As resources become sparse (high risk/low reward), the optimal search strategy must shift from Brownian to Lévy (ballistic) to avoid over-sampling depleted zones \parencite{viswanathanOptimizingSuccessRandom1999}
+		
+		So my though process was
+		\begin{itemize}
+			\item Instead of a tedious process of mapping all vesicle mechanics lets focus on how their movement distributions change with nutrient supply
+			\item The probability of taking $P(L) \sim L^{-(\mu)}$
+			\item and then I needed $F: \text{Nutrient} \rightarrow \mu$
+			\item so I defined: $\mu_{base} = \mu_{base} + \alpha \cdot tanh(\gamma \cdot \Delta_{\phi}(t))$
+		\end{itemize}
+		where:
+		\begin{itemize}
+			\item $\Delta \phi(t) = \phi_{arrival} - \phi_{fusion}(t)$
+			\item $\phi_{\text{arrival}}(t) = R(t) + e^{-\lambda} \cdot \phi_{\text{arrival}}(t-1)$
+			\item $\phi_{fusion}(t) = \phi_{arrival}(t) \cdot (1 - \sigma_{t})$
+		\end{itemize}
+	\end{frame}
+	
+		\begin{frame}
+			\frametitle{Intuition}
+			The intuition is to abstract the mechanism by modulating the movement distribution and letting the modulators be financial market variables, such as returns $\phi_{arrival}$ and risk $\phi_{fusion}$, while preserving the biological properties increased resources/returns increases Brownian movement, and adverse conditions high salinity/risk inhibit fusion increasing diffusivity.
+		\end{frame}
+		
+		\begin{frame}
+			\frametitle{Link with financial markets}
+			How can I make mycelium navigate markets?
+			My answer was to build a very simple topology
+			\begin{itemize}
+				\item The search topology is the set of all possible price coordinates (lags) the agent considers ``reachable'' at time $t$
+				\item The agent is embedded because the search rules $(\mu)$ are defined in the same units and dimensions as the market's price lags
+				\item The challenge then was if the agent is embedded with a logic that deals with regime changes can it survive the SP500 volatility?
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}
+			\frametitle{Financial market formalization}
+			\begin{itemize}
+				\item The market is a $d$-dimensional (2 for now) surface $\mathcal{M}$ where each point $x \in \mathcal{M}$ represents a state in the \textbf{lag-phase space}
+				\item \textbf{Coordinates:} a point $x_{t} = (P_{t-1}, P_{t-2},\dots, P_{t-d})$
+			\end{itemize}
+		\end{frame}
+
+	
+	
+	
+\end{document}

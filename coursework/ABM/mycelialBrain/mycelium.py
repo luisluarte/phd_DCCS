@@ -17,7 +17,7 @@ import sys
 # --- 1. FIXED ENVIRONMENT ---
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 WINDOW_SIZE = 1000
-NUM_ITERATIONS = 50  # Total randomized runs
+NUM_ITERATIONS = 1000  # Total randomized runs
 
 class LevyForager:
     def __init__(self, size, device, params):
