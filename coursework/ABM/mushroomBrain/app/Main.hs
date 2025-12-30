@@ -2,94 +2,59 @@
 module Main where
 
 import MycelialState
-import MycelialSimulation (runSeq)
-import Simulation.Loop (genesisState) 
-import Simulation.Evolution (randomizeGenome)
-import Data.Aeson (decode, encode)
+import Simulation.Loop (genesisState, stepSimulation)
 import qualified Data.ByteString.Lazy as B
-import System.IO (hSetBuffering, stdout, BufferMode(..))
-import System.Environment (getArgs)
+import Data.Aeson (encode)
+import Data.List.Split (splitOn) -- Requires 'split' package, or use simple replacement
+import System.IO (getContents)
+import Data.List (foldl')
+import Text.Read (readMaybe)
+import Data.Maybe (catMaybes)
 
--- ============================================================================
--- 1. CUSTOM GENESIS INITIALIZATION
--- ============================================================================
-makeCustomGenesis :: SimConfig -> SystemState
-makeCustomGenesis cfg =
-    let 
-        -- 1. Construct the Base Genome from R input
-        customGenome = Genome
-            { geneGreed             = cfgInitGreed cfg
-            , geneTurbulence        = cfgInitTurbulence cfg
-            , geneGrowthRate        = cfgInitGrowthRate cfg
-            , geneBaseOrder         = cfgInitBaseOrder cfg
-            , genePhiCritical       = cfgInitPhiCritical cfg
-            , geneReproductiveInvest= cfgInitReproductiveInvest cfg
-            , geneVacuumCoefficient = cfgInitVacuumCoefficient cfg
-            , geneDevMult           = cfgInitDevMult cfg
-            
-            -- Fixed / System Parameters mapped from Config
-            , geneSporeBatchSize    = cfgSporeBatchSize cfg
-            , geneDCAOrder          = cfgDcaOrder cfg
-            , geneMaxOrders         = cfgMaxOrders cfg
-            , geneMaxChildren       = cfgMaxChildren cfg
-            , geneDispersion        = cfgDispersionRadius cfg
-            , geneMaintenance       = cfgMaintenanceCost cfg
-            , geneMaturity          = cfgInitMaturity cfg
-            , geneVolMult           = 1.0
-            }
-
-        -- 2. Helper to update a Mushroom's genome
-        updateMush m = m { mushGenome = customGenome }
-        
-        -- 3. Helper to update a Hypha's genome WITH RANDOMIZATION
-        updateHyp h = 
-            let (HyphalId i) = hypId h
-            in h { hypGenome = randomizeGenome customGenome (i * 9999) }
-        
-        -- 4. Get the default state
-        -- FIXED: Pass cfgMaxChildren to genesisState so initial population matches config
-        s0 = genesisState (cfgMaxChildren cfg)
-    in 
-        -- 5. Return state with updated agents
-        s0
-        { sysMushrooms = map updateMush (sysMushrooms s0)
-        , sysHyphae    = map updateHyp (sysHyphae s0)
-        }
-
--- ============================================================================
--- 2. PIPELINE MODE
--- ============================================================================
-
-runPipelineMode :: IO ()
-runPipelineMode = do
-    inputRaw <- B.getContents
-    let payload = decode inputRaw :: Maybe InputPayload
-    
-    case payload of
-        Nothing -> error "JSON Decoding Failed: Check input format in R."
-        Just (InputPayload pricesRaw config) -> do
-            
-            let s0 = makeCustomGenesis config
-            let prices = map Price pricesRaw
-            let finalState = runSeq config prices s0
-            let stats = reverse (sysSnapshots finalState)
-            let equity = map statTotalWealth stats
-            
-            let output = OutputPayload 
-                  { outputEquityCurve = equity
-                  , outputStats = stats 
-                  }
-            
-            B.putStr (encode output)
-
--- ============================================================================
--- 3. ENTRY POINT
--- ============================================================================
+-- Helper to split string by comma if split package missing
+splitComma :: String -> [String]
+splitComma s = case break (==',') s of
+    (w, "") -> [w]
+    (w, _:rest) -> w : splitComma rest
 
 main :: IO ()
 main = do
-    hSetBuffering stdout NoBuffering
-    args <- getArgs
-    case args of
-        ["--pipeline"] -> runPipelineMode
-        _              -> putStrLn "Usage: mycelial-exe --pipeline < input.json"
+    -- 1. READ INPUT (Comma Separated String)
+    inputRaw <- getContents
+    
+    -- Filter out newlines/spaces and parse
+    let cleanInput = filter (\c -> c /= '\n' && c /= ' ') inputRaw
+    let stringValues = splitComma cleanInput
+    let prices = catMaybes $ map readMaybe stringValues :: [Double]
+    
+    if null prices 
+        then putStrLn "[]" -- Empty output if no input
+        else do
+            -- 2. CONFIG
+            let config = SimConfig
+                    { cfgNumAgents = 500
+                    , cfgMaxLag    = 50  -- We look for patterns up to 50 ticks back
+                    , cfgMaxStep   = 1.5 -- Agents crawl slowly
+                    , cfgSigma     = 2.0 -- Tolerance for similarity
+                    }
+            
+            -- 3. INITIALIZE
+            let s0 = genesisState config 42
+            
+            -- 4. RUN LOOP (Feed the series one by one)
+            let finalState = foldl' (\st p -> stepSimulation config p st) s0 prices
+            
+            -- 5. FORMAT OUTPUT (Sparse Matrix)
+            -- We group agents into integer cells and output biomass
+            let agents = sysAgents finalState
+            let cells = map (\a -> MatrixCell 
+                                    { x = round (fst $ hypLoc a)
+                                    , y = round (snd $ hypLoc a)
+                                    , b = let (Capital m) = hypBiomass a in m
+                                    }
+                            ) agents
+            
+            -- Filter out dead agents (0 biomass) to keep it clean
+            let activeCells = filter (\c -> b c > 0) cells
+            
+            B.putStr (encode activeCells)
